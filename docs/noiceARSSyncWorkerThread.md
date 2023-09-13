@@ -109,7 +109,8 @@ database, which fields are index-searchable and various other options. The `conf
         rowUpdateCallback: (threadHandle, data) => { ... },
         writeQueueRowIsPrunable: async (formMeta, writeQueueRow, api, threadHandle) => { ... },
         writeTransactionTransform: (formMeta, trans, threadHandle) => { ... },
-        postWriteSyncTransform: async (formMeta, trans, api, threadHandle) => { ... }
+        postWriteSyncTransform: async (formMeta, trans, api, threadHandle) => { ... },
+        formDefinitionTransform: (formDefinition) => { ... }
 
     }
     ```
@@ -221,6 +222,11 @@ database, which fields are index-searchable and various other options. The `conf
   * **`postWriteSyncTransform` async function(formMeta, trans, api, threadHandle)**
 
     when we have executed a write transaction, we are then going to execute a `noiceRemedyAPI.getTicket()` on the row we just modified or perhaps the row we just created. In the way that `writeTransactionTransform` allows you to intercept and transform the write api transaction, this allows you to intercept and transform the read transaction. For instance if you wrote to a landing form you might need to query the entryId you created on the landing form for the entryId of the *actual* record on the main form. This is async so you can do that. Only real difference is you get an api handle, and `trans` is just the args to `getTicket()`
+
+  * **`formDefinitionTransform` function(formDefinition)**
+
+    if defined, this function is executed on formDefinition fetch from server, between `api.getFormFields()` and `noiceIndexedDB.put()`, whatever you return from this function will be written as the formDefintion for this form. The need for this function should be fairly rare. This is handy, in the case of a viewForm on the server for `CURRENCY` fields where the view MUST model them as a `DECIMAL` and you need to manually override the datatype in-app. Use with caution but
+    if you need these shenanigans, this is the proper way to implement them
 
 * **`_bulkSync` object**
 
