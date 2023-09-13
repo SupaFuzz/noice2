@@ -190,3 +190,10 @@ Objects of this type can instantiate worker threads, including a `serviceWorker`
     this handles asynchronous messages sent from child threads. This is distinct from `threadResponse` above, in that this is intended to catch signals initiated by the child thread (for instance log messages, alerts, etc). This will dispatch messages to the callback function specified in `this.threadSignalHandlers[<threadName>][<messageType>]` where threadName and messageType match.
 
     callbacks in `threadSignalHandlers` are passed an object of the form `{ threadName: <threadName>, event: <messageEvent>}` [see docs on MDN](https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent)
+
+* `encodeCSVRow(array)`
+   convert the given array to a CSV-encoded string properly escaped and joined with "," and return the string.\
+   suitable for using in an Array.map() for instance.
+
+* `decodeHTMLEntities(str)`
+  decodes HTML entities in the given string and returns it [see MDN Docs on DOMParser API](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser)
