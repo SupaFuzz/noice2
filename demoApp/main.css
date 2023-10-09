@@ -1,0 +1,224 @@
+
+/* this disables scrolling on the body */
+html, body {
+    position: fixed;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-size: 2vw;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background-color: rgb(20, 22, 23);
+    color: rgb(216, 210, 210);
+}
+
+
+
+
+/*
+    global buttons
+*/
+button.btnBurger {
+    background: url('./gfx/buttons/burger.svg');
+    border: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+
+
+/*
+    noiceBalloonDialog
+*/
+.noiceBalloonDialog > * {
+   cursor: default;
+}
+.noiceBalloonDialog .dialog {
+   font-size: 				1em;
+}
+.noiceBalloonDialog .dialog .body {
+   overflow: auto;
+   border-left: 1px solid rgb(191, 191, 24);
+   border-right: 1px solid rgb(191, 191, 24);
+   border-bottom: 1px solid rgb(191, 191, 24);
+   background-color: rgb(191, 191, 24);
+   border-radius: .25em;
+}
+.noiceBalloonDialog[data-arrow='bottom'] .dialog:after {
+   content: '';
+   position: absolute;
+   bottom: 0;
+   right: 21px;
+   width: 0;
+   height: 0;
+   border: 10px solid transparent;
+   border-top-color: rgb(191, 191, 24);
+   border-bottom: 0;
+   margin-left: -10px;
+   margin-bottom: -10px;
+}
+.noiceBalloonDialog[data-arrow='bottomLeft'] .dialog:after {
+   content: '';
+   position: absolute;
+   bottom: 0;
+   left: 21px;
+   width: 0;
+   height: 0;
+   border: 10px solid transparent;
+   border-top-color: rgb(191, 191, 24);
+   border-bottom: 0;
+   margin-left: -10px;
+   margin-bottom: -10px;
+}
+.noiceBalloonDialog[data-arrow='top'] .dialog:after {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 21px;
+   width: 0;
+   height: 0;
+   border: 10px solid transparent;
+   border-bottom-color: rgb(191, 191, 24);
+   border-top: 0;
+   margin-left: -10px;
+   margin-top: -10px;
+}
+.noiceBalloonDialog[data-arrow='topMiddle'] .dialog:after {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 50%;
+   width: 0;
+   height: 0;
+   border: 10px solid transparent;
+   border-bottom-color: rgb(191, 191, 24);
+   border-top: 0;
+   margin-left: -10px;
+   margin-top: -10px;
+}
+.noiceBalloonDialog[data-arrow='topRight'] .dialog:after {
+   content: '';
+   position: absolute;
+   top: 0;
+   right: 21px;
+   width: 0;
+   height: 0;
+   border: 10px solid transparent;
+   border-bottom-color: rgb(191, 191, 24);
+   border-top: 0;
+   margin-left: -10px;
+   margin-top: -10px;
+}
+.noiceBalloonDialog .dialogHeader {
+   background-color: rgb(191, 191, 24);
+   border: 0px;
+}
+.noiceBalloonDialog .dialogHeader .dialogHeaderTitle {
+   font-size: .66em;
+   padding: .25em .75em .25em .75em;
+   color: rgba(30, 32, 33, 66);
+   text-align: left;
+}
+.noiceBalloonDialog .dialogHeader .btnContainer {
+   width: 100%;
+   text-align: right;
+}
+.noiceBalloonDialog .dialogContent {
+   background-color:			rgb(30, 32, 33);
+   overflow-x:					hidden;
+   overflow-y: 				auto;
+   max-height: 				66vh;
+}
+
+
+
+
+
+/*
+    mainUI
+*/
+.mainUI .rootLayoutContainer .header {
+    background-color: rgb(5, 15, 20);
+    color: rgb(191, 191, 24);
+    border-bottom: .128em solid rgb(191, 191, 24);
+}
+.mainUI .rootLayoutContainer .header .subTitle {
+   color: rgb(216, 210, 210);
+   font-size: .8em;
+   padding-left: 1em;
+}
+.mainUI .rootLayoutContainer .header .btnContainer button:disabled, .infoThing .overview .btnExport:disabled {
+   opacity: .5;
+   filter: grayscale(.9);
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator[data-status="net-read"]{
+   /*rgb(0, 153, 0)*/
+   background-color: rgba(0, 153, 0, .35);
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator[data-status="net-write"]{
+   background-color: rgba(0, 153, 0, .65);
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator[data-status="db-read"]{
+   background-color: rgba(6, 133, 135, .35);
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator[data-status="db-write"]{
+   background-color: rgba(6, 133, 135, .65);
+}
+@keyframes pendingAni {
+   0% {
+      background-color: rgba(230, 146, 64, .3);
+   }
+   50% {
+      background-color: rgba(230, 146, 64, .65);
+   }
+   100% {
+      background-color: rgba(230, 146, 64, .3);
+   }
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator[data-status="pending"]{
+   animation: pendingAni 3s linear infinite;
+}
+
+.mainUI .rootLayoutContainer .header .btnContainer button.btnIndicator {
+   height: 1.5vw;
+   width: 1.5vw;
+   align-self:  center;
+   border-radius: 50%;
+   border-width: .128em;
+   border-top-color: rgba(216, 210, 210, .1);
+   border-left-color: rgba(216, 210, 210, .1);
+   border-bottom-color: transparent;
+   border-right-color: transparent;
+   box-shadow: 2px 2px 2px rgba(20, 22, 23, .8) inset;
+   background: radial-gradient(rgba(255,255,255,.08), rgba(255,255,255,.01),rgba(255,255,255,.01));
+   background-color: rgb(12, 33, 46);
+   transition: background-color .35s ease-out;
+}
+
+.mainUI .rootLayoutContainer .header .btnContainer button {
+    height: 2vw;
+    width: 2vw;
+    margin: .5em;
+}
+.mainUI .rootLayoutContainer .header .btnContainer button.btnBurger {
+   /* to give the balloon menu enough room */
+   margin-right: 25px;
+}
+.mainUI .burgerMenu .burgerMenuItem {
+   text-align: left;
+   background-color: transparent;
+   border-color: transparent;
+   color: rgba(191, 191, 24,.5);
+   font-size: .8em;
+   padding-left: 1.5em;
+}
+.mainUI .burgerMenu .burgerMenuItem[data-selected="true"]{
+   color: rgb(191, 191, 24);
+}
