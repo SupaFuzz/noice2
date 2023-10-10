@@ -5,6 +5,7 @@
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { noicePieChart } from '../../../lib/noicePieChart.js';
+import { noiceBarChart } from '../../../lib/noiceBarChart.js';
 
 class testUIOne extends noiceCoreUIScreen {
 
@@ -65,7 +66,7 @@ setupCallback(self){
     that.testNote = bs;
 
     // lets make a few pie charts for the helluvit
-    let pie = new noicePieChart({
+    this.pie = new noicePieChart({
         showPieChart: true,
         size: '4em',
         pieCharts: [
@@ -74,7 +75,7 @@ setupCallback(self){
         ],
         zIndex: 1
     }).append(that._DOMElements.chartContainer);
-    pie.updatePieChart('done', 35);
+    this.pie.updatePieChart('done', 35);
 
     /*
         LOH 10/9/23 @ 1726
@@ -84,6 +85,11 @@ setupCallback(self){
         wink wink
         knowwhatimean?
     */
+    this.bar = new noiceBarChart({
+        width: '8em',
+        height: '6em',
+        zIndex: 1
+    }).append(that._DOMElements.chartContainer);
 
 }
 
