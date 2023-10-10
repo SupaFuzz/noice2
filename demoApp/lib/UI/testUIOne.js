@@ -80,17 +80,17 @@ setupCallback(self){
     /*
         LOH 10/9/23 @ 1726
         if you wanted to say ... build a new gfx module you might wanna
-        use this little spot as a test harness eh?
+        use this little spot as a test harnenss eh?
         nudge nudge
         wink wink
         knowwhatimean?
     */
-    this.bar = new noiceBarChart({
-        width: '8em',
-        height: '6em',
-        zIndex: 1
+    that.bar = new noiceBarChart({
+        label: 'test'
     }).append(that._DOMElements.chartContainer);
-
+    that.bar.addChart({name: 'one', value: 50, order: 0, color: 'rgb(191, 191, 191)', subValue: 35, subValueColor: 'rgb(190, 57, 57)'});
+    that.bar.addChart({name: 'two', value: 75, order: 1, color: 'green'});
+    that.bar.addChart({name: 'three', value: 100, order: 2, color: 'blue'});
 }
 
 
