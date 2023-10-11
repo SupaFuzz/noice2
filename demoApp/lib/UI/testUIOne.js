@@ -88,9 +88,16 @@ setupCallback(self){
     that.bar = new noiceBarChart({
         label: 'test'
     }).append(that._DOMElements.chartContainer);
+
+    that.bar.addChart({name: 'one', order: 0, layers: [{value: 65, color: 'rgb(191, 191, 191)', graphSpacing: '.128em'}, {value: 35, color: 'rgba(190, 57, 57, .8)'}]});
+    that.bar.addChart({name: 'two', order: 1, layers: [{value: 75, color: 'green'}]});
+    that.bar.addChart({name: 'three', order: 2, layers: [{value: 100, color: 'blue'}]});
+
+    /*
     that.bar.addChart({name: 'one', value: 50, order: 0, color: 'rgb(191, 191, 191)', subValue: 35, subValueColor: 'rgb(190, 57, 57)'});
     that.bar.addChart({name: 'two', value: 75, order: 1, color: 'green'});
     that.bar.addChart({name: 'three', value: 100, order: 2, color: 'blue'});
+    */
 }
 
 
