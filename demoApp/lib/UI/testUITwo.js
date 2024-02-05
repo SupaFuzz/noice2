@@ -51,6 +51,7 @@ setupCallback(self){
     // fix layout for chart grid stuffs
     that.DOMElement.style.alignItems = 'baseline';
     that.DOMElement.style.justifyContent = 'flex-start';
+    that._DOMElements.chartContainer.style.padding = '1em';
 
     // placeholder message
     let bs = document.createElement('h1');
@@ -92,7 +93,8 @@ setupCallback(self){
                 console.log(`rowSelectCallback: ${selectBool} | ${rowElement.dataset.rownum}`);
                 return(true)
             },
-            allowColumnSort: true
+            allowColumnSort: true,
+            label: "test table"
         }).append(that._DOMElements.chartContainer);
     }catch(e){ console.log(e); }
 
