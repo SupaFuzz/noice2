@@ -222,3 +222,44 @@ button.btnBurger {
 .mainUI .burgerMenu .burgerMenuItem[data-selected="true"]{
    color: rgb(191, 191, 24);
 }
+
+/*
+   noiceCoreUITable default style
+*/
+.noiceCoreUITable .tableContainer {
+   box-shadow: 2px 2px 2px rgba(20, 22, 23, .3) inset;
+   background: radial-gradient(ellipse at center, rgb(150, 167, 173), rgba(150, 167, 173, .6));
+   color: rgb(24, 35, 38);
+   padding: .25em;
+   border-radius: .5em;
+}
+.noiceCoreUITable .hdrRow,.noiceCoreUITable .listRow {
+   margin-bottom: .128em;
+}
+.noiceCoreUITable .hdrRow .hdrCol {
+   border: 1px solid rgb(36, 36, 36);
+   padding: .25em .128em .128em .25em;
+   background-color: rgba(36, 36, 36,.1);
+   border-radius: .25em;
+}
+.noiceCoreUITable .hdrRow .hdrCol[data-sort="descending"]:before {
+   content: '\25BC';
+   opacity: .5;
+   font-size: .8em;
+}
+.noiceCoreUITable .hdrRow .hdrCol[data-sort="ascending"]:before {
+   content: '\25B2';
+   opacity: .5;
+   font-size: .8em;
+}
+.noiceCoreUITable .hdrRow .hdrCol, .noiceCoreUITable .listRow .listCol {
+   margin: 0 .128em 0 .128em;
+   padding: 0 .128em 0 .25em;
+}
+.noiceCoreUITable .listRow span.listCol {
+   font-size: .8em;
+}
+.noiceCoreUITable .listRow[data-selected="true"] {
+   background-color: rgba(240, 240, 240,.8);
+   filter: invert(.85);
+}
