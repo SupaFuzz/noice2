@@ -71,6 +71,7 @@ setupCallback(self){
     // 2/2/24 @ 2030 -- I'm bored and I don't have anything better to do ...
     try {
         that.testTable = new noiceCoreUITable({
+            firstArg: "hi there!",
             columns: [
                 { name: 'species', order: 1, type: 'char' },
                 { name: 'first', order: 2, type: 'char' },
