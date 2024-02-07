@@ -80,12 +80,12 @@ setupCallback(self){
                 { name: 'num', order: 5, type: 'int'}
             ],
             rows: [
-                { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5 },
-                { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82 },
-                { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1 },
-                { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12 },
-                { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420 },
-                { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419 },
+                { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+                { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+                { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+                { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+                { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+                { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
             ],
             // maxListHeight: '5em',
             debug: false,
@@ -95,7 +95,24 @@ setupCallback(self){
                 return(true)
             },
             allowColumnSort: true,
-            label: "test table"
+            label: "test table",
+            /*
+            syncRowsBatchLimit: 1,
+            renderRowsProgressCallback: (partial, complete, selfReference) => {
+                console.log(`${partial}/${complete} (${Math.floor(partial/complete*100)})`);
+            }
+            */
+            allowCellEdit: true,
+            editCellCallback: async (rowElement, cellElement) => {
+                console.log(`inside editCellCallback with: ${rowElement.dataset.rownum} / ${cellElement.dataset.name}`);
+                return("this is test");
+            },
+            modifyRowCallback:  async(row, data) => {
+                console.log(`inside modifyRowCallback`);
+                console.log(row);
+                console.log(data);
+                return(data);
+            }
         }).append(that._DOMElements.chartContainer);
     }catch(e){ console.log(e); }
 
