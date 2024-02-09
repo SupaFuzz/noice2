@@ -210,6 +210,11 @@ testTable.data = [
   if `allowCellEdit: true`, and `editCellCallback` is specified, call it and await output
   if resolved promise, send returned value to` modifyRow()` and let it call the `modifyRowCallback()` if specified
 
+* `defaultCellEditCallback(rowElement, cellElement, selfRef)`
+   when setting `allowCellEdit` true, if no `editCellCallback` is specified, this built-in cellEditor is used.
+   this is very basic but works well enough. This is a good template for extending into fancier cell editors
+   that for instance, respect types and constraints on the corresponding column definition etc.
+
 ## CSS
 only layout-necessary CSS is hard coded. If you want it to look pretty
 you'll need some external CSS. This kinda looks nice if you ask me but hey
