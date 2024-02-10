@@ -263,3 +263,22 @@ button.btnBurger {
    background-color: rgba(240, 240, 240,.8);
    filter: invert(.85);
 }
+.noiceCoreUITable .footerMessage {
+   font-size: .8em;
+   font-family: Comfortaa;
+   padding-right: .25em;
+}
+.noiceCoreUITable .label{
+   font-family: Comfortaa;
+   padding-left: .25em;
+   font-weight: bold;
+}
+.noiceCoreUITable .footer .buttonContainer .btnPrefs[data-open="true"]{
+   opacity: .5;
+}
+.noiceCoreUITable .footer .buttonContainer .btnPrefs {
+   background: transparent;
+   border-color: transparent;
+   color: rgb(240, 240, 240);
+   font-size: 1em;
+}

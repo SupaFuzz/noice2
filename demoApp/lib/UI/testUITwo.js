@@ -107,7 +107,9 @@ setupCallback(self){
             console.log(row);
             console.log(data);
             return(data);
-        }
+        },
+        showFooterMessage: true,
+        showBtnPrefs: true,
     }).append(that._DOMElements.chartContainer);
 
 }
