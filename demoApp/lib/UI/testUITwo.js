@@ -76,6 +76,7 @@ setupCallback(self){
             { name: 'middle', order: 3, type: 'char', width: '5em' },
             { name: 'last', order: 4, type: 'char', width: '10em' },
             { name: 'num', order: 5, type: 'int', width: '5em' },
+            /*
            { name: 'Entry ID', fieldName: 'Entry ID', order: 6, type: 'char', width: '10em' },
            { name: 'PO Number', fieldName: 'PO Number', order: 7, type: 'char', width: '13em' },
            { name: 'Line #', fieldName: 'Purchase Order Line', order: 8, type: 'char', width: '5em' },
@@ -101,6 +102,7 @@ setupCallback(self){
            { name: 'Requisition ID', fieldName: 'Requisition ID', order: 28, type: 'char', width: '10em' },
            { name: 'Change ID (NSR)', fieldName: 'Change ID', order: 29, type: 'char', width: '10em' },
            { name: 'FSC', fieldName: 'FSC', order: 30, type: 'char', width: '4em' }
+        */
         ],
         rows: [
             { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
@@ -134,6 +136,8 @@ setupCallback(self){
         },
         showFooterMessage: true,
         showBtnPrefs: true,
+        showBtnSelectAll: true,
+        showBtnSelectNone: true,
         //maxListHeight: '6em'
         listHeight: '66vh',
         selectMode: 'multiple',

@@ -285,6 +285,22 @@ button.btnBurger {
    color: rgb(240, 240, 240);
    font-size: 1em;
 }
+.noiceCoreUITable .footer .buttonContainer .btnSelectAll, .noiceCoreUITable .footer .buttonContainer .btnSelectNone {
+   background-color: transparent;
+   color: rgb(240, 240, 240);
+   border: .128em solid rgb(240, 240, 240);
+   border-radius: 1em;
+   font-size: .55em;
+   height: min-content;
+   margin-right: .5em
+}
+.noiceCoreUITable .footer .buttonContainer .btnSelectAll:active, .noiceCoreUITable .footer .buttonContainer .btnSelectNone:active {
+   background-color: rgb(240, 240, 240);
+   color: rgb(22, 23, 25);
+}
+.noiceCoreUITable .footer .buttonContainer .btnSelectAll:disabled, .noiceCoreUITable .footer .buttonContainer .btnSelectNone:disabled {
+   opacity: .2;
+}
 .noiceCoreUITable .tablePrefEditor, .noiceCoreUITable .userPrompt  {
    background-color: rgba(24, 35, 38, .66);
    border-radius: .5em;
