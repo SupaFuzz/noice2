@@ -282,3 +282,41 @@ button.btnBurger {
    color: rgb(240, 240, 240);
    font-size: 1em;
 }
+.noiceCoreUITable .tablePrefEditor {
+   background-color: rgba(24, 35, 38, .66);
+   border-radius: .5em;
+}
+.noiceCoreUITable .tablePrefEditor {
+   background-color: rgba(24, 35, 38, .66);
+   border-radius: .5em;
+}
+.noiceCoreUITable .defaultPrefUIEditor fieldset {
+   color: rgb(240,240,240);
+   background-color: rgba(24, 35, 38, .66);
+   border-radius: 1em
+}
+.noiceCoreUITable .defaultPrefUIEditor fieldset legend {
+   font-family: Comfortaa;
+   font-weight: bolder;
+   font-size: 1.5em;
+}
+.noiceCoreUITable .defaultPrefUIEditor button.btnClose {
+   margin-right: 1.5em;
+   margin-top: .25em;
+   font-family: Comfortaa;
+   background: url('./gfx/cancel-icon-light.svg');
+   background-repeat: no-repeat;
+   background-size: contain;
+   padding-left: 1.5em;
+   color: rgb(240, 240, 240);
+   border: none;
+}
+
+/*
+    testHarness specific for noiceCoreUITable
+*/
+.noiceCoreUITable .tableContainer {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 95vw;
+ }

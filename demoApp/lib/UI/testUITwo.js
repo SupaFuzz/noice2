@@ -71,11 +71,36 @@ setupCallback(self){
     // 2/2/24 @ 2030 -- I'm bored and I don't have anything better to do ...
     that.testTable = new noiceCoreUITable({
         columns: [
-            { name: 'species', order: 1, type: 'char' },
-            { name: 'first', order: 2, type: 'char' },
+            { name: 'species', order: 1, type: 'char', width: '5em' },
+            { name: 'first', order: 2, type: 'char', width: '10em' },
             { name: 'middle', order: 3, type: 'char', width: '5em' },
-            { name: 'last', order: 4, type: 'char' },
-            { name: 'num', order: 5, type: 'int'}
+            { name: 'last', order: 4, type: 'char', width: '10em' },
+            { name: 'num', order: 5, type: 'int', width: '5em' },
+           { name: 'Entry ID', fieldName: 'Entry ID', order: 6, type: 'char', width: '10em' },
+           { name: 'PO Number', fieldName: 'PO Number', order: 7, type: 'char', width: '13em' },
+           { name: 'Line #', fieldName: 'Purchase Order Line', order: 8, type: 'char', width: '5em' },
+           { name: 'PRR Number', fieldName: 'PRR', order: 9, type: 'char', width: '10em' },
+           { name: 'Work Package', fieldName: 'Work Package', order: 10, type: 'char', width: '13em' },
+           { name: 'Quantity', fieldName: 'Quantity', order: 11, type: 'char', width: '5.5em' },
+           { name: 'Unit Price', fieldName: 'Unit Price', order: 12, type: 'char', width: '7.5em' },
+           { name: 'Property Type', fieldName: 'Property Type', order: 13, type: 'char', width: '10em' },
+           { name: 'Record Type', fieldName: 'Record Type', order: 14, type: 'char', width: '8em' },
+           { name: 'NPAM Status', fieldName: 'NPAM Status', order: 15, type: 'char', width: '8em' },
+           { name: 'Tier 1', fieldName: 'Product Categorization Tier 1', order: 16, type: 'char', width: '13em' },
+           { name: 'Manufacturer', fieldName: 'Manufacturer Name', order: 17, type: 'char', width: '10em' },
+           { name: 'Part Number', fieldName: 'Part Number', order: 18, type: 'char', width: '13em' },
+           { name: 'Serial Number', fieldName: 'SerialNumber', order: 19, type: 'char', width: '13em' },
+           { name: 'Center', fieldName: 'Center', order: 20, type: 'char', width: '5em' },
+           { name: 'Building', fieldName: 'Building', order: 21, type: 'char', width: '7em' },
+           { name: 'Room', fieldName: 'Room', order: 22, type: 'char', width: '5em' },
+           { name: 'Bin / Rack', fieldName: 'Bin/Rack', order: 23, type: 'char', width: '7em' },
+           { name: 'Assigned User', fieldName: 'Assigned User Login ID', order: 24, type: 'char', width: '13em' },
+           { name: 'Company', fieldName: 'Company', order: 25, type: 'char', width: '13em' },
+           { name: 'Description', fieldName: 'Description', order: 26, type: 'char', width: '13em' },
+           { name: 'MAC Address', fieldName: 'MAC Address', order: 27, type: 'char', width: '10em' },
+           { name: 'Requisition ID', fieldName: 'Requisition ID', order: 28, type: 'char', width: '10em' },
+           { name: 'Change ID (NSR)', fieldName: 'Change ID', order: 29, type: 'char', width: '10em' },
+           { name: 'FSC', fieldName: 'FSC', order: 30, type: 'char', width: '4em' }
         ],
         rows: [
             { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
@@ -110,7 +135,10 @@ setupCallback(self){
         },
         showFooterMessage: true,
         showBtnPrefs: true,
+        //maxListHeight: '6em'
+        listHeight: '66vh'
     }).append(that._DOMElements.chartContainer);
+
 
 }
 
