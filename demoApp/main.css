@@ -17,7 +17,10 @@ body {
     background-color: rgb(20, 22, 23);
     color: rgb(216, 210, 210);
 }
-
+@font-face {
+   font-family: 'Comfortaa';
+   src: url('./gfx/Comfortaa.woff2') format("woff2");
+}
 
 
 
@@ -282,11 +285,7 @@ button.btnBurger {
    color: rgb(240, 240, 240);
    font-size: 1em;
 }
-.noiceCoreUITable .tablePrefEditor {
-   background-color: rgba(24, 35, 38, .66);
-   border-radius: .5em;
-}
-.noiceCoreUITable .tablePrefEditor {
+.noiceCoreUITable .tablePrefEditor, .noiceCoreUITable .userPrompt  {
    background-color: rgba(24, 35, 38, .66);
    border-radius: .5em;
 }
@@ -310,6 +309,27 @@ button.btnBurger {
    padding-left: 1.5em;
    color: rgb(240, 240, 240);
    border: none;
+}
+.noiceCoreUITable .userPrompt {
+   padding: 1em;
+   border: .128em solid rgba(240, 240, 240, .8);
+}
+.noiceCoreUITable .userPrompt h2.prompt {
+   margin: 0;
+   font-family: Comfortaa;
+}
+.noiceCoreUITable .userPrompt div.buttonContainer {
+   text-align: center;
+}
+.noiceCoreUITable .userPrompt div.buttonContainer button {
+   font-family: Comfortaa;
+   font-size: .8em;
+   padding: .25em .5em .25em .5em;
+   margin: .8em;
+   border-radius: .5em;
+   background-color: rgba(240, 240, 240 .8);
+   border: .128em solid rgb(20, 22, 23);
+   color: rgb(20, 22, 23);
 }
 
 /*

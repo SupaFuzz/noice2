@@ -112,7 +112,6 @@ setupCallback(self){
         ],
         // maxListHeight: '5em',
         debug: false,
-        selectMode: 'single',
         rowSelectCallback: async (selectBool, rowElement, selfRef) => {
             console.log(`rowSelectCallback: ${selectBool} | ${rowElement.dataset.rownum}`);
             return(true)
@@ -136,7 +135,10 @@ setupCallback(self){
         showFooterMessage: true,
         showBtnPrefs: true,
         //maxListHeight: '6em'
-        listHeight: '66vh'
+        listHeight: '66vh',
+        selectMode: 'multiple',
+        modifyAll: 'prompt'
+
     }).append(that._DOMElements.chartContainer);
 
 
