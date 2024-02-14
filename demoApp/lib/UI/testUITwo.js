@@ -138,6 +138,7 @@ setupCallback(self){
         showBtnPrefs: true,
         showBtnSelectAll: true,
         showBtnSelectNone: true,
+        showBtnExport: true,
         //maxListHeight: '6em'
         listHeight: '66vh',
         selectMode: 'multiple',
