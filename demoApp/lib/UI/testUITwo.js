@@ -71,7 +71,7 @@ setupCallback(self){
     // 2/2/24 @ 2030 -- I'm bored and I don't have anything better to do ...
     that.testTable = new noiceCoreUITable({
         columns: [
-            { name: 'species', order: 1, type: 'char', width: '5em' },
+            { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
             { name: 'first', order: 2, type: 'char', width: '10em' },
             { name: 'middle', order: 3, type: 'char', width: '5em' },
             { name: 'last', order: 4, type: 'char', width: '10em' },
@@ -127,7 +127,7 @@ setupCallback(self){
         }
         */
         allowCellEdit: true,
-        //editCellCallback: async (rowElement, cellElement, tableRef) => { return(that.handleCellEdit(rowElement, cellElement, tableRef)); },
+        editCellCallback: async (rowElement, cellElement, tableRef) => { return(that.handleCellEdit(rowElement, cellElement, tableRef)); },
         modifyRowCallback:  async(row, data) => {
             console.log(`inside modifyRowCallback`);
             console.log(row);
@@ -153,9 +153,49 @@ setupCallback(self){
 
 
 /*
-    handleCellEdit(rowElement, celElement, tableRef)
+    handleCellEdit(rowElement, cellElement, tableRef)
+    new version -- let's try to extend this to custom input types
 */
-handleCellEdit(rowElement, cellElement, tableRef){
+handleCellEdit(rowElement, cellElement, selfRef){
+
+    let that = selfRef;
+    return(new Promise((toot, boot) => {
+
+        let c = cellElement.getBoundingClientRect();
+
+        let inp = document.createElement('input');
+        inp.setAttribute('type', 'text');
+        inp.value = cellElement.textContent;
+        inp.style.width = `${(c.width - 4)}px`;
+        inp.className = that.defaultCellEditorInputClass;
+
+        inp.addEventListener('focusout', (evt) => {
+
+            // so-dumb-it-actually-works xss filter
+            let bs = document.createElement('div');
+            bs.textContent = inp.value;
+            inp.remove();
+            toot(bs.innerHTML);
+
+        });
+        inp.addEventListener('keydown', (evt) => {
+            if (evt.keyCode == 13){ inp.blur(); }
+        });
+
+        cellElement.innerHTML = '';
+        cellElement.appendChild(inp);
+        inp.focus();
+    }));
+}
+
+
+
+
+/*
+    handleCellEditOG(rowElement, celElement, tableRef)
+    the og prototype that because defaultCellEditCallback
+*/
+handleCellEditOG(rowElement, cellElement, tableRef){
     let that = this;
     return(new Promise((toot, boot) => {
 
