@@ -140,9 +140,10 @@ setupCallback(self){
         showBtnSelectNone: true,
         showBtnExport: true,
         //maxListHeight: '6em'
-        listHeight: '66vh',
+        listHeight: '45vh',
         selectMode: 'multiple',
-        modifyAll: 'prompt'
+        modifyAll: 'prompt',
+        showRowNudgeButtons: true
 
     }).append(that._DOMElements.chartContainer);
 

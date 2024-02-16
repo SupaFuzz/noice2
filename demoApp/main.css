@@ -235,6 +235,7 @@ button.btnBurger {
    color: rgb(24, 35, 38);
    padding: .25em;
    border-radius: .5em;
+   font-size: 1.25rem;
 }
 .noiceCoreUITable .hdrRow,.noiceCoreUITable .listRow {
    margin-bottom: .128em;
