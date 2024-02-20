@@ -258,11 +258,20 @@ button.btnBurger {
 }
 .noiceCoreUITable .hdrRow .hdrCol, .noiceCoreUITable .listRow .listCol {
    margin-right: .128em;
-   padding: 0 .128em 0 .25em;
+   padding: .128em .128em 0 .25em;
 }
 .noiceCoreUITable .listRow span.listCol {
    font-size: .8em;
 }
+.noiceCoreUITable .listRow span.listCol[data-haserrors="true"] {
+   background: url('./gfx/dark_warning.svg');
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-color: rgba(230, 0, 161, .35);
+   padding-left: 1.5em;
+   border-radius: .25em;
+}
+
 .noiceCoreUITable .listRow[data-selected="true"] {
    background-color: rgba(240, 240, 240,.8);
    filter: invert(.85);
