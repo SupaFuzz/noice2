@@ -8,6 +8,8 @@ import { Config } from '../config/applicationConfig.js';
 import { mainUI } from './UI/mainUI.js';
 import { testUIOne } from './UI/testUIOne.js';
 import { testUITwo } from './UI/testUITwo.js';
+import { testUIThree } from './UI/testUIThree.js';
+import { testUIFour } from './UI/testUIFour.js';
 
 
 /*
@@ -60,7 +62,9 @@ startup(){
                      useDefaultBurgerMenu: true,
                      UIs: {
                          uiOne: new testUIOne({ sortOrder: 1, title: 'Test UI One', _app:that, debug:false }),
-                         uiTwo: new testUITwo({ sortOrder: 2, title: 'Test UI Two', _app:that, debug:false })
+                         uiTwo: new testUITwo({ sortOrder: 2, title: 'Test UI Two', _app:that, debug:false }),
+                         uiThree: new testUIThree({ sortOrder: 3, title: 'Test UI Three', _app:that, debug:false }),
+                         uiFour: new testUIFour({ sortOrder: 3, title: 'Test UI Four', _app:that, debug:false })
                      }
                  })
             },
