@@ -72,7 +72,7 @@ setupCallback(self){
     that.testTable = new noiceCoreUITable({
         columns: [
             { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
-            { name: 'first', order: 2, type: 'char', width: '10em' },
+            { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
             { name: 'middle', order: 3, type: 'char', width: '5em' },
             { name: 'last', order: 4, type: 'char', width: '10em' },
             { name: 'num', order: 5, type: 'int', width: '5em' },
