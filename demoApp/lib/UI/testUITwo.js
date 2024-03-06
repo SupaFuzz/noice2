@@ -143,7 +143,7 @@ setupCallback(self){
         listHeight: '45vh',
         selectMode: 'multiple',
         modifyAll: 'prompt',
-        showRowNudgeButtons: true
+        showRowNudgeButtons: true,
 
     }).append(that._DOMElements.chartContainer);
 
