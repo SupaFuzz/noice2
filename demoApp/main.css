@@ -263,6 +263,11 @@ button.btnBurger {
 .noiceCoreUITable .listRow span.listCol {
    font-size: .8em;
 }
+.noiceCoreUITable .listRow span.listCol[data-locked="true"] {
+   opacity: .4;
+   text-decoration: line-through;
+   background-color: rgba(24, 35, 38, .2);
+}
 .noiceCoreUITable .listRow span.listCol[data-haserrors="true"] {
    background: url('./gfx/dark_warning.svg');
    background-size: contain;
