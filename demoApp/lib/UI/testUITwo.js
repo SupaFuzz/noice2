@@ -144,6 +144,11 @@ setupCallback(self){
         selectMode: 'multiple',
         modifyAll: 'prompt',
         showRowNudgeButtons: true,
+        customButtons: [
+            {name: 'scoob', callback: (tableRef, btnRef) => {console.log(`${btnRef.textContent} clicked!`); }},
+            {name: 'shag', callback: (tableRef, btnRef) => {console.log(`${btnRef.textContent} clicked!`); }},
+            {name: 'velma', callback: (tableRef, btnRef) => {console.log(`${btnRef.textContent} clicked!`); }}
+        ]
 
     }).append(that._DOMElements.chartContainer);
 
