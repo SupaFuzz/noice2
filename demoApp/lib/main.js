@@ -61,10 +61,9 @@ startup(){
                      burgerMenuTitle: Config.appName,
                      useDefaultBurgerMenu: true,
                      UIs: {
-                         uiOne: new testUIOne({ sortOrder: 1, title: 'Test UI One', _app:that, debug:false }),
-                         uiTwo: new testUITwo({ sortOrder: 2, title: 'Test UI Two', _app:that, debug:false }),
-                         uiThree: new testUIThree({ sortOrder: 3, title: 'Test UI Three', _app:that, debug:false }),
-                         uiFour: new testUIFour({ sortOrder: 3, title: 'Test UI Four', _app:that, debug:false })
+                         uiOne: new testUIOne({ sortOrder: 1, title: 'noiceBarChart / noicePieChart', _app:that, debug:false }),
+                         uiTwo: new testUITwo({ sortOrder: 2, title: 'noiceCoreUITable', _app:that, debug:false }),
+                         uiThree: new testUIThree({ sortOrder: 3, title: 'noiceFormElement', _app:that, debug:false }),
                      }
                  })
             },
