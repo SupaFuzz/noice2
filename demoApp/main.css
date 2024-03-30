@@ -358,7 +358,7 @@ button.btnBurger {
    padding: .25em .5em .25em .5em;
    margin: .8em;
    border-radius: .5em;
-   background-color: rgba(240, 240, 240 .8);
+   background-color: rgba(240, 240, 240, .8);
    border: .128em solid rgb(20, 22, 23);
    color: rgb(20, 22, 23);
 }

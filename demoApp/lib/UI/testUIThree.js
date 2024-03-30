@@ -4,6 +4,7 @@
 */
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
+import { noiceCoreValue } from '../../../lib/noiceCoreValue.js';
 
 class testUIThree extends noiceCoreUIScreen {
 
@@ -65,9 +66,56 @@ setupCallback(self){
     bs.style.width="max-content";
     bs.textContent = `${that._className} v${that._version} | work in progress`
     that.chartContainer = bs;
+
+    // lets try making a coreValue object and see if we can do some stuff with it
+    let btnTestCreate = document.createElement('button');
+    btnTestCreate.textContent = 'noiceCoreValue.create()';
+    btnTestCreate.addEventListener('click', (evt) => {
+        that.coreValue = that.createCoreValue();
+    });
+    that._DOMElements.scanCage.appendChild(btnTestCreate);
+
 }
 
 
+
+
+/*
+    createCoreValue()
+*/
+createCoreValue(){
+    try {
+        let coreValue = new noiceCoreValue({
+            defaultValue: 'dork',
+            nullable: false,
+            editable: true,
+            debug: true,
+            validationStateChangeCallback: (hasErrors, hasWarnings, errors, slf) => {
+                slf.log(`[validationStateChangeCallback]: errors: ${hasErrors} (${errors.filter((a)=>{return(a.severity=="error")}).length}), warnings: ${hasWarnings} (${errors.filter((a)=>{return(a.severity=="warning")}).length})`)
+            },
+            editableStateChangeCallback: (toBool, fromBool, slf) => {
+                slf.log(`[editableStateChangeCallback] ${fromBool} -> ${toBool}`);
+            },
+            nullableStateChangeCallback: (toBool, fromBool, slf) => {
+                slf.log(`[nullableStateChangeCallback] ${fromBool} -> ${toBool}`);
+            },
+            valueChangeCallback: (n, o, slf) => {
+                return(new Promise((_t,_b) => {
+                    slf.log(`[valueChangeCallback] ${o} -> ${n}`);
+                    // demonstrate thine asyncrhony
+                    setTimeout(() => { _t(n); }, 100);
+                }));
+            },
+            valueChangedCallback: async (n, o, slf) => {
+                slf.log(`[valueChangedCallback] ${o} -> ${n}`);
+                return(n);
+            }
+        });
+        return(coreValue)
+    }catch(e){
+        console.log(e);
+    }
+}
 
 
 /*
@@ -78,9 +126,6 @@ gainFocus(focusArgs){
     let that = this;
     return (new Promise(function(toot, boot){
 
-        // bind the scanHandler to keydown event
-        that.scanListener = that.getEventListenerWrapper(function(evt, sr){ that.scanHandler(evt); });
-        document.addEventListener('keydown', that.scanListener);
 
         // be outa here wit ya badass ...
         toot(true);
