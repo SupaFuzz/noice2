@@ -5,6 +5,7 @@
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { noiceCoreValue } from '../../../lib/noiceCoreValue.js';
+import { noiceCoreRow } from '../../../lib/noiceCoreRow.js';
 
 class testUIThree extends noiceCoreUIScreen {
 
@@ -59,6 +60,7 @@ setupCallback(self){
     // fix layout for chart grid stuffs
     that.DOMElement.style.alignItems = 'baseline';
     that.DOMElement.style.justifyContent = 'flex-start';
+    that.DOMElement.style.display = "grid";
     that._DOMElements.chartContainer.style.padding = '1em';
 
     // placeholder message
@@ -75,8 +77,38 @@ setupCallback(self){
     });
     that._DOMElements.scanCage.appendChild(btnTestCreate);
 
+    // let's try making a row
+    let btnTestRow = document.createElement('button');
+    btnTestRow.textContent = 'noiceCoreRow.create()';
+    btnTestRow.addEventListener('click', (evt) => {
+        that.coreRow = that.createCoreRow();
+    });
+    that._DOMElements.scanCage.appendChild(btnTestRow);
+
 }
 
+
+
+
+/*
+    createCoreRow()
+*/
+createCoreRow(){
+    try {
+        let coreRow = new noiceCoreRow({
+            rowData: {
+                entryId:    '000000000000001',
+                status:     "I'm Ready",
+                createDate: 1712023281,
+                user:       'sbsquarepants',
+                subject:    'you forgot the pickles'
+            }
+        });
+        return(coreRow);
+    }catch(e){
+        console.log(`createCoreRow() | object instantiation failed: ${e}`, e);
+    }
+}
 
 
 
