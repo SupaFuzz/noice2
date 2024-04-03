@@ -102,7 +102,40 @@ createCoreRow(){
                 createDate: 1712023281,
                 user:       'sbsquarepants',
                 subject:    'you forgot the pickles'
-            }
+            },
+            fieldConfig: {
+                status: {
+                    values: ["I'm Ready", "Open", "Closed"],
+                    enforceMenuValues: true,
+                    nullable: false
+                },
+                createDate: {
+                    type: "TIME",
+                    storeAs: 'epoch',
+                    showAs: 'dateTimeLocale',
+                    nullable: false
+                },
+                user: {
+                    type: "AUID",
+                    storeAs: "auid",
+                    showAs: "full name",
+                    nullable: false
+                },
+                subject: {
+                    nullable: false
+                },
+                entryId: {
+                    type: 'char',
+                    maxLength: 15,
+                    nullable: false
+                }
+            },
+            saveOnChange: false,
+            saveCallback: (rowData, selfRef) => {return(new Promise((toot, boot) => {
+                // simulate saving
+                console.log("fake saving! ...");
+                setTimeout(() => { toot(rowData); }, 1000)
+            }))},
         });
         return(coreRow);
     }catch(e){
