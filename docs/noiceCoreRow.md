@@ -175,7 +175,13 @@ if specified, log statements will be sent to this function rather than `console.
 
 if set `true`, will log more. else will log less.
 
+### `addDataElementCallback` | async function(noiceCoreValue)
 
+if specified, is called and awaited from `getDataElement` when a new dataElement is spawned
+
+### `removeDataElementCallback` | async function(noiceCoreValue)
+
+if specified, is called and awaited before removing a dataElement via the `removeDataElement()` function. Promise rejects are ignored. 
 
 
 ## FUNCTIONS
@@ -226,3 +232,15 @@ internal function is a stub. child classes may wish to override this for the pur
 ### `async valueChangePostHook({ fieldID: <colName>, newValue: <val>, oldValue: <val>, fieldReference: <noiceCoreValue object> })`
 
 internal function is a stub. child classes may wish to override this for the purposes of executing logic triggered by field value changes *after* the value has been set. This function is asynchronous for symmetry to `valueChange()` however, the resolution or rejection status of the returned promise is ignored. This is mostly useful for updating UI states as a result of a successful field change, etc.
+
+### `getDataElement(fieldID, defaultValue)`
+
+this returns the dataElement on this.dataElements, corresponding to colName
+if no matching dataElement is found this will create a new one, and return that
+append it to this.dataElements (that's on the caller)
+
+if we had to create the dataElement and addDataElementCallback is specified, we call that
+
+### `removeDataElement(fieldID)`
+
+removes the noiceCoreValue object identified by `fieldID` from the `this.dataElements` attribute. If `removeDataElementCallback` is specified, we will await resolution/rejection before deleting the dataElement. However promise rejections are ignored and the dataElement is still deleted regardless.
