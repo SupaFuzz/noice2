@@ -6,10 +6,10 @@ import { noicePieChart } from '../../lib/noicePieChart.js';
 import { Config } from '../config/applicationConfig.js';
 
 import { mainUI } from './UI/mainUI.js';
-import { testUIOne } from './UI/testUIOne.js';
-import { testUITwo } from './UI/testUITwo.js';
-import { testUIThree } from './UI/testUIThree.js';
-import { testUIFour } from './UI/testUIFour.js';
+import { chartsDemo } from './UI/chartsDemo.js';
+import { tableDemo } from './UI/tableDemo.js';
+import { dataClassDemo } from './UI/dataClassDemo.js';
+import { webComponentDemo } from './UI/webComponentDemo.js';
 
 
 /*
@@ -41,10 +41,10 @@ constructor(args, defaults, callback){
 
 
 
-
+webComponentDemo
 /*
     startup()
-    startup the app, init UI state etc\
+    startup the app, init UI state etc
 */
 startup(){
     let that = this;
@@ -61,9 +61,10 @@ startup(){
                      burgerMenuTitle: Config.appName,
                      useDefaultBurgerMenu: true,
                      UIs: {
-                         uiOne: new testUIOne({ sortOrder: 1, title: 'noiceBarChart / noicePieChart', _app:that, debug:false }),
-                         uiTwo: new testUITwo({ sortOrder: 2, title: 'noiceCoreUITable', _app:that, debug:false }),
-                         uiThree: new testUIThree({ sortOrder: 3, title: 'noiceCoreValue', _app:that, debug:false }),
+                         uiOne: new chartsDemo({ sortOrder: 1, title: 'noiceBarChart / noicePieChart', _app:that, debug:false }),
+                         uiTwo: new tableDemo({ sortOrder: 2, title: 'noiceCoreUITable', _app:that, debug:false }),
+                         uiThree: new dataClassDemo({ sortOrder: 3, title: 'noiceCoreValue', _app:that, debug:false }),
+                         wcDemo: new webComponentDemo({ sortOrder: 4, title: 'web components demo', _app:that, debug:true })
                      }
                  })
             },

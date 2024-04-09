@@ -7,7 +7,7 @@ import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { noicePieChart } from '../../../lib/noicePieChart.js';
 import { noiceBarChart } from '../../../lib/noiceBarChart.js';
 
-class testUIOne extends noiceCoreUIScreen {
+class chartsDemo extends noiceCoreUIScreen {
 
 
 
@@ -20,7 +20,7 @@ constructor(args, defaults, callback){
         args,
         noiceObjectCore.mergeClassDefaults({
             _version: 1,
-            _className: 'testUIOne',
+            _className: 'chartsDemo',
             pies: {},
             debug: false
         }, defaults),
@@ -173,4 +173,4 @@ loseFocus(focusArgs){
 
 
 }
-export { testUIOne };
+export { chartsDemo };

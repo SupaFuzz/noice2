@@ -7,7 +7,7 @@ import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { noiceCoreValue } from '../../../lib/noiceCoreValue.js';
 import { noiceCoreRow } from '../../../lib/noiceCoreRow.js';
 
-class testUIThree extends noiceCoreUIScreen {
+class dataClassDemo extends noiceCoreUIScreen {
 
 
 
@@ -20,7 +20,7 @@ constructor(args, defaults, callback){
         args,
         noiceObjectCore.mergeClassDefaults({
             _version: 1,
-            _className: 'testUIThree',
+            _className: 'dataClassDemo',
             pies: {},
             debug: false,
             _isTyping:              false,
@@ -221,4 +221,4 @@ loseFocus(focusArgs){
 }
 
 }
-export { testUIThree };
+export { dataClassDemo };
