@@ -41,7 +41,6 @@ constructor(args, defaults, callback){
 
 
 
-webComponentDemo
 /*
     startup()
     startup the app, init UI state etc
