@@ -33,7 +33,7 @@ constructor(args, defaults, callback){
 */
 get html(){return(`
     <h1>Web Component Demo</h1>
-    <wp-pie-chart id="testMe" size="5em" value="20" badge_text="help" its_a_bool="false" />
+    <wp-pie-chart id="testMe" size="5em" value="20" badge_text="donks" show_badge="true" badge_position="bottom" />
 `)}
 
 
