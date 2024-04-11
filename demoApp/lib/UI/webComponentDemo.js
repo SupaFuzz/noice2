@@ -4,9 +4,12 @@
 */
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
-import { wpPieChart } from '../../../lib/webComponents/wpPieChart.js';
-class webComponentDemo extends noiceCoreUIScreen {
 
+import { wpPieChart } from '../../../lib/webComponents/wpPieChart.js';
+
+wpPieChart.registerElement('wp-pie-chart');
+
+class webComponentDemo extends noiceCoreUIScreen {
 
 
 
@@ -33,7 +36,7 @@ constructor(args, defaults, callback){
 */
 get html(){return(`
     <h1>Web Component Demo</h1>
-    <wp-pie-chart id="testMe" size="5em" value="20" badge_text="donks" show_badge="true" badge_position="bottom" />
+    <wp-pie-chart id="testMe" size="20em" value="20" badge_text="donks" show_badge="true" badge_position="bottom" />
 `)}
 
 
@@ -48,6 +51,11 @@ setupCallback(self){
     that.DOMElement.style = "grid";
 
     that.testThing = that.DOMElement.querySelector('#testMe');
+
+    // hackeration
+    console.log(customElements.getName(wpPieChart));
+    let bs = wpPieChart;
+    console.log(customElements.getName(bs));
 }
 
 
