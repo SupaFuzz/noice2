@@ -5,8 +5,8 @@
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
 
-import { wpPieChart } from '../../../lib/webComponents/wpPieChart.js';
-wpPieChart.registerElement('wp-pie-chart');
+import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
+wcPieChart.registerElement('wc-pie-chart');
 
 class webComponentDemo extends noiceCoreUIScreen {
 
@@ -37,7 +37,7 @@ get html(){return(`
     <h1>Web Component Demo</h1>
 
     <div class="pieChartDemo" style="display:grid;place-items:center;">
-        <wp-pie-chart id="testMe" size="20em" badge_text="test" show_badge="true" badge_position="bottom"></wp-pie-chart>
+        <wc-pie-chart id="testMe" size="20em" badge_text="test" show_badge="true" badge_position="bottom"></wc-pie-chart>
         &nbsp;
         &nbsp;
         <button id="btnAddChart">add charts</button>
