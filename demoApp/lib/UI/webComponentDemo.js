@@ -8,6 +8,9 @@ import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
 wcPieChart.registerElement('wc-pie-chart');
 
+import { wcFormElement } from '../../../lib/webComponents/wcFormElement.js';
+wcFormElement.registerElement('wc-form-element');
+
 class webComponentDemo extends noiceCoreUIScreen {
 
 
@@ -36,13 +39,17 @@ constructor(args, defaults, callback){
 get html(){return(`
     <h1>Web Component Demo</h1>
 
-    <div class="pieChartDemo" style="display:grid;place-items:center;">
+
+    <div class="pieChartDemo" style="display:grid;place-items:center; display: none;">
         <wc-pie-chart id="testMe" size="20em" badge_text="test" show_badge="true" badge_position="bottom"></wc-pie-chart>
         &nbsp;
         &nbsp;
         <button id="btnAddChart">add charts</button>
         <button id="btnToggleMode">layout mode</button>
     </div>
+
+    <wc-form-element name="test" type="text" label="test field" show_undo_button="true" show_menu_button="true"></wc-form-element>
+
 `)}
 
 
