@@ -48,7 +48,7 @@ get html(){return(`
         <button id="btnToggleMode">layout mode</button>
     </div>
 
-    <wc-form-element name="test" type="text" label="test field" show_undo_button="true" show_menu_button="true"></wc-form-element>
+    <wc-form-element name="test" type="text" label="test field" show_undo_button="true" show_menu_button="true" message="test message"></wc-form-element>
 
 `)}
 
@@ -64,6 +64,7 @@ setupCallback(self){
     that.DOMElement.style.display = "grid";
 
     that.testPie = that.DOMElement.querySelector('#testMe');
+    that.testFormElement = that.DOMElement.querySelector('wc-form-element');
 
     that.DOMElement.querySelector('#btnAddChart').addEventListener('click', (evt) =>{
         // I ain't fibbin' ... or am i?
