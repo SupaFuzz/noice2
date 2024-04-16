@@ -36,21 +36,53 @@ constructor(args, defaults, callback){
 /*
     html
 */
-get html(){return(`
+get html(){
+    let bs = JSON.stringify({
+      Cats: [
+        "Bootsy",
+        "Meowery",
+        "Moe",
+        [3, "Lilly"],
+        "Jazzy",
+        "Lucy"
+      ],
+      Dogs: [
+        "Scotty",
+        "Missy",
+        "Molly",
+        "Grizzly"
+      ]
+    });
+return(`
     <h1>Web Component Demo</h1>
 
 
-    <div class="pieChartDemo" style="display:grid;place-items:center; display: none;">
-        <wc-pie-chart id="testMe" size="20em" badge_text="test" show_badge="true" badge_position="bottom"></wc-pie-chart>
-        &nbsp;
-        &nbsp;
-        <button id="btnAddChart">add charts</button>
-        <button id="btnToggleMode">layout mode</button>
+    <div class="pieChartDemo" style="
+        display:grid;
+        place-items:center;
+        grid-template-columns: auto auto;
+        margin-bottom: 2em;
+    ">
+        <wc-pie-chart id="testMe" size="12em" badge_text="test" show_badge="true" badge_position="bottom"></wc-pie-chart>
+        <div class="btnContainer">
+            <button id="btnAddChart">add charts</button>
+            <button id="btnToggleMode">layout mode</button>
+        </div>
     </div>
 
-    <wc-form-element name="test" type="text" label="test field" show_undo_button="true" show_menu_button="true" message="test message"></wc-form-element>
+    <wc-form-element
+        name="test"
+        type="text"
+        label="test field"
+        show_undo_button="true"
+        show_menu_button="true"
+        message="test message"
+        options='{"values":["one", "two", "three"]}'
+        default_value="two"
+    ></wc-form-element>
 
-`)}
+`)
+}
 
 
 
@@ -62,6 +94,8 @@ get html(){return(`
 setupCallback(self){
     let that = this;
     that.DOMElement.style.display = "grid";
+    that.DOMElement.style.height = "max-content";
+    that.DOMElement.style.maxHeight = "100%";
 
     that.testPie = that.DOMElement.querySelector('#testMe');
     that.testFormElement = that.DOMElement.querySelector('wc-form-element');
