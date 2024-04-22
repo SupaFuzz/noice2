@@ -24,6 +24,7 @@ a library for interfacing with a noiceARSSyncWorkerThread from a parent thread
         ticket: <str>,
         fields: [<str>,<str>,...],
         returnFormat: <enum: raw|fieldName|fieldID> (default fieldName),
+        dateFormat: <enum: any date time format accepted by noiceCore.fromEpoch> default: datetime-local
         returnChanges: <bool> (default: false)
     })
 
@@ -55,6 +56,7 @@ a library for interfacing with a noiceARSSyncWorkerThread from a parent thread
         query: <IDBKeyRange (optional)>,
         count: <int (optional)>,
         returnFormat: <enum: raw|fieldName|fieldID> (default fieldName),
+        dateFormat: <enum: any date time format accepted by noiceCore.fromEpoch> default: datetime-local
         returnChanges: <bool> (default: false)
     })
 

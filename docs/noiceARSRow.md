@@ -134,9 +134,9 @@ NOTE: `.fieldID` is an unfortunate attribute name. This is the `name` of the fie
 
 pull the formDefinition corresponding to `this.formName` from the threadClient, and mutate it into a fieldConfig, then install that fieldConfig on the `.fieldConfig` attribute. This is called automatically from the constructor
 
-### `load(entryId)`
+### `load(entryId, dateFormat)`
 
-load the row from the datastore corresponding to `this.formName` with the specified `entryId` into the object. Values will be available on `this.rowData`, and the `dataLoadedCallback()` will be executed if specified. Upon an error, will reject returned promise.
+load the row from the datastore corresponding to `this.formName` with the specified `entryId` into the object. Values will be available on `this.rowData`, and the `dataLoadedCallback()` will be executed if specified. Upon an error, will reject returned promise. `dateFormat` is any dateTime format accepted by `noiceCore.fromEpoch()`, if null, defaults to `datetime-local` for compatibility with `wcFormElement`
 
 ### `refresh(mergeChangesBool)`
 

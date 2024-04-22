@@ -10,6 +10,7 @@ import { chartsDemo } from './UI/chartsDemo.js';
 import { tableDemo } from './UI/tableDemo.js';
 import { dataClassDemo } from './UI/dataClassDemo.js';
 import { webComponentDemo } from './UI/webComponentDemo.js';
+import { webComponentPlayground } from './UI/webComponentPlayground.js';
 
 
 /*
@@ -63,7 +64,8 @@ startup(){
                          uiOne: new chartsDemo({ sortOrder: 1, title: 'noiceBarChart / noicePieChart', _app:that, debug:false }),
                          uiTwo: new tableDemo({ sortOrder: 2, title: 'noiceCoreUITable', _app:that, debug:false }),
                          uiThree: new dataClassDemo({ sortOrder: 3, title: 'noiceCoreValue', _app:that, debug:false }),
-                         wcDemo: new webComponentDemo({ sortOrder: 4, title: 'web components demo', _app:that, debug:true })
+                         wcDemo: new webComponentDemo({ sortOrder: 4, title: 'web components demo', _app:that, debug:true }),
+                         wcPlay: new webComponentPlayground({ sortOrder: 5, title: 'web component playground', _app:that, debug:true }),
                      }
                  })
             },
