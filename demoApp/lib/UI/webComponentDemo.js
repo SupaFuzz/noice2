@@ -138,6 +138,7 @@ setupCallback(self){
 
     // theme selector stuff
     that.themeSelector = that.DOMElement.querySelector('wc-form-element[name="theme"]');
+
     that.themeSelector.captureValueCallback = (value) => {
         if (that.themeStyle instanceof Element){ that.themeStyle.remove(); }
         if (value == "dark"){
@@ -192,8 +193,7 @@ setupCallback(self){
     }
 
     // set default
-    that.themeSelector.captureValueCallback(that.themeSelector.value);
-
+    that.themeSelector.captureValue();
 
 }
 

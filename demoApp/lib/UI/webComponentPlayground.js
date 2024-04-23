@@ -62,11 +62,30 @@ setupCallback(self){
     that.DOMElement.appendChild(btn);
     btn.addEventListener('click', (evt) => {
         that.testFormElement = new wcFormElement({
-            type: 'color',
+            label: 'test field',
+            name: 'test',
+            type: 'text',
             capture_value_on: 'change',
+            show_undo_button: true,
+            show_menu_button: true,
             captureValueCallback: (val, slf) => {slf.log(`[value]: ${val}`); },
+            menuCallback: (slf, btn) => {
+                slf.log('menu callback');
+                btn.disabled = true;
+                setTimeout(() => {btn.disabled = false}, 1500);
+            },
+            undoCallback: (slf, btn) => {
+                slf.log('undo callback');
+                btn.disabled = true;
+                setTimeout(() => {btn.disabled = false}, 1500);
+            },
             log: (str) => { console.log(`hi there: ${str}`); }
         });
+        /*
+        that.testFormElement.addEventListener('capture_value', (evt) => {
+            console.log(`[name]: ${evt.detail.self.name} [value]: ${evt.detail.value}`);
+        })
+        */
         that.DOMElement.appendChild(that.testFormElement);
     })
 
