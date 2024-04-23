@@ -1,8 +1,76 @@
 /*
     wcARSFormView.js
-    4/23/24     Amy Hicox <amy@hicox.com>
+    4/19/24     Amy Hicox <amy@hicox.com>
+
+    this class accepts a noiceARSRow object on instantiation
+    (and associated config data), and returns a UI composed
+    from wcFormElement objects.
+
+    docs to follow as I figure it out lol
+
+    --> 4/22/24 @ 2023 <--
+    at home. thinking this through.
+    we cannot model the formView as a webComponent.
+    here's why
+
+    document.body.querySelectorAll('wc-ars-form-view')[0].arsRow.threadClient
+
+    my god, that's just asking for trouble right there.
+    the app must own the DOM. The DOM *cannot* contain references back to app objects.
+
+    this means we CANNOT take ._app on webComponents
+
+    actually. I'm not even sure storing callback references in the DOM is safe.
+    actually the more I think about it, the more it definitely cannot be safe
+    to do that.
+
+    yeah private properties aint gonna save it
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
+
+    so ... how do we do callbacks on webComponents correctly?
+    maybe we can emulate the Element.onclick((evt) => {...}) kinda shorthand
+    for eventListeners?
+
+    the DOM element never contains the callback reference, but exposes an event
+    that can be fired, which the owner code owns. I think that's better.
+
+    so something like this to attach the callback
+
+    wcFormElement.addEventListener('capture_value', (evt) => {
+
+            because we're limited on the evt interface
+            there might be shenanigans about passing refs back
+            need to look into that
+
+    });
+
+    and something like this in the class to setup the custom event
+    this.dispatchEvent(new Event("capture_value", yadda yadda ))
+
+    doesn't look too complicated
+    https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events
+
+    STILL THOUGH!
+    even if we can do callbacks "securely" with event dispatchers, we still can't
+    be *pulling this bullshit*
+
+    how about like this.
+    We yank all the stuff out that directly references arsRow
+    and we paramatarize that. So we take the fieldConfig as an input (that we locally materialize)
+    instead of a reference to the arsRow.fieldConfig. Mahybe mutate it a little bit so default
+    values are included. -- basically here are the fields I want you to display and their current values.
+
+    the arsRow will own the wcFormView via something like a .getFormView() function, that way
+    the super dumb wcFormView is born with event listeners linked back into it's corresponding
+    parent arsRow, and the DOM ONLY gets markup and events, no code references.
+
+    this seems like the away
+    operation data diode, baby.
+    
 */
 import { noiceAutonomousCustomElement } from '../noiceAutonomousCustomElement.js';
+import { noiceARSRow } from '../noiceARSRow.js';
+
 import { wcFormElement } from './wcFormElement.js';
 wcFormElement.registerElement('wc-form-element');
 
@@ -32,42 +100,18 @@ constructor(args){
     this._version = 1;
     this._elements = {};
     this.formElements = {};
-    this._rowData = {};
-    this.logger = ((args instanceof Object) && (args.logger instanceof Function))?args.logger:console.log;
 
-    /*
-        come back here and do the throw if we don't got 'em after we figure the rest out
-
-        things we need to instantiate
-        .rowData = { fieldName: value, ... }
-        .fieldConfig = { fieldName: { id: <int>, name: <str>, type: <enum>, values: [ ... ],  modes: { ... }}}
-
-        you can use also to set indiviual field values
-        .setFieldValue(name, value)
-
-        remember -- the arsRow *owns* the wcARSFormView not the other way round
-        when a field changes value it gets the valueChangeCallback(), which should be bound already to the arsRow dataElement
-
-        setting .fieldConfig should call renderFieldContainer() again.
-
-        also .mode that's required too or needs to default?
-
-    */
+    // we really gotta have a noiceARSRow from the get-go.
+    // I know it breaks markup instantiation but let's fix that later
+    if (! (this.arsRow instanceof noiceARSRow) ){
+        throw('arsRow is a rewquired argument');
+    }
+    this.mode = this.arsRow.mode;
 
     // attributeChangeHandlers
     this.attributeChangeHandlers = {
         //locked: (n, o, v, s) => { s.toggleLocked(v, o); }
     };
-}
-
-
-
-
-/*
-    getAttributeDefaults()
-*/
-getAttributeDefaults(){
-    return(wcARSFormView.classAttributeDefaults);
 }
 
 
@@ -93,13 +137,13 @@ getHTMLContent(){
         we're gonna need to figure out how we want to deal with entry_id change
         and loading, etc. Also how to handle create mode.
 
-        if this is born from markup it won't have a reference to .rowData and .fieldConfig as input
+        if this is born from markup it won't have a reference to a noiceARSRow as input
         and hence we won't know what fields to draw. So I think we'll have to render
         with a null field container, then update as we get input
     */
     div.insertAdjacentHTML('afterbegin', `
         <div class="header" data-sync="${this.db_sync}">
-            <span class="textField" data-name="entryId">${this.isNull(this.entry_id)?this.entryId:this.entry_id}</span>
+            <span class="textField" data-name="entryId">${this.entry_id}</span>
             <span class="textField" data-name="mode">${this.mode}</span>
             <div class="buttonContainer">
                 <button class="btnSave">${(this.mode == "create")?'create':'save'}</button>
@@ -112,6 +156,11 @@ getHTMLContent(){
     this._elements.mode = div.querySelector('span.textField[data-name="mode"]');
     this._elements.btnSave = div.querySelector('button.btnSave');
     this.renderFieldContainer(this._elements.fieldContainer);
+
+    /*
+        LOH 4/19/23 @ 1729 -- COB
+        figguring it out but yeah. think i'm on the right track
+    */
 
     return(div);
 }
@@ -169,10 +218,8 @@ getFormElement(fieldConfigEntry){
             {
                 type: this.arsTypeToFormElementType(fieldConfigEntry.type),
                 capture_value_on: 'change',
-                captureValueCallback: (val, s) => { that.fieldValueChange(val, s); },
-                undoCallback: (s, btn) => { that.fieldUndo(s, btn) },
-                menuCallback: (s, btn) => { that.fieldMenu(s, btn) },
-                default_value: this.rowData.hasOwnProperty(fieldConfigEntry.fieldName)?this.rowData[fieldConfigEntry.fieldName]:null,
+                captureValueCallback: (val, s) => { that.fieldValueChange(fieldConfigEntry.fieldName, val, s); },
+                default_value: this.arsRow.rowData.hasOwnProperty(fieldConfigEntry.fieldName)?this.arsRow.rowData[fieldConfigEntry.fieldName]:null,
                 name: fieldConfigEntry.fieldName
             }
         ));
@@ -182,24 +229,12 @@ getFormElement(fieldConfigEntry){
 
 
 
-
-/*
-    log()
-    may expand this at some point, but this.logger controls where it goes
-*/
-log(str){
-    this.logger(`${this._className} v${this._version} | ${str}`);
-}
-
-
-
-
 /*
     manageFormElements()
 
-    this instantiates wcFormElement objects correlating to fields on this.fieldConfig
+    this instantiates wcFormElement objects correlating to fields on this.arsRow.fieldConfig
     where:
-        this.fieldConfig[<fieldName>].modes[this.mode].display == true
+        this.arsRow.fieldConfig[<fieldName>].modes[this.mode].display == true
 
     for each field matching this condition, if it does not exist, will be instantited.
     for each pre-existing field that does not exist in the config with this condition will be removed
@@ -207,32 +242,32 @@ log(str){
     output is on this.formElements[fieldName]
 */
 manageFormElements(){
-    if ( (this.fieldConfig instanceof Object) ){
+    if (this.arsRow instanceof noiceARSRow){
 
         // make anything missing
-        Object.keys(this.fieldConfig).filter((fieldName) =>{return(
+        Object.keys(this.arsRow.fieldConfig).filter((fieldName) =>{return(
             (! this.formElements.hasOwnProperty(fieldName)) &&
-            (this.fieldConfig[fieldName] instanceof Object) &&
-            (this.fieldConfig[fieldName].modes instanceof Object) &&
-            (this.fieldConfig[fieldName].modes[this.mode] instanceof Object) &&
-            this.fieldConfig[fieldName].modes[this.mode].hasOwnProperty('display') &&
-            (this.fieldConfig[fieldName].modes[this.mode].display === true)
-        )}, this).forEach((fieldName) => { this.formElements[fieldName] = this.getFormElement(this.fieldConfig[fieldName])}, this);
+            (this.arsRow.fieldConfig[fieldName] instanceof Object) &&
+            (this.arsRow.fieldConfig[fieldName].modes instanceof Object) &&
+            (this.arsRow.fieldConfig[fieldName].modes[this.mode] instanceof Object) &&
+            this.arsRow.fieldConfig[fieldName].modes[this.mode].hasOwnProperty('display') &&
+            (this.arsRow.fieldConfig[fieldName].modes[this.mode].display === true)
+        )}, this).forEach((fieldName) => { this.formElements[fieldName] = this.getFormElement(this.arsRow.fieldConfig[fieldName])}, this);
 
         // prune anything removed
         Object.keys(this.formElements).filter((fieldName) => {return(!(
-            (this.fieldConfig[fieldName] instanceof Object) &&
-            (this.fieldConfig[fieldName].modes instanceof Object) &&
-            (this.fieldConfig[fieldName].modes[this.mode] instanceof Object) &&
-            this.fieldConfig[fieldName].modes[this.mode].hasOwnProperty('display') &&
-            (this.fieldConfig[fieldName].modes[this.mode].display === true)
+            (this.arsRow.fieldConfig[fieldName] instanceof Object) &&
+            (this.arsRow.fieldConfig[fieldName].modes instanceof Object) &&
+            (this.arsRow.fieldConfig[fieldName].modes[this.mode] instanceof Object) &&
+            this.arsRow.fieldConfig[fieldName].modes[this.mode].hasOwnProperty('display') &&
+            (this.arsRow.fieldConfig[fieldName].modes[this.mode].display === true)
         ))}, this).forEach((fieldName) => {
             this.formElements[fieldName].remove();
             delete(this.formElements[fieldName]);
         }, this);
 
     }else{
-        if (this.debug){ this.log(`${this._className} v${this._version} | manageFormElements() called with no fieldConfig`); }
+        if (this.debug){ this.log(`${this._className} v${this._version} | manageFormElements() called with no arsRow`); }
     }
 }
 
@@ -266,42 +301,6 @@ renderFieldContainer(fieldContainerElement){
 
 
 /*
-    okaaaaayyyy -- this does not work and I do not know why
-    rowData setter/getter
-    sets need to update entry_id and call renderFieldContainer again
-get rowData(){ return(this._rowData); }
-set rowData(v){
-    if (v instanceof Object){
-        this._rowData = v;
-
-    }
-}
-*/
-
-// this however does, so that's good i guess
-get entryId(){
-    return(
-        (
-            (this.fieldConfig instanceof Object) &&
-            (Object.keys(this.fieldConfig).filter((fieldName) => { return(this.fieldConfig[fieldName].id == 1) }, this).length > 0) &&
-            (this.rowData instanceof Object) &&
-            this.rowData.hasOwnProperty(Object.keys(this.fieldConfig).filter((fieldName) => { return(this.fieldConfig[fieldName].id == 1) }, this)[0])
-        )?this.rowData[Object.keys(this.fieldConfig).filter((fieldName) => { return(this.fieldConfig[fieldName].id == 1) }, this)[0]]:null
-    )
-}
-
-
-
-/*
-    --------------------------------------------------------------------------------
-    TO-DO Stubs Below
-    --------------------------------------------------------------------------------
-*/
-
-
-
-
-/*
     initializedCallback()
 */
 initializedCallback(){
@@ -327,48 +326,24 @@ get defaultStyle(){
 }
 
 
-
-
 /*
-    fieldValueChange(value, wcFormElement)
-    a field value has changed
+    getAttributeDefaults()
 */
-fieldValueChange(value, formElement){
-    if (that.debug){ that.log(`fieldValueChange(${formElement.name}, ${value})`); }
-    /*
-        insert further shenanigans here
-    */
+getAttributeDefaults(){
+    return(wcARSFormView.classAttributeDefaults);
 }
 
 
 
 
 /*
-    fieldUndo()
-    the undo button got clicked on a formElement
+    fieldValueChange(fieldName, newValue. formElementRef)
 */
-fieldUndo(formElement, btnUndo){
-    if (that.debug){ that.log(`fieldUndo(${formElement.name})`); }
-    /*
-        insert further shenanigans here
-    */
+fieldValueChange(fieldName, newValue, formElementRef){
+    // placeholder
 }
 
 
-
-
-/*
-    fieldMenu()
-    the menu button got clicked on a formElement
-*/
-fieldMenu(formElement, btnUndo){
-    if (that.debug){ that.log(`fieldMenu(${formElement.name})`); }
-    /*
-        insert logic here.
-        it is of course entirely possible we don't *have* a menu here so
-        yknow ... check that formElement.
-    */
-}
 
 
 
