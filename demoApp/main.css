@@ -20,6 +20,30 @@
     --theme-field-option-background: rgb(20, 22, 23);
 }
 */
+:root {
+    /* global colors */
+    --theme-lightest-grey: rgb(240, 240, 240);
+    --theme-mid-grey: rgb(191,191,191);
+    --theme-dark-grey: rgb(53, 57, 59);
+    --theme-darkest-grey: rgb(36, 36, 36);
+    --theme-alt-grey: rgb(150, 167, 173);
+    --theme-almost-black: rgb(5, 15, 20);
+    --theme-leidos-purp: rgb(70, 7, 141);
+    --theme-alig-yellow: rgb(191, 191, 24);
+    --theme-gold: rgb(242, 177, 52);
+    --theme-gold-background: rgba(242, 177, 52, .35);
+    --theme-gold-border: 2px solid  rgba(242, 177, 52, .8);
+    --theme-default-background-color: rgb(20, 22, 23);
+    --theme-default-foreground-color: rgb(216, 210, 210);
+    --theme-default-modal-blocking-color: rgba(24, 35, 38, .75);
+    --theme-default-ui-surface: var(--theme-alig-yellow);
+    --theme-highlight-color: rgb(242, 177, 52);
+    --theme-error-color: rgb(230, 0, 161);
+    --theme-disabled-color: rgb(98, 109, 112);
+    --theme-disabled-background-color: rgb(81, 91, 94);
+    --theme-button-background: rgba(191, 191, 24, .8);
+    --theme-button-foreground: rgba(5, 15, 20, .8);
+}
 
 /* this disables scrolling on the body */
 html, body {
