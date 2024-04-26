@@ -1,27 +1,28 @@
 /*
-    wpFormElement.js
-    4/12/24 Amy Hicox <amy@hicox.com>
+    wcBalloonDialog.js
+    4/25/24 Amy Hicox <amy@hicox.com>
 
-    this implements a base class for a webComponent version
-    of a noiceCoreUIFormElement basically.
-
-    to-do:
-        * everything
+    this is a reimplementation of noiceBalloonDialog as a webComponent
 */
 import { noiceAutonomousCustomElement } from '../noiceAutonomousCustomElement.js';
-import { isNull, isNotNull } from '../noiceCore.js';
 
-class wpFormElement extends noiceAutonomousCustomElement {
-
+class wcBalloonDialog extends noiceAutonomousCustomElement {
 
 
 
-static classID = 'wpFormElement';
 
+static classID = wcBalloonDialog;
 static classAttributeDefaults = {
+    /*
+        ex:
+        disabled: { observed: true, accessor: true, type: 'bool', value: false, forceAttribute: true },
+        message: { observed: true, accessor: true, type: 'str', value: '' },
+        size: { observed: true, accessor: true, type: 'int', value: 20 },
+        options: { observed: true, accessor: true, type: 'json', key: 'values', value: []},
+        wrap: { observed: true, accessor: true, type: 'enum', values:['hard','soft','off'], value: 'off' },
+        value: { observed: true, accessor: true, type: 'float', value: 1.618 },
+    */
 }
-
-// observedAttributes
 static observedAttributes = Object.keys(this.classID.classAttributeDefaults).filter((a) =>{ return(this.classID.classAttributeDefaults[a].observed === true); });
 
 
@@ -30,23 +31,30 @@ static observedAttributes = Object.keys(this.classID.classAttributeDefaults).fil
 /*
     constructor
 */
-constructor(){
-    super();
-    this._className = 'wpPieChart';
+constructor(args){
+    super(args);
+    this._className = 'wcBalloonDialog';
     this._version = 1;
-    this._initialized = false;
-    this._charts = {};
-
-    // we have to make a hard copy of the classAttributeDefaults to use as our local copy
-    this.attributeDefaults = JSON.parse(JSON.stringify(wpFormElement.classAttributeDefaults));
-
-    // spawn the attribute accessors
-    this.spawnAttributeAccessors();
 
     // attributeChangeHandlers
     this.attributeChangeHandlers = {
-        //size:  (name, oldValue, newValue, slf) => { slf.setSize(newValue); },
-    }
+        /*
+            ex
+            label_position: (attributeName, oldValue, newValue, selfReference) => { selfReference.setLabelPosition(newValue, oldValue); },
+        */
+    };
+}
+
+
+
+
+/*
+    getAttributeDefaults()
+    override this in each subclass, as I can't find a more elegant way of
+    referencing the static class vars in an overridable way
+*/
+getAttributeDefaults(){
+    return(wcBalloonDialog.classAttributeDefaults);
 }
 
 
@@ -62,8 +70,9 @@ getHTMLContent(){
     div.className = this._className;
 
     /*
-        inserteth thine UI stuffs here
-        ye verily
+        insert shenanigans here
+        also set this._elements references if needed
+        also setup default event listeners if needed
     */
 
     return(div);
@@ -73,22 +82,30 @@ getHTMLContent(){
 
 
 /*
-    style getter
+    initializedCallback(slf)
+    anything you need to do only once, but *after* everything is rendered
+    and this.initialized is set.
+
+    this is called from .initialize() and .setType() (sometimes)
 */
-get style(){return(`
-    /* insert scoped CSS here */
-`)}
+initializedCallback(){
+    /*
+        doeth thine settting up things here
+    */
+}
 
 
 
 
 /*
-    ----------------------------------------------------------------------
-    attributeChangeHandler functions go down here
-    ----------------------------------------------------------------------
+    defaultStyle getter
 */
-
+get defaultStyle(){return(`
+    :host {
+        display: block;
+    }
+`)};
 
 
 }
-export { wpFormElement };
+export { wcBalloonDialog };
