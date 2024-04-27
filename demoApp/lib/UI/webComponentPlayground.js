@@ -11,6 +11,9 @@ wcPieChart.registerElement('wc-pie-chart');
 import { wcFormElement } from '../../../lib/webComponents/wcFormElement.js';
 wcFormElement.registerElement('wc-form-element');
 
+import { wcBalloonDialog } from '../../../lib/webComponents/wcBalloonDialog.js';
+wcBalloonDialog.registerElement('wc-balloon-dialog');
+
 class webComponentPlayground extends noiceCoreUIScreen {
 
 
@@ -54,13 +57,14 @@ return(`
 setupCallback(self){
     let that = this;
     that.DOMElement.style.display = "grid";
-    that.DOMElement.style.height = "max-content";
-    that.DOMElement.style.maxHeight = "100%";
+    that.DOMElement.style.height = "100%";
+    //that.DOMElement.style.maxHeight = "100%";
 
-    const btn = document.createElement('button');
-    btn.textContent = "test";
-    that.DOMElement.appendChild(btn);
-    btn.addEventListener('click', (evt) => {
+    // wcFormElement test
+    const btnFormElement = document.createElement('button');
+    btnFormElement.textContent = "test formElement";
+    that.DOMElement.appendChild(btnFormElement);
+    btnFormElement.addEventListener('click', (evt) => {
         that.testFormElement = new wcFormElement({
             label: 'test field',
             name: 'test',
@@ -71,13 +75,13 @@ setupCallback(self){
             captureValueCallback: (val, slf) => {slf.log(`[value]: ${val}`); },
             menuCallback: (slf, btn) => {
                 slf.log('menu callback');
-                btn.disabled = true;
-                setTimeout(() => {btn.disabled = false}, 1500);
+                btnFormElement.disabled = true;
+                setTimeout(() => {btnFormElement.disabled = false}, 1500);
             },
             undoCallback: (slf, btn) => {
                 slf.log('undo callback');
-                btn.disabled = true;
-                setTimeout(() => {btn.disabled = false}, 1500);
+                btnFormElement.disabled = true;
+                setTimeout(() => {btnFormElement.disabled = false}, 1500);
             },
             log: (str) => { console.log(`hi there: ${str}`); }
         });
@@ -87,7 +91,29 @@ setupCallback(self){
         })
         */
         that.DOMElement.appendChild(that.testFormElement);
-    })
+    });
+
+    // wcBalloonDialog test
+    const btnBalloon = document.createElement('button');
+    btnBalloon.textContent = 'test wcBalloonDialog';
+    that.DOMElement.appendChild(btnBalloon);
+
+    let b = document.createElement('div');
+    b.insertAdjacentHTML('afterbegin', "<ul><li>she</li><li>done already</li><li>done</li><li>had herses</li></ul>");
+
+    btnBalloon.addEventListener('click', (evt) => {
+        that.testDialog = new wcBalloonDialog({
+            arrow_position: 'top',
+            x: '10px',
+            y: '10px',
+            z: 9,
+            title: "hi there",
+            dialogContent: b
+        });
+        that.DOMElement.appendChild(that.testDialog);
+    });
+
+
 
 }
 
