@@ -57,7 +57,6 @@ coreValue.setValue('dweeb').then((val) => {
 // revert last change
 coreValue.undo().then((val) => {
     // val will have the current value (which is by the time you're in this block, the previous value)
-    // note this only works if undoable: true
 }).catch((error) =>{
     // fill fire if valueChangeCallback rejected
 })
@@ -92,18 +91,18 @@ if specified this asynchronous callback is executed each time the value of the `
 ### `valueChangedCallback` -  async function(newValue, oldValue, selfReference)
 
 if specified, this asynchronous callback is executed *after* the value has been set on the `.value` attribute. If the callback rejects it's promise, that is ignored. If the callback returns a different value, this too is ignored. This is executed asynchronously purely for symmetry with `valueChangeCallback`. This hook could be used for instance, to drive a UI subclass to indicate values that have been recently changed, etc.
-
-### `undoable` - bool | default: true
-
- if set true, we copy the previous value in the `.undoValue` attribute on each change to the `.value` attribute and the `.undo()` function is enabled. If set false, not so much.
+.
 
 ### `undoValue` - any
 
-the previous value of `.value` or null
+the last value of `.value` when the `changeFlag` was false.
 
 ### `changeFlag` - bool | default: false
 
 this attribute is individually addressable, meaning you can manually set it false or true if needed, however, the value will automatically set `true` when `.value` changes and `.undoValue !== .value`. When the value of `.changeFlag` changes, the `changeFlagCallback()` will be invoked if specified
+
+when `changeFlag` is set from `true` to `false` and the `.undoValue !== .value` condition is true, we copy `.value` into `.undoValue`
+which is to say `undoValue` is set either from `.defaultValue` at instantiation, or by explicitly setting `.changeFlag = false` while `.undoValue !== .value`
 
 ### `changeFlagCallback` - function(changeFlag, previousChangeFlag, selfReference)
 
@@ -170,7 +169,7 @@ this function changes the value of `.value`, returning a promise resolving to th
 
 ### `async undo(bypassBool)`
 
-if the `.undoable` attribute is set true, this will revert `.value` to `.undoValue` when executed. If `bypassBool` is set `true`, will pass to the `setValue()` function, bypassing callbacks on the change.
+this will revert `.value` to `.undoValue` when executed. If `bypassBool` is set `true`, will pass to the `setValue()` function, bypassing callbacks on the change.
 
 ### `async validate()`
 
