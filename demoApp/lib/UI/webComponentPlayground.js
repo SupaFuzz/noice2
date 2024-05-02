@@ -44,6 +44,8 @@ get html(){
 
 return(`
     <h1>Web Component Playground</h1>
+    <div class="btnContainer" data-templatename="btnContainer" data-templateattribute="true"></div>
+    <div class="testStuff" data-templatename="testStuff" data-templateattribute="true"></div>
 `)
 }
 
@@ -58,12 +60,13 @@ setupCallback(self){
     let that = this;
     that.DOMElement.style.display = "grid";
     that.DOMElement.style.height = "100%";
-    //that.DOMElement.style.maxHeight = "100%";
+    that.DOMElement.style.alignContent = "baseline";
+    that.DOMElement.style.gridTemplateRows = 'auto auto auto';
 
     // wcFormElement test
     const btnFormElement = document.createElement('button');
     btnFormElement.textContent = "test formElement";
-    that.DOMElement.appendChild(btnFormElement);
+    that._DOMElements.btnContainer.appendChild(btnFormElement);
     btnFormElement.addEventListener('click', (evt) => {
         that.testFormElement = new wcFormElement({
             label: 'test field',
@@ -90,28 +93,43 @@ setupCallback(self){
             console.log(`[name]: ${evt.detail.self.name} [value]: ${evt.detail.value}`);
         })
         */
-        that.DOMElement.appendChild(that.testFormElement);
+        that._DOMElements.testStuff.appendChild(that.testFormElement);
     });
 
     // wcBalloonDialog test
     const btnBalloon = document.createElement('button');
     btnBalloon.textContent = 'test wcBalloonDialog';
-    that.DOMElement.appendChild(btnBalloon);
+    that._DOMElements.btnContainer.appendChild(btnBalloon);
 
-    let b = document.createElement('div');
-    b.insertAdjacentHTML('afterbegin', "<ul><li>she</li><li>done already</li><li>done</li><li>had herses</li></ul>");
 
     btnBalloon.addEventListener('click', (evt) => {
+        let b = document.createElement('div');
         that.testDialog = new wcBalloonDialog({
-            arrow_position: 'top',
+            arrow_position: 'topRight',
             x: '10px',
             y: '10px',
             z: 9,
             title: "hi there",
             dialogContent: b
         });
+        b.style.display = "grid";
+        ['none',
+        'topRight', 'topMiddle', 'topLeft',
+        'bottomRight', 'bottomMiddle', 'bottomLeft',
+        'rightTop', 'rightMiddle', 'rightBottom',
+        'leftTop', 'leftMiddle', 'leftBottom'].map((position) => {
+            let btn = document.createElement('button');
+            btn.className = "burgerMenu";
+            btn.textContent = position;
+            btn.dataset.selected = (that.testDialog.arrow_position == position);
+            btn.addEventListener("click", (evt) => {
+                that.testDialog.arrow_position = position;
+            });
+            return(btn);
+        }).forEach((el) => { b.appendChild(el); });
         that.DOMElement.appendChild(that.testDialog);
     });
+
 
 
 
