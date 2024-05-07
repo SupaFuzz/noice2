@@ -114,67 +114,7 @@ setupCallback(self){
                 title: "hi there",
                 dialogContent: b
             });
-
-            that.testDialog.setPositionCallback = (s) => {
-
-                let myD = s.DOMElement.getBoundingClientRect();
-                let targetD = btnBalloon.getBoundingClientRect();
-
-                // lets try for arrow: topRight, align to target bottom middle
-                //s.x = `${targetD.right - myD.width}px`;
-
-                /*
-                    5/5/24 @ 2247 -- aight I gotta shut it down
-                    this works. ResizeObserver fixed all kinds of problems
-
-                    so now we need to just code up a bunch of relative positioning
-                    presets and we're good to go
-                */
-
-                /*
-                    5/5/24 @ 2108
-                    I do not understand this.
-                    the first time you put it on the screen, it's exactly 10px to the right
-                    like the getBoundingClientRect() has not yet calculated the 10px for the
-                    border pointer.
-
-                    and in fact if you chain three or 4 requestAnimationFrame's here and keep
-                    checking the width you will eventually see it expand by exactly 10px, and if
-                    you catch that and re-triger the set_position event it'll fix itself
-
-                    ok. Here's the crazy shit right?
-                    the behavior is exactly the same across safari, chrome and firefox
-
-                    you've gotta go into a loop waiting for the thing to change width but
-                    only the first time it's added to the DOM?
-
-                    is there like some kinda width change listener I could just set up on the damn thing?
-                    beause I've got no idea wtf is mutating the calculated width like this
-
-                    yes. it's the ResizeObserver class. And I just added it to the class.
-                    but wow.
-
-                    the fact this works at all and consistently across all three platforms blows my mind
-                    function bs(chk, num){
-                        let b = s.DOMElement.getBoundingClientRect();
-                        if (Math.floor(b.width) == Math.floor(chk)){
-                            requestAnimationFrame(() => {bs(chk, (num + 1)); });
-                        }else{
-                            console.log(`found it: ${chk} -> ${b.width} at ${num} frames`);
-                            s._wtaf = true;
-                            s.setPosition();
-                        }
-                    }
-                    if (! s._wtaf){ bs(myD.width, 0); }
-
-                */
-
-                s.x = `${targetD.x - ((myD.width) - targetD.width)}px`;
-                s.y = `${targetD.bottom + 10}px`;
-
-
-
-            }
+            that.testDialog.relativeElement = btnBalloon;
 
             b.style.display = "grid";
             ['none',
