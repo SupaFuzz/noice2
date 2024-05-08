@@ -46,6 +46,14 @@ return(`
     <h1>Web Component Playground</h1>
     <div class="btnContainer" data-templatename="btnContainer" data-templateattribute="true"></div>
     <div class="testStuff" data-templatename="testStuff" data-templateattribute="true"></div>
+    <div class="rando" data-templatename="rando" data-templateattribute="true" style="
+        width: .5em;
+        height: .5em;
+        background-color: green;
+        position: relative;
+        top: 5em;
+        left: 5em;
+    "></div>
 `)
 }
 
@@ -114,7 +122,8 @@ setupCallback(self){
                 title: "hi there",
                 dialogContent: b
             });
-            that.testDialog.relativeElement = btnBalloon;
+            //that.testDialog.relativeElement = btnBalloon;
+            that.testDialog.relativeElement = that._DOMElements.rando;
 
             b.style.display = "grid";
             ['none',
