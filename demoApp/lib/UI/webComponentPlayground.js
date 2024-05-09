@@ -125,21 +125,68 @@ setupCallback(self){
             //that.testDialog.relativeElement = btnBalloon;
             that.testDialog.relativeElement = that._DOMElements.rando;
 
-            b.style.display = "grid";
+            // build the poisition menu
+            let s = b.attachShadow({mode: 'open'});
+            let m = document.createElement('div');
+            m.className = "positionMenu";
+            m.style.display = "grid";
+
             ['none',
-            'topRight', 'topMiddle', 'topLeft',
-            'bottomRight', 'bottomMiddle', 'bottomLeft',
-            'rightTop', 'rightMiddle', 'rightBottom',
-            'leftTop', 'leftMiddle', 'leftBottom'].map((position) => {
+             'topRight', 'topMiddle', 'topLeft',
+             'bottomRight', 'bottomMiddle', 'bottomLeft',
+             'rightTop', 'rightMiddle', 'rightBottom',
+             'leftTop', 'leftMiddle', 'leftBottom'].map((position) => {
                 let btn = document.createElement('button');
                 btn.className = "burgerMenu";
                 btn.textContent = position;
                 btn.dataset.selected = (that.testDialog.arrow_position == position);
                 btn.addEventListener("click", (evt) => {
                     that.testDialog.arrow_position = position;
+                    let p = (btn.dataset.selected == "true");
+                    m.querySelectorAll('button[data-selected="true"]').forEach((el) => {el.dataset.selected = false; });
+                    btn.dataset.selected = (! p);
                 });
                 return(btn);
-            }).forEach((el) => { b.appendChild(el); });
+            }).forEach((el) => { m.appendChild(el); });
+            const mnuStyle = document.createElement('style');
+            mnuStyle.textContent = `/* full 90's mode */
+button {
+    background-color: transparent;
+    color: rgba(191, 191, 24, .6);
+    font-size: .8em;
+    font-family: Comfortaa;
+    text-align: left;
+    padding-left: .5em;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: .128em solid rgba(191, 191, 24, .1);
+    transition: background-color .5s ease;
+}
+button:hover {
+    background-color: rgba(191, 191, 24, .1);
+    color: rgba(191, 191, 24, .9);
+}
+button:active {
+    background-color: rgba(191, 191, 24, .9);
+    color: rgb(5, 15, 20);
+}
+button[data-selected="true"]{
+    color: rgba(191, 191, 24, .9);
+}
+button[data-selected="true"]:before {
+    content: '◉';
+    padding-right: .25em;
+}
+button[data-selected="false"]:before {
+    content: '◎';
+    padding-right: .25em;
+    opacity: .5;
+}`;
+            s.appendChild(mnuStyle)
+
+            s.appendChild(m);
+
         }
 
         // oof! locking something to screen coordinates, this thing has to go at the root :-/
