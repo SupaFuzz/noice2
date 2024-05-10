@@ -125,7 +125,6 @@ setupCallback(self){
                 title: "hi there",
                 dialogContent: b,
                 headerContent: btnTest,
-                /* it works
                 exitCallback:  (selfRef) => {return(new Promise((toot, boot) => {
                     let limit = 300;
                     function dumbShit(i){
@@ -138,7 +137,6 @@ setupCallback(self){
                     }
                     dumbShit(0);
                 }))}
-                */
             });
 
             // relativeElement
@@ -146,7 +144,7 @@ setupCallback(self){
             that.testDialog.relativeElement = that._DOMElements.rando;
 
             // btns in headers!
-            btnTest.addEventListener('click', (evt) => { that.testDialog.remove()})
+            btnTest.addEventListener('click', (evt) => { that.testDialog.exit()})
 
             // build the poisition menu
             let s = b.attachShadow({mode: 'open'});
