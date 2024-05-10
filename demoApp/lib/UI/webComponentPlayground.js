@@ -113,6 +113,9 @@ setupCallback(self){
 
     btnBalloon.addEventListener('click', (evt) => {
         if (!(that.testDialog instanceof wcBalloonDialog)){
+            const btnTest = document.createElement('button');
+            btnTest.textContent = "close";
+
             let b = document.createElement('div');
             that.testDialog = new wcBalloonDialog({
                 arrow_position: 'topRight',
@@ -120,10 +123,30 @@ setupCallback(self){
                 y: '10px',
                 z: 9,
                 title: "hi there",
-                dialogContent: b
+                dialogContent: b,
+                headerContent: btnTest,
+                /* it works
+                exitCallback:  (selfRef) => {return(new Promise((toot, boot) => {
+                    let limit = 300;
+                    function dumbShit(i){
+                        if (i > limit){
+                            toot(true);
+                        }else{
+                            selfRef.title = `destruct: ${limit - i}`;
+                            requestAnimationFrame(() => { dumbShit(i + 1); });
+                        }
+                    }
+                    dumbShit(0);
+                }))}
+                */
             });
+
+            // relativeElement
             //that.testDialog.relativeElement = btnBalloon;
             that.testDialog.relativeElement = that._DOMElements.rando;
+
+            // btns in headers!
+            btnTest.addEventListener('click', (evt) => { that.testDialog.remove()})
 
             // build the poisition menu
             let s = b.attachShadow({mode: 'open'});
