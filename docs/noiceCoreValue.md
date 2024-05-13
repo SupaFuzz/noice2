@@ -95,7 +95,12 @@ if specified, this asynchronous callback is executed *after* the value has been 
 
 ### `undoValue` - any
 
-the last value of `.value` when the `changeFlag` was false.
+the value of `.value` when the `changeFlag` was last false. NOTE: this is NOT "the last value", but "the last saved value"
+
+### `previousValue` - any
+
+this is the previous value of `.value`, which is to say inside the `valueChangeCallback` and `valueChangedCallback` this is
+the "old value" in the arg list. This is initialized to `defaultValue`, and will hold the previous value on each subsequent change. For instance if my `defaultValue="red"`, and I change value to "green", `(previousValue =="red") == true`, if I subsequently change value to "blue", `(previousValue == "green") == true`, if I subsequently set `changeFlag = false` (indicating a save), `previousValue == "blue"`. ya dig? this is for change detection. and `undoValue` is for `undo()`.
 
 ### `changeFlag` - bool | default: false
 
