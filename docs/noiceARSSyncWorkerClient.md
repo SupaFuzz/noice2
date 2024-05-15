@@ -69,6 +69,39 @@ a library for interfacing with a noiceARSSyncWorkerThread from a parent thread
 
 
 
+## getMatchingARSRows({})
+```javascript
+/*
+    getMatchingARSRows({
+        schema: <str>
+        match: {indexedFieldName: value, indexedFieldName: value ...},
+        fields: [<str>, <str>, ...],
+        returnFormat: <enum: raw|fieldName|fieldID> (default fieldName),
+        returnChanges: <bool> (default: false),
+        bypassFilters: <bool> (default: false)
+        dateFormat: <enum: any date time format accepted by noiceCore.fromEpoch> default: datetime-local
+    })
+
+    wraps indexedDB.getMatching(), returns all rows on `args.schema` matching
+    the given input `args.query` object which is an object of indexed fields
+    and values.
+
+    For isntance: {
+        'Assigned User': 'SpongeBob',
+        'Location': 'BikiniBottom'
+    }
+
+    where 'Asssigned User' and 'Location' fields have corresponding indexNames in the
+    schema's indexedDB dataStore, AND there is a composite index of ['Assigned User', 'Location']
+
+    this function will automatically identify the correct index, and retrieve all matching rows
+    which are then passed through the standard dbOutputFilter and returnChanges and filters and
+    the rest.
+*/
+```
+
+
+
 ## modifyARSRow({})
 ```javascript
 /*
