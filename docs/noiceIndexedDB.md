@@ -431,6 +431,29 @@ let matchingRows = await AmyDatabase.getAll({
 
 
 
+## `async getMatching({args})`
+This might be slightly closer to a true `query()`, this wraps `getAll()` to return all rows on `args.dataStore` exactly matching the `args. match` object. Each attribute on `args.match` must correspond to an indexed attribute name om `args.dataStore`. If more than one attribute is specified, we will search for an index containing *all* of the object attributes. If we do not find a matching index, resolve an error, else we resolve the output of the resulting `getAll()`
+
+### args
+* **storeName** `string` - the dataStore
+
+* **match** `object` - an object of indexed attributes to match
+
+### example
+```javascript
+AmyDatabase.getMatching({
+    storeName: 'pets',
+    match: {
+        species: 'Cat',
+        breed: 'Calico'
+    }
+})
+```
+
+
+
+
+
 ## `async clear({args})`
 this deletes all row objects from the dataStore identified by `storeName`
 
