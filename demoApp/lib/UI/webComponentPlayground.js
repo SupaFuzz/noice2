@@ -54,6 +54,22 @@ return(`
         top: 5em;
         left: 5em;
     "></div>
+    <div class="spacer" data-templatename="rando2Container" data-templateattribute="true" style="
+        width: 20em;
+        height: 20em;
+        background-color: rgba(240, 240, 240, .2);
+        position: relative;
+        right: -15em;
+    ">
+    <div class="rando" data-templatename="rando2" data-templateattribute="true" style="
+        width: .5em;
+        height: .5em;
+        background-color: orange;
+        position: relative;
+        top: 5em;
+        left: 5em;
+    "></div>
+    </div>
 `)
 }
 
@@ -118,6 +134,7 @@ setupCallback(self){
 
             let b = document.createElement('div');
             that.testDialog = new wcBalloonDialog({
+                full_screen: false,
                 arrow_position: 'topRight',
                 x: '10px',
                 y: '10px',
@@ -141,7 +158,8 @@ setupCallback(self){
 
             // relativeElement
             //that.testDialog.relativeElement = btnBalloon;
-            that.testDialog.relativeElement = that._DOMElements.rando;
+            //that.testDialog.relativeElement = that._DOMElements.rando;
+            that.testDialog.relativeElement = that._DOMElements.rando2;
 
             // btns in headers!
             btnTest.addEventListener('click', (evt) => { that.testDialog.exit()})
@@ -212,7 +230,8 @@ button[data-selected="false"]:before {
 
         // oof! locking something to screen coordinates, this thing has to go at the root :-/
         //that.DOMElement.appendChild(that.testDialog);
-        document.body.appendChild(that.testDialog);
+        //document.body.appendChild(that.testDialog);
+        that._DOMElements.rando2Container.appendChild(that.testDialog);
     });
 
 
