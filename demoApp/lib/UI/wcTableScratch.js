@@ -68,7 +68,6 @@ setupCallback(self){
 */
 spawnTable(){
     this.testTable = new wcTable({
-        /*
         columns: [
             { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
             { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
@@ -76,6 +75,7 @@ spawnTable(){
             { name: 'last', order: 4, type: 'char', width: '10em' },
             { name: 'num', order: 5, type: 'int', width: '5em' }
         ],
+        /*
         rows: [
             { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
             { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
@@ -84,26 +84,12 @@ spawnTable(){
             { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
             { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
         ],
-        */
         allow_column_sort: true,
+        */
         label: "test table",
+        footer_message: "helloooooo!"
     });
     this._DOMElements.testStuff.appendChild(this.testTable);
-    this.testTable.columns = [
-        { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
-        { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
-        { name: 'middle', order: 3, type: 'char', width: '5em' },
-        { name: 'last', order: 4, type: 'char', width: '10em' },
-        { name: 'num', order: 5, type: 'int', width: '5em' }
-    ];
-    this.testTable.rows = [
-        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
-        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
-        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
-        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
-        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
-        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" }
-    ]
 }
 
 
