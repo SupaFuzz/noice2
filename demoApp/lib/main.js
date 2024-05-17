@@ -11,7 +11,7 @@ import { tableDemo } from './UI/tableDemo.js';
 import { dataClassDemo } from './UI/dataClassDemo.js';
 import { webComponentDemo } from './UI/webComponentDemo.js';
 import { webComponentPlayground } from './UI/webComponentPlayground.js';
-
+import { wcTableScratch } from './UI/wcTableScratch.js';
 
 /*
     DemoApp.js
@@ -66,6 +66,7 @@ startup(){
                          uiThree: new dataClassDemo({ sortOrder: 3, title: 'noiceCoreValue', _app:that, debug:false }),
                          wcDemo: new webComponentDemo({ sortOrder: 4, title: 'web components demo', _app:that, debug:true }),
                          wcPlay: new webComponentPlayground({ sortOrder: 5, title: 'web component playground', _app:that, debug:true }),
+                         wcTableStuff: new wcTableScratch ({ sortOrder: 6, title: 'wcTable scratch', _app:that, debug:true }),
                      }
                  })
             },
