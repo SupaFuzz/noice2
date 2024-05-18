@@ -1,9 +1,9 @@
 /*
     tableScratch.js
-    5/16/24 - Amy Hicox <amy@hicox.com>
+    5/17/28
 
-    this is a copy of noiceCoreUITable.js where I remove code sections as I port
-    them to wcTable.js
+    this is noiceCoreUITable.js with the bits edited out that have been
+    ported to wcTable.js. This is the to-do list for wcTable basically
 */
 
 import { noiceCoreUIElement, noiceCoreUIOverlay } from './noiceCoreUI.js';
@@ -22,8 +22,26 @@ constructor(args, defaults, callback){
     super(args, noiceObjectCore.mergeClassDefaults({
         _version:                     1,
         _className:                   'noiceCoreUITable',
+        _rows:                        [],
+        _data:                        [],
+        _selectMode:                  'none',
+        _maxListHeight:               null,
+        _listHeight:                  null,
         _defaultFooterMessage:        null,
-
+        _customButtons:               [],
+        _modifyAll:                   'auto', // values: 'auto' or 'prompt'
+        rowSelectCallback:            null,
+        renderRowsProgressCallback:   null,
+        headerColClassName:           'hdrCol',
+        headerRowClassName:           'hdrRow',
+        dataRowClassName:             'listRow',
+        dataRowColClassName:          'listCol',
+        defaultCellEditorInputClass:  'cellEditor',
+        defaultPrefUIClass:           'tablePrefEditor',
+        defaultPrefUIEditorClass:     'defaultPrefUIEditor',
+        userPromptClass:              'userPrompt',
+        exportUIClass:                'exportUI',
+        syncRowsBatchLimit:           250,
         exportFileName:               null,
     },defaults),callback);
 
@@ -38,6 +56,7 @@ constructor(args, defaults, callback){
     setup()
 */
 setup(){
+
 
     // pre-spawn the table preferences editor frame thingy
     that.prefEditorFrameThingy = new noiceCoreUIOverlay({
@@ -54,21 +73,898 @@ setup(){
 
 
 /*
-    openPanel(DOMTree)
+    removeColumn(colName, propagateBool)
+    delete the specified column, syncRows is propagateBool is true
 */
-openPanel(DOMTree){
+removeColumn(colName, propagateBool){
     let that = this;
-    if (DOMTree instanceof Element){
-        that.prefEditorFrameThingy.append(that._DOMElements.uiContainer);
-        that.prefEditorFrameThingy.uiContainer = DOMTree;
-        requestAnimationFrame(() => {
-            let d = that.prefEditorFrameThingy._DOMElements.uiContainer.getBoundingClientRect();
-            that.DOMElement.style.minWidth = `${d.width}px`;
-        });
+    if (
+        that.isNotNull(colName) &&
+        (that.columns.filter((a)=>{return((a instanceof Object) && (a.hasOwnProperty('name')) && (a.name == colName))}).length == 1)
+    ){
+        // remove column from UI
+        let el = that._DOMElements.headerRow.querySelector(`span.${that.headerColClassName}[data-name="${colName}"]`);
+        if (el instanceof Element){ el.remove(); }
+
+        // remove it from the internal column list
+        this._columns = this._columns.filter((a) => {return(!((a instanceof Object) && (a.hasOwnProperty('name')) && (a.name == colName)))});
+
+        // sync the rows if we have the flag
+        that.applyRowCSS(that._DOMElements.headerRow);
+        if (propagateBool === true){ that.syncRows(); }
+
     }else{
-        throw(`${that._className} v${that._version} | openPanel() | invalid input`);
+        throw(`${that._className} v${that._version} | removeColumn() | invalid input`);
     }
 }
+
+
+
+
+/*
+    columns attribute
+*/
+get columns(){ return(this._columns); }
+set columns(v){
+    let that = this;
+    if (
+        (v instanceof Array) &&
+        (v.length == v.filter((a)=>{return(a instanceof Object) && a.hasOwnProperty('name') && that.isNotNull(a.name)}).length)
+    ){
+
+        // this is *the* set of columns meaning we blow away whatever was there
+        that._columns = [];
+        that.headerRow = '';
+
+        // aight! holonnaurbutts ... note addCol will push this._columns for us
+        v.forEach((col) => {
+            try {
+                that.addColumn(col, false);
+            }catch(e){
+                throw(`${that._className} v${that._version} | columns attribute setter | addColumn() threw unexpectedly for ${col.name} | ${e}`);
+            }
+        });
+
+        // setup the css
+        that.applyRowCSS(that._DOMElements.headerRow);
+
+        // the cols are added, sync the rows
+        that.syncRows();
+
+    }else{
+        throw(`${that._className} v${that._version} | columns attribute setter | invalid input format`);
+    }
+}
+
+
+
+
+/*
+    getRow(idx)
+    return this dataStructure for the given row:
+    {data: {<fieldName>:<fieldValue>}, DOMElement: <RowElement>}
+*/
+getRow(idx){
+    let el = this._DOMElements.tableListContainer.querySelector(`.${this.dataRowClassName}:nth-child(${idx})`);
+    if (el instanceof Element){
+        return({
+            data: JSON.parse(el.dataset.rowdata),
+            DOMElement: el
+        });
+    }else{;
+        throw(`${this._className} v${this._version} | getRow(${idx}) | invalid input`);
+    }
+}
+
+
+
+
+/*
+    modifyRow(idx, data)
+*/
+modifyRow(idx, data){
+    let that = this;
+    return(new Promise((toot, boot) =>{
+        let row = null;
+        try {
+            row = that.getRow(idx);
+        }catch(e){
+            if (that.debug){ console.log(`${that._className} v${that._version} | mofifyRow(${idx}, ${JSON.stringify(data)}) | getRow() threw unexpectedly: ${error}`); }
+            boot(error);
+        }
+        if (that.isNotNull(row)){
+            new Promise((_t,_b) =>{
+                if (that.modifyRowCallback instanceof Function){
+                    that.modifyRowCallback(row.DOMElement, data).then((cData) => { _t(cData); }).catch((error) => { _b(error); });
+                }else{
+                    _t(data);
+                }
+            }).then((cData) => {
+                row.DOMElement.dataset.rowdata = JSON.stringify(Object.assign({}, JSON.parse(row.DOMElement.dataset.rowdata), cData));
+                that.renderCells(row.DOMElement);
+                toot(row);
+            }).catch((error) => {
+                if (that.debug){ console.log(`${that._className} v${that._version} | mofifyRow(${idx}, ${JSON.stringify(data)}) | modifyRowCallback() threw unexpectedly: ${error}`); }
+                boot(error);
+            });
+        }
+    }));
+}
+
+
+
+
+/*
+    updateRow(rowElement, data, enableCallbackBool)
+    this is like modifyRow, except we take the rowElement as an arg directly
+    we update the data then call renderCells. If enableCallbackBool
+    is set true await the modifyRowCallnack.
+    on success resolves to the updated row DOM element
+*/
+updateRow(rowElement, data, enableCallbackBool){
+    let that = this;
+
+    return(new Promise((toot, boot) =>{
+        // await the calback if we're supposed to
+        new Promise((_t,_b) => {
+            if ((enableCallbackBool === true) && (that.modifyRowCallback instanceof Function)){
+                that.modifyRowCallback(rowElement, data).then((cData) => { _t(cData); }).catch((error) => { _b(error); });
+            }else{
+                _t(data);
+            }
+        }).then((cData) =>{
+            // update the row and be out
+            rowElement.dataset.rowdata = JSON.stringify(Object.assign({}, JSON.parse(rowElement.dataset.rowdata), cData));
+            that.renderCells(rowElement);
+            toot(rowElement);
+        }).catch((error) => {
+            if (that.debug){ console.log(`${that._className} v${that._version} | updateRow(${JSON.stringify(data)}) | modifyRowCallback() threw unexpectedly: ${error}`); }
+            boot(error);
+        })
+    }));
+}
+
+
+
+/*
+    renderCells(rowElement)
+    create cells from rowElement.rowdata keys that have corresponding
+    column definitions, in the proper order. Kill ones that shouldn't be there
+    spawn ones that are missing. You get it.
+*/
+renderCells(rowElement){
+    let that = this;
+    if ((rowElement instanceof Element) && (rowElement.dataset.rowdata)){
+        let data = null;
+        try {
+            data = JSON.parse(rowElement.dataset.rowdata);
+        }catch(e){
+            throw(`${this._className} v${this._version} | renderCells(${rowElement.dataset.rownum}) | failed to parse rowdata: ${e}`);
+        }
+
+        // remove columns we shouldn't have
+        Array.from(rowElement.querySelectorAll(`span.${that.dataRowColClassName}`)).filter((el) =>{return(
+            that.columns.filter((b)=>{return((b.name == el.dataset.name) && (b.visible === true))}).length == 0
+        )}).forEach((el) =>{ el.remove(); });
+
+        // spawn columns we're missing or update them if they're not -- in order which should make sure they're sorted properly (horizontally)
+        that.columns.filter((a)=>{return(a.visible === true)}).sort((a,b) => {return(a.order - b.order)}).forEach((col) =>{
+            let el = rowElement.querySelector(`span.${that.dataRowColClassName}[data-name="${col.name}"]`);
+            if (el instanceof Element){
+                el.textContent = data.hasOwnProperty(col.name)?data[col.name]:'';
+                // insures we're in the right order
+                rowElement.appendChild(el);
+
+            }else{
+                let span = document.createElement('span');
+                span.className = that.dataRowColClassName;
+                span.dataset.name = col.name;
+                span.dataset.locked = false;
+                if (col.hasOwnProperty('fieldId')){ span.dataset.fieldid = col.fieldId; }
+                span.textContent = data.hasOwnProperty(col.name)?data[col.name]:'';
+                span.style.overflow = "hidden";
+                span.addEventListener('dblclick', (evt) => {
+                    if (
+                        (! (rowElement.dataset.locked == 'true')) &&
+                        (that.allowCellEdit == true)
+                    ){
+                        rowElement.dataset.locked = true;
+                        that.handleCellEdit(rowElement, span).then(() => { rowElement.dataset.locked = false; }).catch((error) => {
+                            rowElement.dataset.locked = false;
+                            throw(`${that._className} v${that._version} | cell edit click handler | handleCellEdit() threw unexpectedly: ${error}`);
+                        });
+                    }
+                })
+                rowElement.appendChild(span);
+            }
+        });
+        that.applyRowCSS(rowElement);
+        // this is an infinite loop sucka!
+        //if (that.rowSetupCallback instanceof Function){ that.rowSetupCallback(rowElement, that); }
+
+    }else{
+        throw(`${this._className} v${this._version} | renderCells() | invalid input`);
+    }
+}
+
+
+
+
+/*
+    applyRowCSS(rowElement)
+    calculate grid-template-columns and apply it to the specified row
+    this is the "use CSS to make it look like an old school table" part
+*/
+applyRowCSS(el){
+    let that = this;
+    if (el instanceof Element){
+        el.style.display = 'grid';
+        el.style.cursor = 'default';
+        el.style.userSelect = 'none';
+        el.style.width = '100%';
+        el.style.height = 'max-content';
+        el.style.gridTemplateColumns = that.columns.filter((a)=>{return(a.visible === true)}).sort((a,b) => {return(a.order - b.order)}).map((col) => {
+            let width = ((col instanceof Object) && col.hasOwnProperty('width') && that.isNotNull(col.width))?col.width:1;
+            return(
+                `${width}${/^\d+$/.test(width)?'fr':''}`
+            )
+        }).join(" ");
+    }
+}
+
+
+
+
+/*
+    syncRows(progressCallback)
+    update every single row by calling renderCells on it
+    (which in turn calls applyRowCSS)
+
+    this executes on animationFrames, we batch rows into
+    gropus of this.syncRowsBatchLimit
+
+    as such is is async. We will call progressCallback(partial, complete, selfReference)
+    if specified.
+*/
+syncRows(progressCallback){
+    let that = this;
+    return(new Promise((toot, boot) => {
+        let chunks = [];
+        let queue = Array.from(this._DOMElements.tableListContainer.querySelectorAll(`div.${that.dataRowClassName}`));
+        let complete = queue.length;
+        while (queue.length > 0){ chunks.push(queue.splice(0, this.syncRowsBatchLimit)); }
+        let doneCount = 0;
+        function recursor(idx){
+            if (idx == chunks.length){
+                toot(true);
+            }else{
+                chunks[idx].forEach((el) => {
+                    that.renderCells(el);
+                    doneCount ++;
+                });
+                requestAnimationFrame(() => {
+                    if (progressCallback instanceof Function){
+                        try {
+                            progressCallback(doneCount, complete, that);
+                        }catch(e){
+                            if (that.debug){ console.log(`${that._className} v${that._version} | syncRows() | ignored | progressCallback threw unexpectedly: ${e}`); }
+                        }
+                    }
+                    recursor((idx + 1));
+                })
+            }
+        }
+        recursor(0);
+
+    }));
+}
+
+
+
+
+/*
+    data attribute
+    get and set the entire table content including the header as a massive
+    2D array-of-arrays. Basically take a parsed spreadsheet as input ya dig?
+    NOTE: this sets/gets ONLY visible data since this format has no means of
+    representing non-visible row values without a corresponding header columns
+*/
+get data(){
+    // literally just returning a grid of what's visible in the DOM. noice!
+    let that = this;
+    let out = [ Array.from(that._DOMElements.headerRow.querySelectorAll(`span.${that.headerColClassName}`)).map((el)=>{return(el.textContent)}) ];
+    return(out.concat(Array.from(that._DOMElements.tableListContainer.querySelectorAll(`div.${that.dataRowClassName}`)).map((el) => {return(
+        Array.from(el.querySelectorAll(`span.${that.dataRowColClassName}`)).map((span) =>{ return(span.textContent); })
+    )})));
+}
+set data(v){
+    let that = this;
+    if (
+        (v instanceof Array) &&
+        (v.length == v.filter((a)=>{return(a instanceof Array)}).length)
+    ){
+        let columns = [];
+        let rows = [];
+        v.forEach((vRow, idx) => {
+            // get cols from the header
+            if (idx == 0){
+                columns = vRow.map((colName, i) => {return({
+                    name: colName,
+                    order: i
+                })});
+
+            // the rest are data rows
+            }else{
+                let tmp = {};
+                vRow.forEach((vCol, vIdx) => { if (vIdx < columns.length){ tmp[columns[vIdx].name] = vCol; } });
+                rows.push(tmp);
+            }
+        });
+
+        // reset table
+        that.reset();
+        that.columns = columns;
+        that.rows = rows;
+
+    }else{
+        // bad data format
+        throw(`${this._className} v${this._version} | data attribute setter | invalid input data format`)
+    }
+}
+
+
+
+/*
+    maxListHeight attribute
+    if not set, the height of the rendered table is unbounded
+    if that's not what you want you can set the max-height CSS
+    attribute of this.tableListContainer in any supported CSS units you like
+    this will provoke the scrollbar and sticky header via the hard-coded CSS
+*/
+get maxListHeight(){
+    return(this._DOMElements.tableListContainer.style.maxHeight);
+}
+set maxListHeight(v){
+    this._DOMElements.tableListContainer.style.height = null;
+    this._DOMElements.tableListContainer.style.maxHeight = v;
+}
+get listHeight(){
+    return(this._DOMElements.tableListContainer.style.height);
+}
+set listHeight(v){
+    this._DOMElements.tableListContainer.style.maxHeight = null;
+    this._DOMElements.tableListContainer.style.height = v;
+}
+
+
+/*
+    selectMode attribute
+    enum: 'none', 'single', 'multiple'
+*/
+get selectMode(){ return(this._selectMode); }
+set selectMode(v){
+    if (this.isNotNull(v) && (['none', 'single', 'multiple'].indexOf(v) >= 0)){
+        this._selectMode = v;
+    }else{
+        throw(`${that._className} v${that._version} | selectMode attribute setter (${v}) | invalid input`);
+    }
+}
+
+
+
+
+
+
+
+
+
+/*
+    getSelected()
+    return an array of all selected rows. We return the output of getRow() so
+    [{data: {<fieldName>:<fieldValue>}, DOMElement: <RowElement>}, ...]
+*/
+getSelected(){
+    return (Array.from(this._DOMElements.tableListContainer.querySelectorAll(`.${this.dataRowClassName}[data-selected="true"]`)).map((el) => {
+        return(
+            {
+                data: JSON.parse(el.dataset.rowdata),
+                DOMElement: el
+            }
+        )
+    }));
+}
+
+
+
+
+/*
+    deselectAll(forceBool)
+    simply deselect all of the selected rows
+    if forceBool is set true, just reset the rows and don't even bother trying the callback
+    otherwise await the callbacks and let 'em abort if they need to
+*/
+deselectAll(forceBool){
+    let that = this;
+    return(Promise.all(Array.from(that._DOMElements.tableListContainer.querySelectorAll(`.${that.dataRowClassName}[data-selected="true"]`)).map((el) => {
+        return(new Promise((toot, boot) => {
+            if (forceBool === true){
+                el.dataset.selected = false;
+                toot(true);
+            }else{
+                that.handleRowSelect(el, false, true).then(()=>{toot(true)}).catch((error) => {
+                    if (that.debug){ console.log(`${that._className} v${that._version} | deselectAll(${forceBool === true}) | rowSelectCallback() aborted deselect (try forceBool): ${error}`)}
+                    boot(error);
+                })
+            }
+        }));
+    })));
+}
+
+
+
+
+/*
+    selectAll(forceBool)
+    simply select all of the selected rows
+    if forceBool is set true, just reset the rows and don't even bother trying the callback
+    otherwise await the callbacks and let 'em abort if they need to
+    totes obvs: this does not a thing if selectMode != 'multiple'
+*/
+selectAll(forceBool){
+    let that = this;
+    return(Promise.all(Array.from(that._DOMElements.tableListContainer.querySelectorAll(`.${that.dataRowClassName}[data-selected="false"]`)).map((el) => {
+        return(new Promise((toot, boot) => {
+            if (! that.selectMode == "multiple"){
+                toot(true);
+            }else if (forceBool === true){
+                el.dataset.selected = true;
+                toot(true);
+            }else{
+                that.handleRowSelect(el, true, true).then(()=>{toot(true)}).catch((error) => {
+                    if (that.debug){ console.log(`${that._className} v${that._version} | selectAll(${forceBool === true}) | rowSelectCallback() aborted deselect (try forceBool): ${error}`)}
+                    boot(error);
+                })
+            }
+        }));
+    })));
+}
+
+
+
+
+/*
+    clear()
+    remove all data rows from the table
+*/
+clear(){
+    this.tableListContainer = '';
+}
+
+
+
+
+/*
+    reset()
+    remove all data rows and all columns from the table
+*/
+reset(){
+    this.clear();
+    this.columns = [];
+    this.headerRow = '';
+}
+
+
+
+/*
+    handleColumnSort(headerColumnElement)
+*/
+handleColumnSort(hdrColEl){
+    let that = this;
+    if (that.allowColumnSort === true){
+        if (that.debug){ console.log(`${that._className} v${that._version} | handleColumnSort(${hdrColEl.dataset.name}) | called`); }
+
+        // it's a three way toggle: none | ascending | descending
+        let modes = ['none','ascending','descending'];
+        hdrColEl.dataset.sort = modes[
+            (((modes.indexOf(hdrColEl.dataset.sort) + 1) > modes.length -1) || (modes.indexOf(hdrColEl.dataset.sort) < 0))?0:(modes.indexOf(hdrColEl.dataset.sort) + 1)
+        ];
+        let colObj = that.columns.filter((a)=>{return(a.name == hdrColEl.dataset.name)})[0];
+
+        // ok when unsetting the sort we don't really do anything until all of the cols are sorted none, then we restore the original sort order
+        if (hdrColEl.dataset.sort == "none"){
+            if (Array.from(that._DOMElements.tableHeader.querySelectorAll(`span.${that.headerColClassName}:not([data-sort="none"])`)).length == 0){
+                Array.from(that._DOMElements.tableListContainer.querySelectorAll(`div.${that.dataRowClassName}`)).sort((a,b) => {
+                    return(parseInt(a.dataset.rownum) - parseInt(b.dataset.rownum))
+                }).forEach((el) => {
+                    that._DOMElements.tableListContainer.appendChild(el);
+                })
+            }
+        }else{
+            Array.from(that._DOMElements.tableListContainer.querySelectorAll(`div.${that.dataRowClassName}`)).sort((a,b) => {
+                let aEl = a.querySelector(`span.${that.dataRowColClassName}[data-name="${hdrColEl.dataset.name}"]`);
+                let bEl = b.querySelector(`span.${that.dataRowColClassName}[data-name="${hdrColEl.dataset.name}"]`);
+                let aVal = (aEl instanceof Element)?aEl.textContent:null;
+                let bVal = (bEl instanceof Element)?bEl.textContent:null;
+
+                // handle custom sort function
+                if ((colObj instanceof Object) && (colObj.sortFunction instanceof Function)){
+                    return((hdrColEl.dataset.sort == 'ascending')?colObj.sortFunction(aVal,bVal):colObj.sortFunction(bVal,aVal));
+
+                    // handle numeric sort
+                }else if (/^\d+$/.test(aVal) && /^\d+$/.test(bVal)){
+                    return((hdrColEl.dataset.sort == 'ascending')?(aVal-bVal):(bVal-aVal));
+
+                    // handle string sort
+                }else{
+                    return((hdrColEl.dataset.sort == 'ascending')?aVal.localeCompare(bVal):bVal.localeCompare(aVal));
+                }
+            }).forEach((el) => {
+                that._DOMElements.tableListContainer.appendChild(el);
+            })
+        }
+    }
+}
+
+
+
+
+/*
+    allowCellEdit
+*/
+get allowCellEdit(){ return(this._allowCellEdit === true); }
+set allowCellEdit(v){
+    this._allowCellEdit = (v === true);
+    if (!(this.editCellCallback instanceof Function)){
+        this.editCellCallback = this.defaultCellEditCallback;
+    }
+}
+
+
+
+/*
+    handleCellEdit(rowElement, cellElement)
+    if allowCellEdit: true, and editCellCallback is specified, call it and await output
+    if resolved promise, send returned value to modifyRow() and let it call the modifyRowCallback() if specified
+*/
+handleCellEdit(rowElement, cellElement){
+    let that = this;
+    return(new Promise((toot, boot) => {
+        if (
+            (that.allowCellEdit == true) &&
+            (that.editCellCallback instanceof Function) &&
+            (that.columns.filter((a)=>{return(
+                (a.name == cellElement.dataset.name) && (! (a.hasOwnProperty('disableCellEdit') && (a.disableCellEdit === true)))
+            )}).length == 1) &&
+            (cellElement instanceof Element)
+        ){
+            if ((!(
+                (cellElement.dataset) &&
+                (cellElement.dataset.locked) &&
+                (cellElement.dataset.locked == "true")
+            ))){
+
+                // do all the things
+                let undoValue = cellElement.textContent;
+                that.editCellCallback(rowElement, cellElement, that).then((value) => {
+
+                    // if we're in modify mode and modifyAll: prompt is set ...
+                    new Promise((_t,_b) => {
+
+                        let colRef = that.columns.filter((a) => {return(a.name == cellElement.dataset.name)})[0];
+                        let dma = ((colRef instanceof Object) && colRef.hasOwnProperty('disableModifyAll') && (colRef.disableModifyAll == true));
+
+                        if ((that.selectMode == 'multiple') && (that.numSelectedRows > 1) && (! dma)){
+                            if (that.modifyAll == "prompt"){
+                                let grr = {};
+                                grr[`Modify ${that.numSelectedRows} Rows`] = 'all';
+
+                                that.userQuery({
+                                    prompt: `Modify All Rows?`,
+                                    detail: `You have changed the value of '${cellElement.dataset.name}', copy this change to all ${that.numSelectedRows} selected rows?`,
+                                    options: Object.assign(grr, {
+                                        'Only This Row': 'selfOnly',
+                                        'Undo': null
+                                    })
+                                }).then((userResponse) => {
+                                    if (that.isNull(userResponse)){
+                                        _b('undo');
+                                    }else{
+                                        _t(userResponse == 'all');
+                                    }
+                                });
+                            }else if (that.modifyAll == "auto"){
+                                _t('all');
+                            }else{
+                                _t('selfOnly');
+                            }
+                        }else{
+                            _t('selfOnly');
+                        }
+                    }).then((copyAllBool) => {
+
+
+                        /*
+                            if copyAllBool is hot, copy all the other rows
+                            if copyAllBool is chill, just modify the one row
+                        */
+                        if (copyAllBool == true){
+
+                            let rowQueue = that.getSelected();
+                            function recursor(idx){
+                                if (idx == rowQueue.length){
+                                    toot(true);
+                                }else{
+                                    let ce = rowQueue[idx].DOMElement.querySelector(`.${that.dataRowColClassName}[data-name='${cellElement.dataset.name}']`);
+                                    if (ce instanceof Element){
+                                        that.modifyCellValue(rowQueue[idx].DOMElement, ce, value).then(() => {
+                                            requestAnimationFrame(() => {recursor(idx + 1); });
+                                        }).catch((error) => {
+                                            if (that.debug){ console.log(`${that._className} v${that._version} | handleCellEdit() | modifyCellValue() threw unexpectedly on rownum: ${rowQueue[idx].DOMElement.dataset.rownum}: ${error}`); }
+                                            boot(error);
+                                        });
+                                    }
+                                }
+                            }
+                            recursor(0);
+
+                        }else{
+                            that.modifyCellValue(rowElement, cellElement, value).then(() => {
+                                toot(true);
+                            }).catch((error) => {
+                                if (that.debug){ console.log(`${that._className} v${that._version} | handleCellEdit() | modifyCellValue() threw unexpectedly: ${error}`); }
+                                boot(error);
+                            });
+                        }
+
+
+                    }).catch((error) => {
+                        // user query threw. this means undo
+                        cellElement.textContent = undoValue;
+                        toot(false);
+                    });
+                }).catch((error) => {
+                    if (that.debug){ console.log(`${that._className} v${that._version} | handleCellEdit() | editCellCallback() threw unexpectedly: ${error}`); }
+                    boot(error);
+                });
+
+            }else if (
+                (cellElement.dataset) &&
+                (cellElement.dataset.locked) &&
+                (cellElement.dataset.locked == "true")
+            ){
+                if (
+                    cellElement.dataset.lockmessage &&
+                    that.isNotNull(cellElement.dataset.lockmessage)
+                ){
+                    // pop the note about why it can't be edited
+                    that.userQuery({
+                        prompt: `Cell cannot be edited`,
+                        detail: cellElement.dataset.lockmessage,
+                        options: { ok: true }
+                    }).then(() => {
+                        toot(false);
+                    })
+                }else{
+                    if (that.debug){ console.log(`${that._className} v${that._version} | handleCellEdit() | cell is locked`); }
+                    toot(false);
+                }
+            }
+        }else{
+            if (that.debug){ console.log(`${that._className} v${that._version} | handleCellEdit() | cellEdit disabled`); }
+            toot(false);
+        }
+    }));
+}
+
+
+
+
+/*
+    modifyCellValue(rowElement, cellElement, value)
+    set the given value on the specified cellElement within the specified rowElement
+    await the modifyRowCallback if we have one, then call renderCells and be out
+*/
+modifyCellValue(rowElement, cellElement, value){
+    let that = this;
+    return(new Promise((toot, boot) => {
+
+        new Promise((_t, _b) => {
+            let guh = {};
+            guh[cellElement.dataset.name] = value;
+            if (that.modifyRowCallback instanceof Function){
+               that.modifyRowCallback(rowElement, guh).then((d) => { _t(d); }).catch((error) => { _b(error); });
+            }else{
+               _t(guh);
+           }
+        }).then((cData) => {
+            let dta = Object.assign({}, JSON.parse(rowElement.dataset.rowdata), cData);
+            rowElement.dataset.rowdata = JSON.stringify(dta);
+            try {
+                that.renderCells(rowElement);
+                toot(true);
+            }catch(e){
+                if (that.debug){ console.log(`${that._className} v${that._version} | modifyCellValue() | renderCells() threw unexpectedly: ${error}`); }
+                boot(error);
+            }
+        }).catch((error) => {
+            if (that.debug){ console.log(`${that._className} v${that._version} | modifyCellValue() | modifyRowCallback() threw unexpectedly: ${error}`); }
+            boot(error);
+        });
+    }));
+}
+
+
+
+
+/*
+    modifyAll (bool)
+*/
+get modifyAll(){ return(this._modifyAll); }
+set modifyAll(v){
+    if (['auto', 'prompt'].indexOf(v) >= 0){
+        this._modifyAll = v;
+    }else{
+        throw(`${this._className} v${this._version} | modifyAll(${v}) attribute setter: invalid input`);
+    }
+}
+
+
+
+
+/*
+    defaultCellEditCallback(rowElement, cellElement, selfRef)
+    if no cellEditCallback is specified at object instantiation
+    but allowEdit is set true, we will use this default cell editor
+    it's kinda barebones and dumb. You might wanna use this as a
+    tempate for building one a little fancier
+*/
+defaultCellEditCallback(rowElement, cellElement, selfRef){
+    let that = this;
+    return(new Promise((toot, boot) => {
+
+        let c = cellElement.getBoundingClientRect();
+
+        let inp = document.createElement('input');
+        inp.setAttribute('type', 'text');
+        inp.value = cellElement.textContent;
+        inp.style.width = `${(c.width - 4)}px`;
+        inp.className = that.defaultCellEditorInputClass;
+
+        inp.addEventListener('focusout', (evt) => {
+
+            // so-dumb-it-actually-works xss filter
+            let bs = document.createElement('div');
+            bs.textContent = inp.value;
+            inp.remove();
+            toot(bs.innerHTML);
+
+        });
+        inp.addEventListener('keydown', (evt) => {
+            if (evt.keyCode == 13){ inp.blur(); }
+        });
+
+        cellElement.innerHTML = '';
+        cellElement.appendChild(inp);
+        inp.focus();
+    }));
+}
+
+
+
+
+/*
+    showFooter (bool)
+*/
+get showFooter(){ return(this._showFooter === true); }
+set showFooter(v){
+    this._showFooter = (v === true);
+    this._DOMElements.footer.style.display = this._showFooter?'grid':'none';
+}
+
+/*
+    _showBtnPrefs (bool)
+*/
+get showBtnPrefs(){ return(this._showBtnPrefs === true); }
+set showBtnPrefs(v){
+    this._showBtnPrefs = (v === true);
+    this._DOMElements.btnPrefs.style.display = this._showBtnPrefs?null:'none';
+}
+
+/*
+    _showBtnSelectAll (bool)
+*/
+get showBtnSelectAll(){ return(this._showBtnSelectAll === true); }
+set showBtnSelectAll(v){
+    this._showBtnSelectAll = (v === true);
+    this._DOMElements.btnSelectAll.style.display = this._showBtnSelectAll?null:'none';
+}
+
+/*
+    _showBtnSelectNone (bool)
+*/
+get showBtnSelectNone(){ return(this._showBtnSelectNone === true); }
+set showBtnSelectNone(v){
+    this._showBtnSelectNone = (v === true);
+    this._DOMElements.btnSelectNone.style.display = this._showBtnSelectNone?null:'none';
+}
+
+/*
+    _showBtnExport (bool)
+*/
+get showBtnExport(){ return(this._showBtnExport === true); }
+set showBtnExport(v){
+    this._showBtnExport = (v === true);
+    this._DOMElements.btnExport.style.display = this._showBtnExport?null:'none';
+}
+
+/*
+    _showFooterMessage (bool)
+*/
+get showFooterMessage(){ return(this._showFooterMessage === true); }
+set showFooterMessage(v){
+    this._showFooterMessage = (v === true);
+    this._DOMElements.footerMessage.style.display = this._showFooterMessage?null:'none';
+    this._DOMElements.footerMessage.innerHTML = '';
+    this._DOMElements.footerMessage.appendChild(this.getFooterMessage());
+}
+
+/*
+    _showRowNudgeButtons (bool)
+*/
+get showRowNudgeButtons(){ return(this._showRowNudgeButtons === true); }
+set showRowNudgeButtons(v){
+    this._showRowNudgeButtons = (v === true);
+    this._DOMElements.btnNudgeUp.style.display = this._showRowNudgeButtons?null:'none';
+    this._DOMElements.btnNudgeDown.style.display = this._showRowNudgeButtons?null:'none';
+}
+
+/*
+    getFooterMessage()
+*/
+getFooterMessage(){
+    let that = this;
+
+    // does this belong here? no
+    // does every other part of the code that could affect a row select end up calling this: yes
+    // they say you can fix anything with duct tape and determination, y'know?
+    if(that.showBtnSelectNone){that._DOMElements.btnSelectNone.disabled = (this.numSelectedRows < 1);}
+    if(that.showBtnSelectAll){that._DOMElements.btnSelectAll.disabled = (this.numRows == this.numSelectedRows);}
+    if(that.showBtnExport){that._DOMElements.btnExport.disabled = (this.numRows == 0);}
+    if (that.showRowNudgeButtons){
+        if (this.numSelectedRows > 0){
+            let selected = that.getSelected();
+            let min = (Array.from(this._DOMElements.tableListContainer.children).indexOf(selected[0].DOMElement) + 1);
+            let max = (Array.from(this._DOMElements.tableListContainer.children).indexOf(selected[(selected.length -1)].DOMElement) + 1);
+
+            // disable up nudge if the minimum selected row is at top
+            that._DOMElements.btnNudgeUp.disabled = (min == 1);
+
+            // disable nudge down if the max selected row is at bottom
+            that._DOMElements.btnNudgeDown.disabled = (max == that.numRows);
+
+        }else{
+            that._DOMElements.btnNudgeUp.disabled = true;
+            that._DOMElements.btnNudgeDown.disabled = true;
+        }
+    }
+
+    // oh yes, and also the actual code that belongs here ...
+    if (that.getFooterMessageCallback instanceof Function){
+        return(that.getFooterMessageCallback(that));
+    }else{
+        return(that.defaultFooterMessage);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,25 +980,7 @@ closePanel(){
 
 
 
-/*
-    openPrefEditor(evt)
-    we are gonna open an embeded modal dialog that obscures the table
-    CSS is up to you to make it look nice with transparencies and such
-    into that embedded dialog we are going to place the output of
-    this.getPrefEditor(), which in turn will either spit back whatever
-    your configured getPrefEditorCallback() or the output of defaultPrefEditor()
-*/
-openPrefEditor(evt){
-    let that = this;
-    that._DOMElements.btnPrefs.dataset.open = (!(that._DOMElements.btnPrefs.dataset.open == 'true'));
-    if (that._DOMElements.btnPrefs.dataset.open == 'true'){
-        that.openPanel(that.getPrefEditor());
-        that._DOMElements.btnExport.disabled = true;
-    }else{
-        that.closePanel();
-        that._DOMElements.btnExport.disabled = false;
-    }
-}
+
 
 
 
@@ -158,10 +1036,6 @@ userQuery(args){
         that.openPanel(div);
     }));
 }
-
-
-
-
 
 
 
@@ -512,7 +1386,42 @@ clearAllValidationErrors(rowElement){
 
 
 
+/*
+    getCell(rowElement, colName)
+*/
+getCell(rowElement, colName){
+    let col;
+    if ((rowElement instanceof Element) && this.isNotNull(colName)){
+        col = rowElement.querySelector(`span.${this.dataRowColClassName}[data-name="${colName}"]`);
+    }
+    if (col instanceof Element){
+        return(col);
+    }else{
+        throw(`${this._className} v${this._version} | getCell() | invalid input`);
+    }
+}
 
+
+
+
+/*
+    lockCell(cellElement, lockBool, lockMessage)
+*/
+lockCell(cellElement, lockBool, lockMessage){
+    if (cellElement instanceof Element){
+        cellElement.dataset.locked = (lockBool === true);
+
+        if ((cellElement.dataset.locked == "true") && this.isNotNull(lockMessage)){
+            cellElement.dataset.lockmessage = lockMessage;
+        }
+
+        if (! (cellElement.dataset.locked == "true")){
+            cellElement.dataset.lockmessage = '';
+        }
+    }else{
+        throw(`${this._className} v${this._version} | lockCell() | invalid input`);
+    }
+}
 
 
 

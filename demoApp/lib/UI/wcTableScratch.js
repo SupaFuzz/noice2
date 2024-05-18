@@ -68,6 +68,7 @@ setupCallback(self){
 */
 spawnTable(){
     this.testTable = new wcTable({
+        label: "test table",
         columns: [
             { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
             { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
@@ -75,7 +76,6 @@ spawnTable(){
             { name: 'last', order: 4, type: 'char', width: '10em' },
             { name: 'num', order: 5, type: 'int', width: '5em' }
         ],
-        /*
         rows: [
             { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
             { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
@@ -84,10 +84,17 @@ spawnTable(){
             { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
             { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
         ],
+        select_mode: 'single',
+        show_footer_message: true,
         allow_column_sort: true,
+        
+        /* done
+        footer_message: "helloooooo!",
+        custom_buttons: [
+            { name:'yes', callback: (s,b) => {console.log('yes')}},
+            { name:'no', callback: (s,b) => {console.log('also yes')}},
+        ]
         */
-        label: "test table",
-        footer_message: "helloooooo!"
     });
     this._DOMElements.testStuff.appendChild(this.testTable);
 }
