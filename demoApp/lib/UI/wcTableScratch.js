@@ -91,6 +91,7 @@ spawnTable(){
         show_btn_select_all: true,
         show_btn_select_none: true,
         show_btn_export: true,
+        allow_cell_edit: true,
         /* done
         footer_message: "helloooooo!",
         custom_buttons: [
