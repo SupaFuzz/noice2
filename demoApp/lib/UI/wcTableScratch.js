@@ -87,7 +87,10 @@ spawnTable(){
         select_mode: 'single',
         show_footer_message: true,
         allow_column_sort: true,
-        
+        show_btn_prefs: true,
+        show_btn_select_all: true,
+        show_btn_select_none: true,
+        show_btn_export: true,
         /* done
         footer_message: "helloooooo!",
         custom_buttons: [
