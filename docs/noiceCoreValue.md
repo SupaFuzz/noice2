@@ -165,6 +165,10 @@ if specified at instantiation, the object is "born" with `.value` set to this va
 
 if specified, this callback is executed from the `validate()` function, and its output chained to built in `nullable` and `enforceMenuValues` validations.
 
+### `attributeChangeCallback` - function(name, value, oldValue, selfRef)
+
+if specified, this is called from `setAttribute()` when setting a new attribute value
+
 
 ## functions
 
@@ -205,3 +209,7 @@ remove all objects in `.errors` where `.severity == "error"`, then call 'validat
 ### `clearValidationWarnings()`
 
 remove all objects in `.errors` where `.severity == "warning"`, then call 'validationStateChangeCallback()' if specified
+
+### `setAttribute(name, value)`
+
+sets the attribute identified by `name` to the given `value`. If `attributeChangeCallback()` is present, it is invoked

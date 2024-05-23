@@ -181,7 +181,7 @@ if specified, is called and awaited from `getDataElement` when a new dataElement
 
 ### `removeDataElementCallback` | async function(noiceCoreValue)
 
-if specified, is called and awaited before removing a dataElement via the `removeDataElement()` function. Promise rejects are ignored. 
+if specified, is called and awaited before removing a dataElement via the `removeDataElement()` function. Promise rejects are ignored.
 
 
 ## FUNCTIONS
@@ -244,3 +244,7 @@ if we had to create the dataElement and addDataElementCallback is specified, we 
 ### `removeDataElement(fieldID)`
 
 removes the noiceCoreValue object identified by `fieldID` from the `this.dataElements` attribute. If `removeDataElementCallback` is specified, we will await resolution/rejection before deleting the dataElement. However promise rejections are ignored and the dataElement is still deleted regardless.
+
+### `handleAttributeStateChange({ fieldID: <colName>, name: <str>, value: <bool>, oldValue: <bool>, fieldReference: <noiceCoreValue> })`
+
+override this function stub in child classes to capture arbitrary attribute changes on a noiceCoreValue dataElement. NOTE this excludes attributes with coded attribute getter/setters: `editable`, `nullable`, and `values`
