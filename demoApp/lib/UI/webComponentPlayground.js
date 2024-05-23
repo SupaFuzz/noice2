@@ -14,6 +14,9 @@ wcFormElement.registerElement('wc-form-element');
 import { wcBalloonDialog } from '../../../lib/webComponents/wcBalloonDialog.js';
 wcBalloonDialog.registerElement('wc-balloon-dialog');
 
+import { wcBasic } from '../../../lib/webComponents/wcBasic.js';
+wcBasic.registerElement('wc-basic');
+
 class webComponentPlayground extends noiceCoreUIScreen {
 
 
@@ -234,6 +237,18 @@ button[data-selected="false"]:before {
         that._DOMElements.rando2Container.appendChild(that.testDialog);
     });
 
+
+
+    // wcBasic
+    const btnBasic = document.createElement('button');
+    btnBasic.textContent = "wcBasic";
+    that._DOMElements.btnContainer.appendChild(btnBasic);
+    btnBasic.addEventListener('click', (evt) =>{
+        that.thing = new wcBasic({
+            content: `<h1 data-_name="lyric">I talk de talk and I walk de walk</h1>`
+        });
+        that.DOMElement.appendChild(that.thing);
+    })
 
 
 
