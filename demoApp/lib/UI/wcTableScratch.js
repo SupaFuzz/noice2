@@ -39,7 +39,11 @@ get html(){return(`
     <div class="btnContainer" data-templatename="btnContainer" data-templateattribute="true">
         <button id="btnMakeTable">make table</button>
     </div>
-    <div class="testStuff" data-templatename="testStuff" data-templateattribute="true"></div>
+    <div class="testStuff" data-templatename="testStuff" data-templateattribute="true" style="
+        background-color: darkblue;
+        height: 30em;
+        overflow: hidden;
+    "></div>
 `)}
 
 
@@ -67,6 +71,41 @@ setupCallback(self){
     make one and put it on the screen
 */
 spawnTable(){
+    this.testRows = [
+        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+
+        // volume test
+        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+        { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+        { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+        { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+        { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+    ];
+
     this.testTable = new wcTable({
         label: "test table",
         columns: [
@@ -77,12 +116,21 @@ spawnTable(){
             { name: 'num', order: 5, type: 'int', width: '5em' }
         ],
         rows: [
+            { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
             { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
             { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
             { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
             { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
             { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
             { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+            { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+            { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+            { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+            { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+            { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+            { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+            { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+            { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
         ],
         select_mode: 'single',
         show_footer_message: true,
@@ -92,6 +140,7 @@ spawnTable(){
         show_btn_select_none: true,
         show_btn_export: true,
         allow_cell_edit: true,
+        fit_parent: true
         /* done
         footer_message: "helloooooo!",
         custom_buttons: [
@@ -101,6 +150,13 @@ spawnTable(){
         */
     });
     this._DOMElements.testStuff.appendChild(this.testTable);
+    const btn = document.createElement('button');
+    btn.textContent = "add row";
+    this._DOMElements.btnContainer.appendChild(btn);
+    btn.addEventListener('click', (evt) => {
+        this.testTable.addRow(this.testRows.pop());
+    });
+
 }
 
 
