@@ -40,8 +40,7 @@ get html(){return(`
         <button id="btnMakeTable">make table</button>
     </div>
     <div class="testStuff" data-templatename="testStuff" data-templateattribute="true" style="
-        background-color: darkblue;
-        height: 30em;
+        height: 60vh;
         overflow: hidden;
     "></div>
 `)}
@@ -140,7 +139,8 @@ spawnTable(){
         show_btn_select_none: true,
         show_btn_export: true,
         allow_cell_edit: true,
-        fit_parent: true
+        fit_parent: true,
+        //table_fontsize: '1.2rem'
         /* done
         footer_message: "helloooooo!",
         custom_buttons: [
