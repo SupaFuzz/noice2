@@ -245,7 +245,27 @@ button[data-selected="false"]:before {
     that._DOMElements.btnContainer.appendChild(btnBasic);
     btnBasic.addEventListener('click', (evt) =>{
         that.thing = new wcBasic({
-            content: `<h1 data-_name="lyric">I talk de talk and I walk de walk</h1>`
+            content: `<h1 data-_name="lyric">I talk de talk and I walk de walk</h1>`,
+            styleSheet: `
+                h1 {
+                    color: rgb(230, 0, 161);
+                    animation: bluh 3s linear infinite;
+                }
+                @keyframes bluh {
+                    0% {
+                        color: rgba(230, 0, 161, .1);
+                        filter: blur(1.5em);
+                    }
+                    50% {
+                        color: rgba(230, 0, 161, .9);
+                        filter: blur(0);
+                    }
+                    100% {
+                        color: rgba(230, 0, 161, .1);
+                        filter: blur(1.5em);
+                    }
+                }
+            `
         });
         that.DOMElement.appendChild(that.thing);
     })
