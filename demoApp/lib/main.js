@@ -12,6 +12,7 @@ import { dataClassDemo } from './UI/dataClassDemo.js';
 import { webComponentDemo } from './UI/webComponentDemo.js';
 import { webComponentPlayground } from './UI/webComponentPlayground.js';
 import { wcTableScratch } from './UI/wcTableScratch.js';
+import { layoutTest } from './UI/layouts.js';
 
 /*
     DemoApp.js
@@ -67,6 +68,7 @@ startup(){
                          wcDemo: new webComponentDemo({ sortOrder: 4, title: 'web components demo', _app:that, debug:true }),
                          wcPlay: new webComponentPlayground({ sortOrder: 5, title: 'web component playground', _app:that, debug:true }),
                          wcTableStuff: new wcTableScratch ({ sortOrder: 6, title: 'wcTable scratch', _app:that, debug:true }),
+                         layouts: new layoutTest ({ sortOrder: 6, title: 'layouts', _app:that, debug:true }),
                      }
                  })
             },

@@ -448,3 +448,32 @@ button.btnBurger {
     overflow-y: hidden;
     max-width: 95vw;
  }
+
+
+ /*
+     testHarness specific for noiceCoreUITable
+ */
+ .noiceCoreUITable .tableContainer {
+     overflow-x: auto;
+     overflow-y: hidden;
+     max-width: 95vw;
+  }
+
+ .layoutTest .horizontalSplitter {
+    background-color: rgba(0, 0, 255, .25);
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+ }
+ .layoutTest .horizontalSplitter .section {
+
+ }
+ .layoutTest .horizontalSplitter .upper {
+    background-color: rgba(0, 0, 255, .25);
+    margin: .5em .5em .25em .5em;
+ }
+ .layoutTest .horizontalSplitter .lower {
+    background-color: rgba(0, 0, 255, .25);
+    margin: .25em .5em .5em .5em;
+ }
