@@ -52,37 +52,54 @@ setupCallback(self){
     let that = this;
 
     // lessee if we can make a clickHandler that ONLY fires on the background
-    that.DOMElement.querySelectorAll('.section').forEach((el) => { el.addEventListener("click", (evt) => {
-        evt.stopPropagation();
-        console.log(`${el.dataset.templatename} clicked`);
-    })});
+    that.DOMElement.querySelectorAll('.section').forEach((el) => {
+        el.addEventListener("mousedown", (evt) => { evt.stopPropagation(); });
+        //el.addEventListener("mouseup", (evt) => { evt.stopPropagation(); });
+    });
 
-    that._DOMElements.horizontalSplitter.addEventListener("click", (evt) => {
-        console.log(`horizontalSplitter clicked`);
+    that._DOMElements.horizontalSplitter.addEventListener("mousedown", (evt) => {
+        that._dragStart = [
+            evt.clientX,
+            evt.clientY,
+            that._DOMElements.upperSection.offsetHeight,
+            that._DOMElements.lowerSection.offsetHeight,
+            (that._DOMElements.upperSection.offsetHeight/(that._DOMElements.upperSection.offsetHeight + that._DOMElements.lowerSection.offsetHeight)),
+            (that._DOMElements.lowerSection.offsetHeight/(that._DOMElements.upperSection.offsetHeight + that._DOMElements.lowerSection.offsetHeight)),
+
+        ];
+        console.log(`horizontalSplitter grabbed`, that._dragStart);
+        that._dragListener = that.getEventListenerWrapper((evt, slf) => { slf.handleDrag(evt, slf); });
+        that._DOMElements.horizontalSplitter.addEventListener('mousemove', that._dragListener);
+    });
+
+    that._DOMElements.horizontalSplitter.addEventListener("mouseup", (evt) => {
+        console.log(`horizontalSplitter released`);
+        if (that._dragListener instanceof Function){
+            that._DOMElements.horizontalSplitter.removeEventListener('mousemove', that._dragListener);
+        }
     });
 
     /*
-        LOH 5/28/24 @ 2250
-        next step I think do this:
-        
-        mousedown -> capture upper and lower outerHeight
-                  -> calculate % by DOMElement.height
-                  -> set gridTemplateRows
-                  -> capture click[x,y]
-                  -> spawn mousemove listener
+        LOH 5/29/24 @ 2301
+        it works! really smoothly too!
 
-        mousemove -> capture delta-y
-                  -> calculate delta-y as % of DOMElement.height
-                  -> calculate new gridTemplateRows as
-                      -> apply + delta-y as subtract from upper + add remainder to lower
-                      -> apply - delta-y as add to upper + subtract remainder from upper
+        next step -- componentize it
+        conidder something like splitter
+        with orientation="horisontal" | "vertical"
 
-        mouseup  -> terminate mousemove listener
+        may need to change pane naming conventions
+        something for tomorrow
     */
 
 }
-
-
+/*
+    handleDrag(evt, slf)
+*/
+handleDrag(evt, slf){
+    let deltaY = (evt.clientY - this._dragStart[1]);
+    let deltaYPct = deltaY / (this._dragStart[2] + this._dragStart[3]);
+    this._DOMElements.horizontalSplitter.style.gridTemplateRows = `${(this._dragStart[4] + deltaYPct)*100}% ${((this._dragStart[4] + this._dragStart[5]) - (this._dragStart[4] + deltaYPct))*100}%`;
+}
 
 
 /*
