@@ -1,0 +1,17 @@
+/*
+    I can't believe this actually works but it does
+*/
+.newPODashboard .ctrlPnl button:after {
+   content: '';
+   position: absolute;
+   background: url('./gfx/buttons/refresh-icon.svg');
+   background-repeat: no-repeat;
+   width: 2em;
+   height: 2em;
+   animation: tryit 3s linear infinite;
+}
+@keyframes tryit {
+   0%   { transform: rotate(0deg); }
+   50%  { transform: rotate(-180deg); }
+   100% { transform: rotate(-360deg); }
+}
