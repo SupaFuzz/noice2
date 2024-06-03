@@ -137,7 +137,7 @@ setupCallback(self){
 
             let b = document.createElement('div');
             that.testDialog = new wcBalloonDialog({
-                full_screen: false,
+                //full_screen: true,
                 arrow_position: 'topRight',
                 x: '10px',
                 y: '10px',
@@ -160,9 +160,9 @@ setupCallback(self){
             });
 
             // relativeElement
-            //that.testDialog.relativeElement = btnBalloon;
+            that.testDialog.relativeElement = btnBalloon;
             //that.testDialog.relativeElement = that._DOMElements.rando;
-            that.testDialog.relativeElement = that._DOMElements.rando2;
+            //that.testDialog.relativeElement = that._DOMElements.rando2;
 
             // btns in headers!
             btnTest.addEventListener('click', (evt) => { that.testDialog.exit()})
@@ -233,8 +233,8 @@ button[data-selected="false"]:before {
 
         // oof! locking something to screen coordinates, this thing has to go at the root :-/
         //that.DOMElement.appendChild(that.testDialog);
-        //document.body.appendChild(that.testDialog);
-        that._DOMElements.rando2Container.appendChild(that.testDialog);
+        document.body.appendChild(that.testDialog);
+        //that._DOMElements.rando2Container.appendChild(that.testDialog);
     });
 
 

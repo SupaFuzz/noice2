@@ -43,6 +43,11 @@ constructor(args){
             label_position: (attributeName, oldValue, newValue, selfReference) => { selfReference.setLabelPosition(newValue, oldValue); },
         */
     };
+
+    // merge object defaults
+    this.mergeClassDefaults({
+        _content: null
+    });
 }
 
 
