@@ -5,7 +5,7 @@
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { wcSplitter } from '../../../lib/webComponents/wcSplitter.js';
-wcSplitter.registerElement('wc-splitter');
+import { wcTable } from '../../../lib/webComponents/wcTable.js';
 
 class layoutTest extends noiceCoreUIScreen {
 
@@ -34,16 +34,7 @@ constructor(args, defaults, callback){
     html
 */
 get html(){
-return(`<wc-splitter orientation="horizontal"></wc-splitter>`);
-
-/*
-return(`
-    <div class="horizontalSplitter" data-templatename="horizontalSplitter" data-templateattribute="true">
-        <div class="upper section" data-templatename="upperSection" data-templateattribute="true"></div>
-        <div class="lower section" data-templatename="lowerSection" data-templateattribute="true"></div>
-    </div>
-`)
-*/
+    return(`<wc-splitter orientation="horizontal"></wc-splitter>`);
 }
 
 
@@ -54,49 +45,72 @@ return(`
     perform these actions (just once) after render but before focus is gained
 */
 setupCallback(self){
-    /*
-    let that = this;
 
-    // lessee if we can make a clickHandler that ONLY fires on the background
-    that.DOMElement.querySelectorAll('.section').forEach((el) => {
-        el.addEventListener("mousedown", (evt) => { evt.stopPropagation(); });
-        //el.addEventListener("mouseup", (evt) => { evt.stopPropagation(); });
-    });
-
-    that._DOMElements.horizontalSplitter.addEventListener("mousedown", (evt) => {
-        that._dragStart = [
-            evt.clientX,
-            evt.clientY,
-            that._DOMElements.upperSection.offsetHeight,
-            that._DOMElements.lowerSection.offsetHeight,
-            (that._DOMElements.upperSection.offsetHeight/(that._DOMElements.upperSection.offsetHeight + that._DOMElements.lowerSection.offsetHeight)),
-            (that._DOMElements.lowerSection.offsetHeight/(that._DOMElements.upperSection.offsetHeight + that._DOMElements.lowerSection.offsetHeight)),
-
-        ];
-        console.log(`horizontalSplitter grabbed`, that._dragStart);
-        that._dragListener = that.getEventListenerWrapper((evt, slf) => { slf.handleDrag(evt, slf); });
-        that._DOMElements.horizontalSplitter.addEventListener('mousemove', that._dragListener);
-    });
-
-    that._DOMElements.horizontalSplitter.addEventListener("mouseup", (evt) => {
-        console.log(`horizontalSplitter released`);
-        if (that._dragListener instanceof Function){
-            that._DOMElements.horizontalSplitter.removeEventListener('mousemove', that._dragListener);
-        }
-    });
-
-        LOH 5/29/24 @ 2301
-        it works! really smoothly too!
-
-        next step -- componentize it
-        conidder something like splitter
-        with orientation="horisontal" | "vertical"
-
-        may need to change pane naming conventions
-        something for tomorrow
-    */
     this.splitter = this.DOMElement.querySelector('wc-splitter');
 
+    this.splitter.a = new wcTable({
+        label: 'A',
+        columns: [
+            { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
+            { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
+            { name: 'middle', order: 3, type: 'char', width: '5em' },
+            { name: 'last', order: 4, type: 'char', width: '10em' },
+            { name: 'num', order: 5, type: 'int', width: '5em' }
+        ],
+        rows: [
+            { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+            { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+            { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+            { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+            { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+            { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+        ],
+        select_mode: 'single',
+        show_footer_message: true,
+        allow_column_sort: true,
+        show_btn_prefs: true,
+        show_btn_select_all: true,
+        show_btn_select_none: true,
+        show_btn_export: true,
+        show_btn_search: true,
+        allow_cell_edit: true,
+        fit_parent: true,
+    });
+    this.splitter.a.style.margin = '.5em .5em 0 .5em';
+    this.splitter.b = new wcTable({
+        label: 'B',
+        columns: [
+            { name: 'species', order: 1, type: 'char', width: '5em', disableCellEdit: true, visible:false },
+            { name: 'first', order: 2, type: 'char', width: '10em', disableModifyAll: true },
+            { name: 'middle', order: 3, type: 'char', width: '5em' },
+            { name: 'last', order: 4, type: 'char', width: '10em' },
+            { name: 'num', order: 5, type: 'int', width: '5em' }
+        ],
+        rows: [
+           { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+           { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+           { species: 'cat', first: 'Jazzy', middle: 'J', last: 'Hicox', num: 82, test: "the" },
+           { species: 'snail', first: 'Gary', middle: 'X', last: 'Squarepants', num: 1, test: "heck" },
+           { species: 'crustacean', first: 'Eugene', middle: "C", last: "Krabbs", num: 12, test: "is" },
+           { species: 'canine', first: 'Scooby', middle: "D", last: "Doo", num: 420, test: "going"  },
+           { species: 'starfish', first: 'Patrick', middle: "", last: "Starr", num: 419, test: "on" },
+           { species: 'cat', first: 'Mo', middle: 'M', last: 'Hicox', num: 5, test: "what" },
+        ],
+        select_mode: 'single',
+        show_footer_message: true,
+        allow_column_sort: true,
+        show_btn_prefs: true,
+        show_btn_select_all: true,
+        show_btn_select_none: true,
+        show_btn_export: true,
+        show_btn_search: true,
+        allow_cell_edit: true,
+
+        fit_parent: true,
+    });
+    this.splitter.b.style.margin = '.5em .5em 0 .5em';
+
+    /*
     this.splitter.a =
 `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus in est sem. Praesent nec convallis neque. Cras ultrices tristique felis, in accumsan diam rhoncus ultrices. Mauris sit amet nibh ac quam malesuada pulvinar. Quisque et porta massa. In hac habitasse platea dictumst. Sed id gravida mi. Nulla vel lacinia purus, at laoreet sapien. Nulla nec pulvinar lorem. Donec vel eleifend quam, a consectetur tellus. Mauris quis metus odio. Maecenas velit est, molestie ac porttitor eu, placerat porttitor est. Praesent pharetra sodales tellus vitae condimentum. Aliquam erat volutpat. Sed vel gravida nisl, eu fermentum augue. Sed eu mattis turpis.
 
@@ -109,17 +123,10 @@ Morbi ut luctus purus. Aenean gravida molestie est ac suscipit. Nunc rutrum, eli
 Mauris blandit maximus erat. Suspendisse potenti. Mauris dapibus tristique bibendum. Nulla a efficitur elit. Etiam varius porta consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus. In hac habitasse platea dictumst. Nam laoreet pharetra enim, id imperdiet eros tincidunt eget. Fusce odio ante, pellentesque eget vestibulum dignissim, gravida lobortis massa. Duis ultricies sed ipsum eu condimentum. Etiam ornare lectus vel lacus finibus porttitor. Duis semper mauris magna, vehicula vestibulum lorem semper iaculis. Nunc placerat, erat nec dictum accumsan, ante arcu efficitur libero, et malesuada eros neque eu ipsum. Nunc laoreet sagittis magna vitae sollicitudin. Donec commodo fringilla ipsum quis pharetra.`
 
     this.splitter.b = this.splitter.a;
-
+    */
 
 }
-/*
-    handleDrag(evt, slf)
-*/
-handleDrag(evt, slf){
-    let deltaY = (evt.clientY - this._dragStart[1]);
-    let deltaYPct = deltaY / (this._dragStart[2] + this._dragStart[3]);
-    this._DOMElements.horizontalSplitter.style.gridTemplateRows = `${(this._dragStart[4] + deltaYPct)*100}% ${((this._dragStart[4] + this._dragStart[5]) - (this._dragStart[4] + deltaYPct))*100}%`;
-}
+
 
 
 /*
