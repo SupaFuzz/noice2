@@ -34,7 +34,7 @@ constructor(args, defaults, callback){
     html
 */
 get html(){
-    return(`<wc-splitter orientation="horizontal"></wc-splitter>`);
+    return(`<wc-splitter orientation="vertical"></wc-splitter>`);
 }
 
 
