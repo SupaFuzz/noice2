@@ -145,6 +145,7 @@ setupCallback(self){
                 title: "hi there",
                 dialogContent: b,
                 headerContent: btnTest,
+                /*
                 exitCallback:  (selfRef) => {return(new Promise((toot, boot) => {
                     let limit = 300;
                     function dumbShit(i){
@@ -157,12 +158,13 @@ setupCallback(self){
                     }
                     dumbShit(0);
                 }))}
+                */
             });
 
             // relativeElement
-            that.testDialog.relativeElement = btnBalloon;
+            //that.testDialog.relativeElement = btnBalloon;
             //that.testDialog.relativeElement = that._DOMElements.rando;
-            //that.testDialog.relativeElement = that._DOMElements.rando2;
+            that.testDialog.relativeElement = that._DOMElements.rando2;
 
             // btns in headers!
             btnTest.addEventListener('click', (evt) => { that.testDialog.exit()})
@@ -233,8 +235,8 @@ button[data-selected="false"]:before {
 
         // oof! locking something to screen coordinates, this thing has to go at the root :-/
         //that.DOMElement.appendChild(that.testDialog);
-        document.body.appendChild(that.testDialog);
-        //that._DOMElements.rando2Container.appendChild(that.testDialog);
+        //document.body.appendChild(that.testDialog);
+        that._DOMElements.rando2Container.appendChild(that.testDialog);
     });
 
 
