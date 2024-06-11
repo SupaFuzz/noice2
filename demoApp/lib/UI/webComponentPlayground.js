@@ -267,7 +267,8 @@ button[data-selected="false"]:before {
                         filter: blur(1.5em);
                     }
                 }
-            `
+            `,
+            initializedCallback: (slf) => {console.log("initializedCallback() is here!")}
         });
         that.DOMElement.appendChild(that.thing);
     })
