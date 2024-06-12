@@ -34,7 +34,24 @@ constructor(args, defaults, callback){
     html
 */
 get html(){
-    return(`<wc-splitter orientation="vertical"></wc-splitter>`);
+    return(`
+        <div class="eh" style="
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: 2em auto;
+        ">
+            <div class="btnContiner"><button class="btnOrientation">vertical</button></div>
+            <div class="spltCntr" style="
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            ">
+                <wc-splitter orientation="vertical"></wc-splitter>
+            </div>
+        </div>
+    `);
 }
 
 
@@ -147,6 +164,12 @@ setupCallback(self){
         fit_parent: true,
     });
     this.splitter.b.style.margin = '.5em .5em 0 .5em';
+
+    let that = this;
+    this.DOMElement.querySelector('button.btnOrientation').addEventListener('click', (evt) => {
+        evt.target.textContent = (evt.target.textContent == "vertical")?"horizontal":"vertical";
+        that.splitter.orientation = evt.target.textContent;
+    });
 
     /*
     this.splitter.a =
