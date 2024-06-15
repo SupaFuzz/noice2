@@ -247,11 +247,11 @@ button[data-selected="false"]:before {
     that._DOMElements.btnContainer.appendChild(btnBasic);
     btnBasic.addEventListener('click', (evt) =>{
         that.thing = new wcBasic({
-            content: `<h1 data-_name="lyric">I talk de talk and I walk de walk</h1>`,
+            content: `<h1 data-_name="lyric">put a donk on it⏎</h1>`,
             styleSheet: `
                 h1 {
                     color: rgb(230, 0, 161);
-                    animation: bluh 3s linear infinite;
+                    animation: bluh 7s ease infinite;
                 }
                 @keyframes bluh {
                     0% {
