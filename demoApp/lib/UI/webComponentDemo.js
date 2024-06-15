@@ -65,9 +65,12 @@ return(`
         margin-bottom: 2em;
     ">
         <wc-pie-chart id="testMe" size="12em" badge_text="test" show_badge="true" badge_position="bottom"></wc-pie-chart>
-        <div class="btnContainer">
+        <div class="btnContainer" style="
+            display: grid;
+        ">
             <button id="btnAddChart">add charts</button>
             <button id="btnToggleMode">layout mode</button>
+            <button id="btnTogglePosition" data-int="1">label position</button>
         </div>
     </div>
 
@@ -135,6 +138,12 @@ setupCallback(self){
         that.testPie.multiple_chart_mode = (that.testPie.multiple_chart_mode == "stack")?'overlay':'stack';
         that.testPie.badge_text = `chart layout: ${that.testPie.multiple_chart_mode}`;
     });
+    that.DOMElement.querySelector('#btnTogglePosition').addEventListener('click', (evt) => {
+        const el = that.DOMElement.querySelector('#btnTogglePosition'); // you can never be sure about evt.target
+        el.dataset.int = (parseInt(el.dataset.int) + 1);
+        that.testPie.badge_position = ['top','center','bottom'][parseInt(el.dataset.int)%3];
+    });
+
 
     // theme selector stuff
     that.themeSelector = that.DOMElement.querySelector('wc-form-element[name="theme"]');
