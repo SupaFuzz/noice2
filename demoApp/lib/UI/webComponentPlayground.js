@@ -4,18 +4,11 @@
 */
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
-
 import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
-wcPieChart.registerElement('wc-pie-chart');
-
 import { wcFormElement } from '../../../lib/webComponents/wcFormElement.js';
-wcFormElement.registerElement('wc-form-element');
-
 import { wcBalloonDialog } from '../../../lib/webComponents/wcBalloonDialog.js';
-wcBalloonDialog.registerElement('wc-balloon-dialog');
-
 import { wcBasic } from '../../../lib/webComponents/wcBasic.js';
-wcBasic.registerElement('wc-basic');
+import { wcNoise } from '../../../lib/webComponents/wcNoise.js';
 
 class webComponentPlayground extends noiceCoreUIScreen {
 
@@ -271,7 +264,15 @@ button[data-selected="false"]:before {
             initializedCallback: (slf) => {console.log("initializedCallback() is here!")}
         });
         that.DOMElement.appendChild(that.thing);
-    })
+    });
+
+    const btnNoise = document.createElement('button');
+    btnNoise.textContent = "wcNoise";
+    that._DOMElements.btnContainer.appendChild(btnNoise);
+    btnNoise.addEventListener('click', (evt) => {
+        that.wcNoise = new wcNoise();
+        that._DOMElements.rando2Container.appendChild(that.wcNoise);
+    });
 
 
 
