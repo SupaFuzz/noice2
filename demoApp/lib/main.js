@@ -13,6 +13,7 @@ import { webComponentDemo } from './UI/webComponentDemo.js';
 import { webComponentPlayground } from './UI/webComponentPlayground.js';
 import { wcTableScratch } from './UI/wcTableScratch.js';
 import { layoutTest } from './UI/layouts.js';
+import { animationTest } from './UI/animations.js';
 
 /*
     DemoApp.js
@@ -69,6 +70,7 @@ startup(){
                          wcPlay: new webComponentPlayground({ sortOrder: 5, title: 'web component playground', _app:that, debug:true }),
                          wcTableStuff: new wcTableScratch ({ sortOrder: 6, title: 'wcTable scratch', _app:that, debug:true }),
                          layouts: new layoutTest ({ sortOrder: 6, title: 'layouts', _app:that, debug:true }),
+                         animations: new animationTest({ sortOrder: 7, title: 'animations', _app:that, debug:true })
                      }
                  })
             },
