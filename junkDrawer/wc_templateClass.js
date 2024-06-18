@@ -35,6 +35,11 @@ constructor(args){
     super(args);
     this._className = 'wcBalloonDialog';
     this._version = 1;
+    this._initialized = false;
+
+    this.attributeDefaults = JSON.parse(JSON.stringify(wcPieChart.classAttributeDefaults));
+    this.initConstructorArgs(args);
+    this.spawnAttributeAccessors();
 
     // attributeChangeHandlers
     this.attributeChangeHandlers = {
@@ -113,4 +118,5 @@ get defaultStyle(){return(`
 
 
 }
-export { wcBalloonDialog };
+const _classRegistration = wcBalloonDialog.registerElement('wc-balloon-dialo');
+export { _classRegistration as wcBalloonDialog };

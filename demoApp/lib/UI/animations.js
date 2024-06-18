@@ -8,6 +8,8 @@ import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
 import { noiceRadialPolygonPath } from '../../../lib/noiceRadialPolygonPath.js'
 
+import { wcScanIndicator } from '../../../lib/webComponents/wcScanIndicator.js';
+
 /*
 import { wcSplitter } from '../../../lib/webComponents/wcSplitter.js';
 import { wcTable } from '../../../lib/webComponents/wcTable.js';
@@ -49,9 +51,13 @@ get html(){
             grid-template-columns: auto auto;
             align-items: center;
         ">
-            <wc-pie-chart size="20em" style="justify-self: right;" data-templatename="pieChart" data-templateattribute="true"></wc-pie-chart>
+            <wc-pie-chart size="10em" style="justify-self: right;" data-templatename="pieChart" data-templateattribute="true"></wc-pie-chart>
             <div class="btnContiner" style="justify-self: left;" data-templatename="btnContainer" data-templateattribute="true">
                 <button data-templatename="btnStart" data-templateattribute="true">start</button>
+            </div>
+            <wc-scan-indicator size="5em" style="justify-self: right;" data-templatename="scanInd" data-templateattribute="true"></wc-scan-indicator>
+            <div class="btnContiner" style="justify-self: left;" data-templatename="btnContainer2" data-templateattribute="true">
+                <button data-templatename="btnStart2" data-templateattribute="true">start</button>
             </div>
         </div>
     `);
@@ -90,6 +96,11 @@ setupCallback(self){
             that.runAnimation = (! (that.runAnimation == true));
             if (that.runAnimation == true){ that.startAnimation(); }
             that._DOMElements.btnStart.textContent = (that.runAnimation == true)?'stop':'start';
+        });
+
+        that._DOMElements.btnStart2.addEventListener('click', () => {
+            that._DOMElements.scanInd.run_animation = (that._DOMElements.btnStart2.textContent == 'start');
+            that._DOMElements.btnStart2.textContent = (that._DOMElements.btnStart2.textContent == 'start')?'stop':'start';
         });
     }
 
