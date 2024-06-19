@@ -477,3 +477,17 @@ button.btnBurger {
     background-color: rgba(0, 0, 255, .25);
     margin: .25em .5em .5em .5em;
  }
+
+ div[data-templatename="rando2Container"][data-texture="true"] {
+    background: radial-gradient(rgba(255,255,52, .3), rgba(0,255,0, .1));
+    border-radius: 1em;
+    overflow: hidden;
+    box-shadow: .1258em .2133em 4px rgba(20, 22, 23, .5) inset;
+    border-style: solid;
+    border-top-width: .128em;
+    border-left-width: .128em;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-top-color: rgba(240, 240, 240, .3);
+    border-left-color: rgba(240, 240, 240, .3);
+ }
