@@ -52,7 +52,7 @@ return(`
     "></div>
     <div class="spacer" data-templatename="rando2Container" data-templateattribute="true" style="
         width: 20em;
-        height: 20em;
+        height: 30em;
         background-color: rgba(240, 240, 240, .2);
         position: relative;
         right: -15em;
@@ -63,7 +63,7 @@ return(`
         background-color: orange;
         position: relative;
         top: 5em;
-        left: 5em;
+        left: 10em;
     "></div>
     </div>
 `)
@@ -270,8 +270,11 @@ button[data-selected="false"]:before {
     btnNoise.textContent = "wcNoise";
     that._DOMElements.btnContainer.appendChild(btnNoise);
     btnNoise.addEventListener('click', (evt) => {
-        that.wcNoise = new wcNoise();
-        that._DOMElements.rando2Container.appendChild(that.wcNoise);
+        if (! (that._DOMElements.rando2Container.dataset.texture == "true")){
+            that.wcNoise = new wcNoise();
+            that._DOMElements.rando2Container.appendChild(that.wcNoise);
+        }
+        that._DOMElements.rando2Container.dataset.texture = (!(that._DOMElements.rando2Container.dataset.texture == "true"));
     });
 
 
