@@ -68,9 +68,9 @@ const demoForm = {
         help: "The previous paper UPC tag number from before the RFID tag was assigned"
     },
 
-    'Property Type': {
-        fieldName: 'Property Type',
-        label: 'Property Type',
+    'Disposition': {
+        fieldName: 'Disposition',
+        label: 'Disposition',
         type: 'ENUM',
         label_position:     'left',
         displaySection:     'receiving',
@@ -78,19 +78,19 @@ const demoForm = {
         poExport:           false,
         capture_value_on:   'change',
         // has different enum values but same position on view vs popsq -- hence the override here
-        values: [ 'Contractor Managed', 'NASA Managed', 'Serialized', 'Leidos Owned' ],
+        values: [ 'Managed', 'Vendor', 'Serialized', 'Co-Owned' ],
         modes:{
             modify: { display:true, editable:true, nullable:false, editIfNull:true },
-            create: { display:true, editable:true, nullable:false, defaultValue: 'Contractor Managed' },
+            create: { display:true, editable:true, nullable:false, defaultValue: 'Managed' },
             clone:  { fieldMenu: false },
             list:   { display: true, editable: true, nullable: true, width: '10em', order: 8 }
         },
         help: "Type of property item"
     },
 
-    'Product Categorization Tier 1': {
-        fieldName: 'Product Categorization Tier 1',
-        label: 'Tier1',
+    'Category': {
+        fieldName: 'Category',
+        label: 'Category',
         type: 'CHAR',
         label_position:     'left',
         displaySection:     'tags and identification',
@@ -102,7 +102,7 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '13em', order: 14 }
         },
-        help: "'Tier 1' property categorization from corresponding NPAM:LineItem record"
+        help: "'Category' property categorization from corresponding NPAM:LineItem record"
     },
 
     'Manufacturer': {
@@ -165,9 +165,9 @@ const demoForm = {
         help: "Serial Number"
     },
 
-    'Center': {
-        fieldName: 'Center',
-        label: 'Center',
+    'Campus': {
+        fieldName: 'Campus',
+        label: 'Campus',
         type: 'CHAR',
         label_position:     'left',
         displaySection:     'location and assignment',
@@ -181,7 +181,7 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '5em', order: 19 }
         },
-        help: "NASA Center where the property item is located"
+        help: "NASA Campus where the property item is located"
     },
 
     'Building': {
@@ -199,7 +199,7 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '7em', order: 20 }
         },
-        help: "Building at selected NASA Center where the property item is located",
+        help: "Building at selected NASA Campus where the property item is located",
         valueDependentMenu: true,
         valueDependentMenuOrder: 1
     },
@@ -219,7 +219,7 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '5em', order: 21 }
         },
-        help: "Room in Building at selected NASA Center where the property item is located",
+        help: "Room in Building at selected NASA Campus where the property item is located",
         valueDependentMenu: true,
         valueDependentMenuOrder: 2
     },
@@ -240,7 +240,7 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '7em', order: 22 }
         },
-        help: "Bin/Rack in Room in Building at selected NASA Center where the property item is located",
+        help: "Bin/Rack in Room in Building at selected NASA Campus where the property item is located",
         valueDependentMenu: true,
         valueDependentMenuOrder: 3
     },
@@ -273,7 +273,7 @@ const demoForm = {
         displayOrder:       6,
         poExport:           false,
         type:               'ENUM',
-        values: [ 'Corporate_IT_COMMSSVC', 'Mission_IT_COMMSSVC', 'Russia_IT_COMMSSVC' ],
+        values: [ 'KongDonkey', 'Tragedeigh', 'TeaParks' ],
         modes:{
             modify: { display: true, editable: true, nullable: true },
             create: { display: true, editable: true, nullable: false, defaultValue: 'Corporate_IT_COMMSSVC'},
@@ -324,10 +324,10 @@ const demoForm = {
         help:               "Description of Item",
     },
 
-    'Unit Price': {
+    'Retail': {
         // type is required since is a char on the view and legit currency on popsq
-        fieldName: 'Unit Price',
-        label: 'Unit Price',
+        fieldName: 'Retail',
+        label: 'Retail',
         type:               'CURRENCY',
         label_position:     'left',
         displaySection:     'receiving',
@@ -424,9 +424,9 @@ const demoForm = {
         help: "The Federal Service Code (FSC) for the property item"
     },
 
-    'NPAM Status': {
-        fieldName: 'NPAM Status',
-        label: 'NPAM Status',
+    'Status': {
+        fieldName: 'Status',
+        label: 'Status',
         type:               'ENUM',
         label_position: 'left',
         displaySection: 'receiving',
@@ -495,6 +495,7 @@ const demoForm = {
     },
 
     'Entry ID': {
+        id: 1,
         fieldName: 'Entry ID',
         label: 'Entry ID',
         type:               'CHAR',
@@ -530,9 +531,9 @@ const demoForm = {
         help: "The Tracking Number the Property Item was received from the Carrier under"
     },
 
-    'Record Type': {
-        fieldName: 'Record Type',
-        label: 'Record Type',
+    'Type': {
+        fieldName: 'Type',
+        label: 'Type',
         type:               'ENUM',
         label_position:     'left',
         displaySection:     'receiving',
@@ -570,9 +571,9 @@ const demoForm = {
         help: "Quantity. For Assets, a value > 1 is possible"
     },
 
-    'PO Number': {
-        fieldName: 'PO Number',
-        label: 'PO Number',
+    'Order Number': {
+        fieldName: 'Order Number',
+        label: 'Order Number',
         type:               'CHAR',
         label_position: 'left',
         displaySection: 'receiving',
@@ -592,9 +593,9 @@ const demoForm = {
         help: "The Purchase Order (PO) associated to the property item",
     },
 
-    'Purchase Order Line': {
-        fieldName: 'Purchase Order Line',
-        label: 'Purchase Order Line',
+    'Priority': {
+        fieldName: 'Priority',
+        label: 'Priority',
         type:               'INTEGER',
         label_position:     'left',
         displaySection:     'receiving',
@@ -616,9 +617,9 @@ const demoForm = {
         valueDependentMenuOrder: 4
     },
 
-    'Work Package': {
-        fieldName: 'Work Package',
-        label: 'Work Package',
+    'Package Number': {
+        fieldName: 'Package Number',
+        label: 'Package Number',
         type:               'CHAR',
         label_position:     'left',
         displaySection:     'receiving',
@@ -632,7 +633,7 @@ const demoForm = {
             clone:  { fieldMenu: false, inheritValue: true, nullableOnBogusPO: true },
             list:   { display: true, editable: true, nullable: true, width: '13em', order: 4 }
         },
-        help: "The Work Package associated to the PO Line Number with the given Purchase Order (PO)",
+        help: "The Package Number associated to the PO Line Number with the given Purchase Order (PO)",
         enforceMenuValues: true,
         valueDependentMenu: true,
         valueDependentMenuOrder: 5
@@ -642,7 +643,7 @@ const demoForm = {
         fieldName: 'PRR',
         label: 'PRR',
         type:               'CHAR',
-        label:              'PRR Number',
+        label:              'Department',
         label_position:     'left',
         displaySection:     'receiving',
         displayOrder:       2.75,
@@ -655,7 +656,7 @@ const demoForm = {
             clone:  { fieldMenu: false, inheritValue: true, nullableOnBogusPO: true, nullableOnEmptyMenu: true },
             list:   { display: true, editable: true, nullable: true, width: '10em', order: 5 }
         },
-        help: "The PRR Number associated to the PO Line Number with the given Purchase Order (PO)",
+        help: "The Department associated to the PO Line Number with the given Purchase Order (PO)",
         valueDependentMenu: true,
         valueDependentMenuOrder: 6
     },
@@ -669,35 +670,35 @@ const demoRow = {
     'TagNumber': '00005429381',
     'rfid.TagNumber': `NC0000000000005429381`,
     'paper.TagNumber': 'C9381',
-    'Property Type': 'Contractor Managed',
-    'Product Categorization Tier 1': 'Switch',
+    'Disposition': 'Managed',
+    'Category': 'Switch',
     'Manufacturer': 'Cisco',
     'Part Number': '12',
     'SerialNumber': '1734203958345096t8',
-    'Center': 'MSFC',
-    'Building': 'MS-4727',
+    'Campus': 'Huntsville',
+    'Building': 'HSV-4727',
     'Room': '420',
     'Bin/Rack': 'Top Shelf',
     'Assigned User Login ID': 'scoob',
     'Company': "KongDonkey",
     'Last Inventory Date': '6/27/2024, 9:25:33 PM',
     'Description': "it's just like ... this whole thing, man",
-    'Unit Price': "$350.55",
+    'Retail': "$350.55",
     'MAC Address': '2c:cf:67:2e:bc:19',
     'Requisition ID': "REQ-1245",
     'Change ID': 'WRGLBUS-0000001',
     'FSC': '0420',
-    'NPAM Status': 'Configuration',
-    'Create Date': '6/27/2024, 9:25:33 PM',
-    'Modified Date': '6/27/2024, 9:25:33 PM',
+    'Status': 'Configuration',
+    'Create Date': '2024-06-28T21:23:15',
+    'Modified Date': '2024-06-28T21:23:15',
     'Last Modified By': 'Scooby D. Doo',
     'Entry ID': '000000000000001',
     'Tracking Number': '1z836073209-12',
-    'Record Type': 'Equipment',
+    'Type': 'Equipment',
     'Quantity': '13',
-    'PO Number': 'PO-0000443321',
-    'Purchase Order Line': '3',
-    'Work Package': 'WP.D.EE.ZNUTZ',
+    'Order Number': 'PO-0000443321',
+    'Priority': '3',
+    'Package Number': 'WP.D.EE.ZNT',
     'PRR': 'PRR-000443321'
 }
 export { demoForm, demoRow };

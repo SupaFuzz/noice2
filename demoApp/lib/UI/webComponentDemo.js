@@ -148,7 +148,7 @@ setupCallback(self){
     // theme selector stuff
     that.themeSelector = that.DOMElement.querySelector('wc-form-element[name="theme"]');
 
-    that.themeSelector.captureValueCallback = (value) => {
+    that.themeSelector.captureValueCallbackkkk = (value) => {
         if (that.themeStyle instanceof Element){ that.themeStyle.remove(); }
         if (value == "dark"){
             that.themeStyle = document.createElement('style');

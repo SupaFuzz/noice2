@@ -92,7 +92,7 @@ setupCallback(self){
             label: 'test field',
             name: 'test',
             type: 'text',
-            capture_value_on: 'change',
+            capture_value_on: 'focusoutOrReturn',
             show_undo_button: true,
             show_menu_button: true,
             captureValueCallback: (val, slf) => {slf.log(`[value]: ${val}`); },
