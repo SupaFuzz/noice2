@@ -41,6 +41,7 @@ constructor(args, defaults, callback){
 get html(){return(`
     <div data-templatename="buttonContainer" data-templateattribute="true">
         <button data-templatename="btnMake" data-templateattribute="true">Make FormView</button>
+        <button data-templatename="btnNarrow" data-templateattribute="true" disabled>Make Narrow</button>
     </div>
 `)}
 
@@ -67,28 +68,21 @@ setupCallback(self){
             fieldConfig: demoForm,
             mode: 'modify',
             show_modified_field_indicator: true,
-            height: '75vh'
+            height: '75vh',
+            viewClosedCallback: (slf) => {
+                that._DOMElements.btnMake.disabled = false;
+                that._DOMElements.btnNarrow.disabled = true;
+                that._DOMElements.btnNarrow.textContent = "Make Narrow"
+            }
         });
         that._DOMElements.btnMake.disabled = true;
         that.DOMElement.appendChild(that.formView);
+        that._DOMElements.btnNarrow.disabled = false;
+    });
 
-        /*
-        new noiceARSRow({
-            formName: this._DOMElements.schema.value,
-            threadClient: that._app.arsSyncWorkerClient,
-            auxFieldConfig: (that._DOMElements.schema.value == 'NPAM:NSCAN2:TrackingNumberRegistry')?trackingNumberFormDisplayProperties:fieldDisplayProperties,
-            debug: false
-        }).load(that._DOMElements.entryID.value).then((row) => {
-            that.testARSRow = row;
-            that.testFormView = row.getFormView({
-                height: (that._DOMElements.schema.value == 'NPAM:NSCAN2:TrackingNumberRegistry')?'min-content':'70vh'
-            }, (that._DOMElements.schema.value == 'NPAM:NSCAN2:TrackingNumberRegistry')?wcTrackingNumberFormView:'');
-            that._DOMElements.frmCntr.innerHTML = '';
-            that._DOMElements.frmCntr.appendChild(that.testFormView);
-        });
-        */
-
-
+    that._DOMElements.btnNarrow.addEventListener('click', (evt) => {
+        that._DOMElements.btnNarrow.textContent = (that._DOMElements.btnNarrow.textContent == "Make Narrow")?"Make Wide":"Make Narrow";
+        that.formView.narrow = (!(that._DOMElements.btnNarrow.textContent == "Make Narrow"));
     });
 }
 
