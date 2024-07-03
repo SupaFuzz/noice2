@@ -385,11 +385,11 @@ const demoForm = {
         help: "The Requsition ID associated to the property item"
     },
 
-    'Change ID': {
+    'Charger ID': {
         // has different label on the view
-        fieldName: 'Change ID',
+        fieldName: 'Charger ID',
         type:               'CHAR',
-        label:              'Change ID (NSR)',
+        label:              'Charger ID',
         label_position:     'left',
         displaySection:     'item information',
         displayOrder:       6,
@@ -404,12 +404,12 @@ const demoForm = {
             clone:  { fieldMenu: true, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '10em', order: 29 }
         },
-        help: "A Change Request(CRQ) associated to the property item"
+        help: "Charger ID associated to the property item"
     },
 
-    'FSC': {
-        fieldName: 'FSC',
-        label: 'FSC',
+    'Service Code': {
+        fieldName: 'Service Code',
+        label: 'Service Code',
         type:               'CHAR',
         label_position:     'left',
         displaySection:     'item information',
@@ -421,7 +421,7 @@ const demoForm = {
             clone:  { fieldMenu: false, inheritValue: true },
             list:   { display: true, editable: true, nullable: true, width: '4em', order: 14 }
         },
-        help: "The Federal Service Code (FSC) for the property item"
+        help: "Service Code for the property item"
     },
 
     'Status': {
@@ -686,8 +686,8 @@ const demoRow = {
     'Retail': "$350.55",
     'MAC Address': '2c:cf:67:2e:bc:19',
     'Requisition ID': "REQ-1245",
-    'Change ID': 'WRGLBUS-0000001',
-    'FSC': '0420',
+    'Charger ID': 'WRGLBUS-0000001',
+    'Service Code': '0420',
     'Status': 'Configuration',
     'Create Date': '2024-06-28T21:23:15',
     'Modified Date': '2024-06-28T21:23:15',
