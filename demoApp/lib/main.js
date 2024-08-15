@@ -15,6 +15,7 @@ import { wcTableScratch } from './UI/wcTableScratch.js';
 import { layoutTest } from './UI/layouts.js';
 import { animationTest } from './UI/animations.js';
 import { formTest } from './UI/formTest.js';
+import { workbenchUI } from './UI/workbench.js';
 
 /*
     DemoApp.js
@@ -72,7 +73,8 @@ startup(){
                          wcTableStuff: new wcTableScratch ({ sortOrder: 6, title: 'wcTable scratch', _app:that, debug:true }),
                          layouts: new layoutTest ({ sortOrder: 6, title: 'layouts', _app:that, debug:true }),
                          animations: new animationTest({ sortOrder: 7, title: 'animations', _app:that, debug:true }),
-                         forms: new formTest({ sortOrder: 8, title: 'formView', _app:that, debug:true })
+                         forms: new formTest({ sortOrder: 8, title: 'formView', _app:that, debug:true }),
+                         workbench: new workbenchUI({ sortOrder: 9, title: 'workbench', _app:that, debug:true })
                      }
                  })
             },
