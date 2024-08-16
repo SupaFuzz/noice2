@@ -75,6 +75,68 @@ setupCallback(self){
                 that._DOMElements.btnNarrow.textContent = "Make Narrow"
             }
         });
+
+        that.formView.renderFieldContainer = (fieldContainerElement) => {
+            let dis = that.formView;
+            dis.manageFormElements();
+
+            /*
+                TO-DO: insert shenanigans here
+            */
+            fieldContainerElement.innerHTML = '';
+
+            /*
+                this should get moved to a sublcass like wcNSCANFormView or something
+                for the moment hard coding it because we have so much else left to work
+                on here before we get to subclasses. But when we do move this to the
+                new child class and then uncomment the dumb demo one below
+            */
+            ['shipping', 'receiving', 'tags and identification', 'location', 'assignment', 'item information' ,'etc.'].forEach((sectionTitle) => {
+                let fs = document.createElement('fieldset');
+                fs.dataset.name = sectionTitle;
+                let legend = document.createElement('legend');
+                legend.textContent = sectionTitle;
+                fs.appendChild(legend);
+                Object.keys(dis.fieldConfig).map((a)=>{return(dis.fieldConfig[a])}).filter((conf) => {return(
+                    (conf instanceof Object) &&
+                    (conf.hasOwnProperty('displaySection')) &&
+                    (conf.displaySection == sectionTitle) &&
+                    (conf.hasOwnProperty('displayOrder')) &&
+                    (! isNaN(parseFloat(conf.displayOrder))) &&
+                    dis.formElements.hasOwnProperty(conf.fieldName)
+                )}).sort((a,b) => {return(a.displayOrder - b.displayOrder)}).forEach((conf) => {
+                    fs.appendChild(dis.formElements[conf.fieldName]);
+                });
+
+                // the "add as new location" thing for location
+                if (sectionTitle == "location"){
+                    let that = this;
+                    let d = document.createElement('div');
+                    d.className = "btnContainer";
+                    dis._elements.btnAddLocation = document.createElement('button');
+                    dis._elements.btnAddLocation.dataset._name = "btnAddLocation";
+                    dis._elements.btnAddLocation.disabled = true;
+                    dis._elements.btnAddLocation.textContent = 'add as new location';
+                    dis._elements.btnAddLocation.addEventListener('click', (evt) => {
+                        // fire the "add_location" event and let the parent noiceARSRow handle it
+                        that.dispatchEvent(new CustomEvent("add_location", { detail: {
+                            value: {
+                                center: dis.formElements.Center.value,
+                                building: dis.formElements.Building.value,
+                                room: dis.formElements.Room.value,
+                                binRack: dis.formElements['Bin/Rack'].value
+                            },
+                            self: dis
+                        }}));
+                    });
+                    d.appendChild(dis._elements.btnAddLocation);
+                    fs.appendChild(d);
+                }
+
+                fieldContainerElement.appendChild(fs);
+            });
+        };
+
         that._DOMElements.btnMake.disabled = true;
         that.DOMElement.appendChild(that.formView);
         that._DOMElements.btnNarrow.disabled = false;
