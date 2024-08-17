@@ -4,12 +4,9 @@
 */
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
-
 import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
-wcPieChart.registerElement('wc-pie-chart');
-
 import { wcFormElement } from '../../../lib/webComponents/wcFormElement.js';
-wcFormElement.registerElement('wc-form-element');
+import { wcToggle } from '../../../lib/webComponents/wcToggle.js';
 
 class webComponentDemo extends noiceCoreUIScreen {
 
@@ -73,6 +70,8 @@ return(`
             <button id="btnTogglePosition" data-int="1">label position</button>
         </div>
     </div>
+
+    <wc-toggle label="test toggler" data-templatename="toggleTest" data-templateattribute="true"></wc-toggle>
 
     <wc-form-element
         name="theme"
@@ -211,6 +210,10 @@ setupCallback(self){
 
     // set default
     that.themeSelector.captureValue();
+
+    that._DOMElements.toggleTest.captureValueCallback = (value, self) => {
+        console.log(`toggler value: ${value}`);
+    }
 
 }
 

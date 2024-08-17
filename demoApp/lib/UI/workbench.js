@@ -5,7 +5,7 @@
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
 import { wcBasic } from '../../../lib/webComponents/wcBasic.js';
-import { wcToggle } from '../../../lib/webComponents/wcToggle.js';
+import { wcLeftPanelLayout } from '../../../lib/webComponents/wcLeftPanelLayout.js';
 
 class workbenchUI extends noiceCoreUIScreen {
 
@@ -35,8 +35,7 @@ constructor(args, defaults, callback){
 */
 get html(){
     return(`
-        <div data-templatename="test" data-templateattribute="true"></div>
-        <wc-toggle label="test toggler" data-templatename="toggleTest" data-templateattribute="true"></wc-toggle>
+        <wc-left-panel-layout></wc-left-panel-layout>
     `);
 }
 
@@ -52,9 +51,26 @@ setupCallback(self){
     // a bit cheeky I must say
     let that = this;
 
-    that._DOMElements.toggleTest.captureValueCallback = (value, self) => {
-        console.log(`toggler value: ${value}`);
+    let wc = that.DOMElement.querySelector('wc-left-panel-layout');
+
+    // brute force add button
+    wc.initCallback = (slf) => {
+
+        let btn = document.createElement('button');
+        btn.className="icon";
+        btn.style.background = `url('./gfx/buttons/burger.svg')`;
+        btn.style.backgroundRepeat = "no-repeat";
+        btn.style.backgroundSize = "contain";
+        slf._elements.buttonContainer.appendChild(btn);
+
+        let addBtn = document.createElement('button');
+        addBtn.className="icon";
+        addBtn.style.background = `url('./gfx/buttons/add_icon_dark.svg')`;
+        addBtn.style.backgroundRepeat = "no-repeat";
+        addBtn.style.backgroundSize = "contain";
+        slf._elements.buttonContainer.appendChild(addBtn);
     }
+
 }
 
 

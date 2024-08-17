@@ -3,7 +3,7 @@
    version="1.1"
    viewBox="0 -256 1792 1792"
    id="svg1173"
-   sodipodi:docname="burger.svg"
+   sodipodi:docname="add_icon_dark.svg"
    inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -45,12 +45,12 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1095"
+     inkscape:window-height="1080"
      id="namedview1175"
      showgrid="false"
      inkscape:zoom="0.37849334"
-     inkscape:cx="834.8892"
-     inkscape:cy="836.21022"
+     inkscape:cx="837.53124"
+     inkscape:cy="837.53124"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -58,20 +58,10 @@
      inkscape:showpageshadow="0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050" />
-  <g
-     id="g17144"
-     transform="matrix(108.8504,0,0,108.8504,-16846.174,-12756.23)">
-    <path
-       style="fill:#bfbf18;fill-opacity:1;stroke:#bfbf18;stroke-width:1.43251;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 158.57304,119.77188 8.84581,-0.006"
-       id="path1457" />
-    <path
-       style="fill:#bfbf18;fill-opacity:1;stroke:#bfbf18;stroke-width:1.43251;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 158.57304,123.25684 8.84581,-0.006"
-       id="path1457-3" />
-    <path
-       style="fill:#bfbf18;fill-opacity:1;stroke:#bfbf18;stroke-width:1.43251;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 158.57304,126.74179 8.84581,-0.006"
-       id="path1457-6" />
-  </g>
+  <path
+     id="path862"
+     transform="matrix(94.488187,0,0,94.488187,-16518.27,-11012.507)"
+     clip-path="url(#clipPath4548)"
+     d="m 190.20875,123.53403 a 5.9077291,5.9077291 0 0 1 -5.90772,5.90773 5.9077291,5.9077291 0 0 1 -5.90773,-5.90773 5.9077291,5.9077291 0 0 1 5.90773,-5.90773 5.9077291,5.9077291 0 0 1 5.90772,5.90773 z"
+     style="fill:#bfbf18;fill-opacity:0.85000002;stroke:none;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" />
 </svg>
