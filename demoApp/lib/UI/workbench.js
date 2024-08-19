@@ -35,7 +35,7 @@ constructor(args, defaults, callback){
 */
 get html(){
     return(`
-        <wc-left-panel-layout></wc-left-panel-layout>
+        <wc-left-panel-layout title="test panel"></wc-left-panel-layout>
     `);
 }
 
@@ -53,7 +53,7 @@ setupCallback(self){
 
     let wc = that.DOMElement.querySelector('wc-left-panel-layout');
 
-    // brute force add button
+    /* brute force add button
     wc.initCallback = (slf) => {
 
         let btn = document.createElement('button');
@@ -70,6 +70,47 @@ setupCallback(self){
         addBtn.style.backgroundSize = "contain";
         slf._elements.buttonContainer.appendChild(addBtn);
     }
+    */
+
+    // elegant add buttons
+    let btn = document.createElement('button');
+    btn.className="icon";
+    btn.style.background = `url('./gfx/buttons/burger.svg')`;
+    btn.style.backgroundRepeat = "no-repeat";
+    btn.style.backgroundSize = "contain";
+    wc.addButton({
+        name: 'burger',
+        element: btn,
+        icon: true,
+        order: 1,
+        callback: (btn, slf, evt) => {
+            console.log(`${btn.dataset.name} button clicked!`);
+        }
+    });
+
+    let addBtn = document.createElement('button');
+    addBtn.className="icon";
+    addBtn.style.background = `url('./gfx/buttons/add_icon_dark.svg')`;
+    addBtn.style.backgroundRepeat = "no-repeat";
+    addBtn.style.backgroundSize = "contain";
+    wc.addButton({
+        name: 'add',
+        element: addBtn,
+        icon: true,
+        order: 2,
+        callback: (btn, slf, evt) => {
+            console.log(`${btn.dataset.name} button clicked!`);
+        }
+    });
+
+
+    // panelToggleCallback
+    wc.panelToggleCallback = (open, slf) => {
+        console.log(`panel is open: ${open}`);
+    }
+
+    // tmp for messing about
+    window.wcTest = wc;
 
 }
 
