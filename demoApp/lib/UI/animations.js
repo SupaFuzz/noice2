@@ -9,6 +9,7 @@ import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
 import { noiceRadialPolygonPath } from '../../../lib/noiceRadialPolygonPath.js'
 
 import { wcScanIndicator } from '../../../lib/webComponents/wcScanIndicator.js';
+import { wcSelectableObject } from '../../../lib/webComponents/wcSelectableObject.js'
 
 /*
 import { wcSplitter } from '../../../lib/webComponents/wcSplitter.js';
@@ -49,7 +50,7 @@ get html(){
             overflow: hidden;
             display: grid;
             grid-template-columns: auto auto;
-            align-items: center;
+            align-items: baseline;
         ">
             <wc-pie-chart size="10em" style="justify-self: right;" data-templatename="pieChart" data-templateattribute="true"></wc-pie-chart>
             <div class="btnContiner" style="justify-self: left;" data-templatename="btnContainer" data-templateattribute="true">
@@ -59,6 +60,18 @@ get html(){
             <div class="btnContiner" style="justify-self: left;" data-templatename="btnContainer2" data-templateattribute="true">
                 <button data-templatename="btnStart2" data-templateattribute="true">start</button>
             </div>
+
+            <wc-scan-indicator size="5em" style="justify-self: right;" data-templatename="scanInd2" data-templateattribute="true"></wc-scan-indicator>
+
+            <wc-selectable-object selected="false" data-templatename="obj" data-templateattribute="true">
+                <ul slot="thang" class="test">
+                    <li>this</li>
+                    <li>is</li>
+                    <li>a</li>
+                    <li>test</li>
+                </ul>
+            </wc-selectable-object>
+
         </div>
     `);
 }
@@ -102,6 +115,17 @@ setupCallback(self){
             that._DOMElements.scanInd.run_animation = (that._DOMElements.btnStart2.textContent == 'start');
             that._DOMElements.btnStart2.textContent = (that._DOMElements.btnStart2.textContent == 'start')?'stop':'start';
         });
+
+        // selectable object stuff
+        /*
+        var bs = document.createElement("ul");
+        ['one', 'two', 'three'].forEach((a) => {
+            let c = document.createElement('li');
+            c.textContent = a;
+            bs.appendChild(c);
+        });
+        that._DOMElements.obj.content = bs;0
+        */
     }
 
 }
