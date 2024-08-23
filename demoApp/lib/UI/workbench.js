@@ -4,8 +4,8 @@
 */
 import { noiceCoreUIScreen } from '../../../lib/noiceCoreUI.js';
 import { noiceObjectCore } from '../../../lib/noiceCore.js';
-import { wcBasic } from '../../../lib/webComponents/wcBasic.js';
 import { wcLeftPanelLayout } from '../../../lib/webComponents/wcLeftPanelLayout.js';
+import { wcSelectableObject } from '../../../lib/webComponents/wcSelectableObject.js'
 
 class workbenchUI extends noiceCoreUIScreen {
 
@@ -35,7 +35,16 @@ constructor(args, defaults, callback){
 */
 get html(){
     return(`
-        <wc-left-panel-layout title="test panel"></wc-left-panel-layout>
+        <wc-left-panel-layout title="test panel">
+
+            <!-- lets make a test menu -->
+            <div slot="main-content" style="display: grid; padding: 1em; user-select: none;" data-_name="testMenu">
+                <wc-selectable-object data-_name="one"><span slot="content">one</span></wc-selectable-object>
+                <wc-selectable-object data-_name="two"><span slot="content">two</span></wc-selectable-object>
+                <wc-selectable-object data-_name="three"><span slot="content">three</span></wc-selectable-object>
+                <wc-selectable-object data-_name="four"><span slot="content">four</span></wc-selectable-object>
+            </div>
+        </wc-left-panel-layout>
     `);
 }
 
@@ -52,6 +61,22 @@ setupCallback(self){
     let that = this;
 
     let wc = that.DOMElement.querySelector('wc-left-panel-layout');
+    let tm = that.DOMElement.querySelector('div[data-_name="testMenu"]');
+    tm.querySelectorAll('wc-selectable-object').forEach((el) => {
+        el.selectCallback = (bool, slf) => {
+
+            // example of how to do single-select
+            if (slf.selected == true){
+                Array.from(tm.querySelectorAll('wc-selectable-object')).filter((a) => {return(
+                    (a.dataset._name != slf.dataset._name) &&
+                    (a.selected == true)
+                )}).forEach((a) => {
+                    a.selected = false;
+                });
+            }
+        }
+    })
+
 
     /* brute force add button
     wc.initCallback = (slf) => {

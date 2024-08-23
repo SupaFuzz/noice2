@@ -64,7 +64,7 @@ get html(){
             <wc-scan-indicator size="5em" style="justify-self: right;" data-templatename="scanInd2" data-templateattribute="true"></wc-scan-indicator>
 
             <wc-selectable-object selected="false" data-templatename="obj" data-templateattribute="true">
-                <ul slot="thang" class="test">
+                <ul slot="thang" class="content">
                     <li>this</li>
                     <li>is</li>
                     <li>a</li>
