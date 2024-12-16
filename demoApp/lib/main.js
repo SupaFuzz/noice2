@@ -16,6 +16,11 @@ import { layoutTest } from './UI/layouts.js';
 import { animationTest } from './UI/animations.js';
 import { formTest } from './UI/formTest.js';
 import { workbenchUI } from './UI/workbench.js';
+import { cryptoStuff } from './UI/cryptoStuff.js';
+
+// uncomment syntax check background thread stuff
+import { noiceARSSyncWorkerThread } from '../../lib/noiceARSSyncWorkerThread.js';
+
 
 /*
     DemoApp.js
@@ -74,7 +79,9 @@ startup(){
                          layouts: new layoutTest ({ sortOrder: 6, title: 'layouts', _app:that, debug:true }),
                          animations: new animationTest({ sortOrder: 7, title: 'animations', _app:that, debug:true }),
                          forms: new formTest({ sortOrder: 8, title: 'formView', _app:that, debug:true }),
-                         workbench: new workbenchUI({ sortOrder: 9, title: 'workbench', _app:that, debug:true })
+                         workbench: new workbenchUI({ sortOrder: 9, title: 'workbench', _app:that, debug:true }),
+                         crypto: new cryptoStuff({ sortOrder: 10, title: 'crypto', _app:that, debug:true })
+
                      }
                  })
             },
