@@ -61,6 +61,7 @@ setupCallback(self){
     that.DOMElement.style.gridTemplateRows = 'auto auto auto';
 
     that.cryptool = new noiceCrypto();
+    that.cryptool.salt = 'nc1f4f7d-c72c-40fb-bc79-671181d55dd7';
 
     that._DOMElements.btnEncrypt.addEventListener('click', (evt) => {
         // how hard could it be? LOL
