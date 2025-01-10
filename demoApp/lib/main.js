@@ -20,6 +20,8 @@ import { cryptoStuff } from './UI/cryptoStuff.js';
 
 // uncomment syntax check background thread stuff
 import { noiceARSSyncWorkerThread } from '../../lib/noiceARSSyncWorkerThread.js';
+//import { noicePGRestAPI } from '../../lib/noicePGRestAPI.js';
+import { noiceMezoAPI } from '../../lib/noiceMezoAPI.js';
 
 
 /*
@@ -47,6 +49,13 @@ constructor(args, defaults, callback){
         threads: { },
         threadSignalHandlers: { }
     },defaults),callback);
+
+    // testing pgrest stuffs
+    this.api = new noiceMezoAPI({
+        protocol: window.location.protocol.replace(':',''),
+        server: window.location.hostname,
+        proxyPath: '/PGREST'
+    });
 }
 
 
