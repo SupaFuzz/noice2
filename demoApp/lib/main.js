@@ -17,11 +17,10 @@ import { animationTest } from './UI/animations.js';
 import { formTest } from './UI/formTest.js';
 import { workbenchUI } from './UI/workbench.js';
 import { cryptoStuff } from './UI/cryptoStuff.js';
+import { mezoTestHarness } from './UI/mezoTestHarness.js';
 
 // uncomment syntax check background thread stuff
-import { noiceARSSyncWorkerThread } from '../../lib/noiceARSSyncWorkerThread.js';
-//import { noicePGRestAPI } from '../../lib/noicePGRestAPI.js';
-import { noiceMezoAPI } from '../../lib/noiceMezoAPI.js';
+// import { noiceARSSyncWorkerThread } from '../../lib/noiceARSSyncWorkerThread.js';
 
 
 /*
@@ -49,13 +48,6 @@ constructor(args, defaults, callback){
         threads: { },
         threadSignalHandlers: { }
     },defaults),callback);
-
-    // testing pgrest stuffs
-    this.api = new noiceMezoAPI({
-        protocol: window.location.protocol.replace(':',''),
-        server: window.location.hostname,
-        proxyPath: '/PGREST'
-    });
 }
 
 
@@ -89,8 +81,8 @@ startup(){
                          animations: new animationTest({ sortOrder: 7, title: 'animations', _app:that, debug:true }),
                          forms: new formTest({ sortOrder: 8, title: 'formView', _app:that, debug:true }),
                          workbench: new workbenchUI({ sortOrder: 9, title: 'workbench', _app:that, debug:true }),
-                         crypto: new cryptoStuff({ sortOrder: 10, title: 'crypto', _app:that, debug:true })
-
+                         crypto: new cryptoStuff({ sortOrder: 10, title: 'crypto', _app:that, debug:true }),
+                         mezo: new mezoTestHarness({ sortOrder: 11, title: 'mezo', _app:that, debug:true })
                      }
                  })
             },

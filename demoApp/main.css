@@ -43,6 +43,7 @@
     --theme-disabled-background-color: rgb(81, 91, 94);
     --theme-button-background: rgba(191, 191, 24, .8);
     --theme-button-foreground: rgba(5, 15, 20, .8);
+    --wc-formelement-label-color: rgba(240,240,240, .8);
 }
 
 /* this disables scrolling on the body */
