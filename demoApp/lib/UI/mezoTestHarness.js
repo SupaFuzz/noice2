@@ -41,12 +41,12 @@ get html(){return(`
 
         <p style="width: 66%;">
             For these tests, you need a <a href="https://github.com/SupaFuzz/mezo">mezo server</a> running
-            in a reverse proxy available on the <strong>proxyPath</strong> specified below.
+            behind a reverse proxy mapped to the <strong>proxyPath</strong> specified below.
         </p>
 
         <div style="display: grid; grid-template-columns: auto auto;">
             <div class="formElements">
-                <wc-form-element type="text" data-templatename="proxypath" data-templateattribute="true" label="proxypath" default_value="/REST" capture_value_on="focusoutOrReturn"></wc-form-element>
+                <wc-form-element type="text" data-templatename="proxypath" data-templateattribute="true" label="proxyPath" default_value="/REST" capture_value_on="focusoutOrReturn"></wc-form-element>
                 <wc-form-element type="text" data-templatename="username" data-templateattribute="true" label="user"></wc-form-element>
                 <wc-form-element type="password" data-templatename="pass" data-templateattribute="true" label="password"></wc-form-element>
                 <button id="btnAuth" data-templatename="btnAuth" data-templateattribute="true" style="width:max-content; margin-top:.5em;">Log In</button>
@@ -90,17 +90,20 @@ setupCallback(self){
         select_mode: 'single',
         show_footer_message: true,
         allow_column_sort: true,
-        show_btn_prefs: true,
-        show_btn_select_all: true,
-        show_btn_select_none: true,
+        show_btn_prefs: false,
+        show_btn_select_all: false,
+        show_btn_select_none: false,
         show_btn_export: true,
         show_btn_search: true,
         allow_cell_edit: false,
         fit_parent: true,
-        rowDblClickCallback: async (rowElement, span, tblRef) => { return(that.handleRowDblClick(rowElement, span, tblRef)); }
+        rowDblClickCallback: async (rowElement, span, tblRef) => { return(that.handleRowDblClick(rowElement, span, tblRef)); },
+        custom_buttons: [
+            { name: 'upload', callback: (tbl, btn) => { that.handleUpload(tbl, btn); } }
+        ]
     });
     that._DOMElements.tableContainer.appendChild(fileList);
-
+    that.table = fileList;
 
     // make the api object
     that.api = new noiceMezoAPI({
@@ -128,31 +131,39 @@ setupCallback(self){
                 console.log(api.token);
                 that._DOMElements.btnAuth.textContent = "Log Out";
 
-                // populate table with file list
-                api.getRows({
-                    table: 'mezo.files',
-                    field_list: ['id','type','name','size']
-                }).then((r) => {
-                    // r is an array
-                    fileList.rows = r;
-                }).catch((error) => {
-                    // whatevs
-                    console.log(error);
-                });
+                that.refreshFileTable(api, fileList);
+
 
             }).catch((error) => {
                 // yeah i dunno -- pop an error or something I guess?
                 console.log(error);
             })
         }
-
-        /*
-            LOH 1/14/25 @ 0015 -- k i'm done
-            it works through listing the files
-            and initially rendering the table content
-        */
     });
 }
+
+
+
+
+/*
+    refreshFileTable(tbl)
+*/
+refreshFileTable(api, tbl){
+
+    tbl.clear();
+    // populate table with file list
+    api.getRows({
+        table: 'mezo.files',
+        field_list: ['id','type','name','size']
+    }).then((r) => {
+        // r is an array
+        tbl.rows = r;
+    }).catch((error) => {
+        // whatevs
+        console.log(error);
+    });
+}
+
 
 
 
@@ -231,6 +242,94 @@ handleRowDblClick(rowElement, span, tblRef){
     }));
 }
 
+
+
+
+/*
+    handleUpload(tbl, btn)
+    pop a dilly with a file selector and a button
+    maybe filename. gotta play with that.
+*/
+handleUpload(tbl, btn){
+    let that = this;
+    return(new Promise((toot, boot) => {
+
+        // yo, what's ...
+        let upDilly = new wcBalloonDialog({
+            arrow_position: 'none',
+            lightbox: true,
+            modal: true,
+            title: 'upload file',
+            exitCallback: async (dilly) => {
+                toot(true);
+            }
+        });
+
+        // make a lil upload UI
+        let div = document.createElement('div');
+        div.setAttribute('slot', "dialogContent");
+        div.innerHTML = `
+            <wc-form-element type="file" label_position="none" capture_value_on="input" style="font-size: .66em;"></wc-form-element>
+            <div style="
+                display: grid;
+                grid-template-columns: auto auto;
+            ">
+                <wc-pie-chart size="5.5em"></wc-pie-chart>
+                <div style="display: flex; flex-direction: row-reverse;">
+                    <button class="btnCancel" style="height: fit-content; margin: .25em;">cancel</button>
+                    <button disabled class="btnUpload" style="height: fit-content; margin: .25em;">upload</button>
+                </div>
+            </div>
+        `;
+        div.style.padding = '.25em';
+        div.querySelector('button.btnCancel').addEventListener('click', (evt) => { upDilly.exit(); });
+        div.querySelector('button.btnUpload').addEventListener('click', (evt) => {
+
+            // parse out the fileName
+            let f = div.querySelector('wc-form-element').value;
+            if (/\//.test(f)){
+                let g = f.split(/\//);
+                f = g[(g.length -1)];
+            }else if (/\\/.test(f)){
+                let g = f.split(/\\/);
+                f = g[(g.length -1)];
+            }
+            f = f.replace(/[^\x00-\x7F]/g, "");
+
+            // send it
+            that.api.putFile({
+                fileName: f,
+                data: new Uint8Array(that.fileBuffer),
+                progressCallback: (r,t,c) => {
+                    div.querySelector('wc-pie-chart').value = ((r/t)*100);
+                }
+            }).then((r) => {
+                console.log(`created file`, r);
+                // refresh table
+                that.refreshFileTable(that.api, that.table);
+
+                upDilly.exit();
+            }).catch((error) => {
+                console.log(error);
+            })
+
+        });
+        div.querySelector('wc-form-element').captureValueCallback = (n,s,ev) => {
+            const file = ev.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                that.fileBuffer = e.target.result;
+                div.querySelector('button.btnUpload').disabled = false;
+            };
+            reader.readAsArrayBuffer(file);
+        };
+
+        upDilly.appendChild(div);
+        upDilly.relativeElement = that.DOMElement;
+
+        that.DOMElement.appendChild(upDilly);
+    }));
+}
 
 
 
