@@ -132,7 +132,12 @@ setupCallback(self){
     // bind the login button
     that._DOMElements.btnAuth.addEventListener('click', (evt) => {
         if (that._DOMElements.btnAuth.textContent == "Log Out"){
-            console.log("log-out: to-do (1/10/25)");
+            that.api.logout().catch((e) => {
+                console.log(`api logout failed? ${e}`);
+            }).then(() => {
+                that._DOMElements.btnAuth.textContent = "Log In";
+                fileList.clear();
+            })
         }else{
             that.api.authenticate({
                 user: that._DOMElements.username.value,

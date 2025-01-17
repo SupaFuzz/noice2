@@ -21,7 +21,7 @@
                still install from the flatfile or whatever, its just that the
                error codes n such will be different
 
-            6) noicePGRestAPI.logout()
+            6) [DONE 1/17/25 @ 1325] noicePGRestAPI.logout()
                is presently a placeholder that does nothing but resolves as expected to keep
                getAPI() working. We need to actually implement a logout function here lol
 
