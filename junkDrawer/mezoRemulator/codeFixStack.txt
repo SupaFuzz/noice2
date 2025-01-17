@@ -1,0 +1,53 @@
+-> main: // MARK @ 195 -> initializedThread();
+
+* updateFormDefinitions()
+    * getAPI()
+        * api.getFormFields({ schema: <str>}
+
+            task set #1 (keep in mind we're keeping this dumb)
+            --------------------------------------------------
+            1) [DONE 1/16/25 @ 1835] create noiceMezoRemulatorAPI.js as a subclass of noiceMezoAPI
+
+            2) [DONE 1/16/25 @ 1835] noiceMezoRemulatorAPI.getFormFields()
+               this will call noiceMezoAPI.getFile() with a hardcoded name
+               of `formDefinition_${schema}`, get back json, parse it and return it
+
+            3) [DONE 1/16/25 @ 1933] write some kinda script to upload both versions of all the schemas
+               because I've tried doing this by hand and it's a royal pain in the arse
+
+            4) [DONE 1/16/25 @ 1945] refactor getAPI() to get the noiceMezoRemulatorAPI instance
+
+            5) [DONE 1/16/25 @ 1957] refactor updateFormDefinitions() logic on error condition
+               still install from the flatfile or whatever, its just that the
+               error codes n such will be different
+
+            6) noicePGRestAPI.logout()
+               is presently a placeholder that does nothing but resolves as expected to keep
+               getAPI() working. We need to actually implement a logout function here lol
+
+                    OK so this is complicated somewhat
+                    this explains in principle how it can be accomplished
+                    https://docs.postgrest.org/en/v12/tutorials/tut1.html#bonus-topic-immediate-revocation
+
+                    it's going to boil down to this
+
+                        1) a table .. say ... basic_auth.user_logout
+                        2) an extra claim in the JWT ... something like sessionid: <guid>
+                        3) logout function writes a row to user_logout with the sessionid in the JWT
+                           that's literally the only thing you get. you call it, it pulls apart your
+                           JWT, finds the session id and writes it to the blacklist here with the
+                           timestamp the token was gonna expire on, so we know when to prune 'em
+                         4) basic_auth.check_token() barfs if the sessionid is in the blacklist
+                         5) pg_cron prunes the user_logout table every minute or whatever
+
+
+            LOH noiceMezoRemulatorThread.js // MARK @#198
+
+
+
+
+
+
+
+-- eventually but not here
+1) create remulator schema

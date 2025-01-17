@@ -9,6 +9,9 @@ import { wcBalloonDialog } from '../../../lib/webComponents/wcBalloonDialog.js';
 import { wcPieChart } from '../../../lib/webComponents/wcPieChart.js';
 import { wcTable } from '../../../lib/webComponents/wcTable.js';
 import { noiceMezoAPI } from '../../../lib/noiceMezoAPI.js';
+import { noiceMezoRemulatorAPI } from '../../../lib/noiceMezoRemulatorAPI.js';
+
+import { noiceRemedyAPI } from '../../../lib/noiceRemedyAPI.js';
 
 class mezoTestHarness extends noiceCoreUIScreen {
 
@@ -99,7 +102,8 @@ setupCallback(self){
         fit_parent: true,
         rowDblClickCallback: async (rowElement, span, tblRef) => { return(that.handleRowDblClick(rowElement, span, tblRef)); },
         custom_buttons: [
-            { name: 'upload', callback: (tbl, btn) => { that.handleUpload(tbl, btn); } }
+            { name: 'upload', callback: (tbl, btn) => { that.handleUpload(tbl, btn); } },
+            { name: 'refresh', callback: (tbl, btn) => { that.refreshFileTable(that.api, tbl); } }
         ]
     });
     that._DOMElements.tableContainer.appendChild(fileList);
@@ -107,6 +111,13 @@ setupCallback(self){
 
     // make the api object
     that.api = new noiceMezoAPI({
+        protocol: window.location.protocol.replace(':',''),
+        server: window.location.hostname,
+        proxyPath: that._DOMElements.proxypath.value
+    });
+
+    // make the other api object
+    that.remulator = new noiceMezoRemulatorAPI({
         protocol: window.location.protocol.replace(':',''),
         server: window.location.hostname,
         proxyPath: that._DOMElements.proxypath.value
@@ -128,6 +139,7 @@ setupCallback(self){
                 password: that._DOMElements.pass.value
             }).then((api) => {
                 that.api = api;
+                that.remulator.token = api.token;
                 console.log(api.token);
                 that._DOMElements.btnAuth.textContent = "Log Out";
 
@@ -330,6 +342,10 @@ handleUpload(tbl, btn){
         that.DOMElement.appendChild(upDilly);
     }));
 }
+
+
+
+
 
 
 
