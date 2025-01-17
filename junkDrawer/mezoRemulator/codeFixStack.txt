@@ -43,10 +43,32 @@
 
             LOH noiceMezoRemulatorThread.js // MARK @#198
 
+        * invokeMainLoop()
+            * syncAllForms()
+                * syncForm()
+                    * [OK] getFormMeta()
+                        * handleTransmits()
+                            * handleAPIWrite()
+                                * api.createTicket(<schema>, <fields>)
+                                * api.modifyTicket(<schema>, <ticket>, <fields>)
 
 
-
-
+                                task set #2 (emulate create and modify)
+                                --------------------------------------------------
+                                1) implement an input on noiceMezoRemulatorAPI maybe call it formMap
+                                   but it's a mapping like this:
+                                   {
+                                        <formName>: {
+                                            tableName: <str>
+                                            fieldMap: {
+                                                <fieldID>: <columnName>
+                                            }
+                                        }
+                                   }
+                                 2) generate formMaps for each of the forms in the config
+                                 3) as part of 2, make all the tables for them too
+                                 4) implement createTicket & modifyTicket emulations
+                                    using the formMap
 
 
 -- eventually but not here
