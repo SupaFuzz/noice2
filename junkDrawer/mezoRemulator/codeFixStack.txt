@@ -55,7 +55,49 @@
 
                                 task set #2 (emulate create and modify)
                                 --------------------------------------------------
-                                1) implement an input on noiceMezoRemulatorAPI maybe call it formMap
+                                1) generate formMaps for each of the forms in the config
+                                   well hold up ...
+
+                                   we have the formDefinitions so id->name and name->id mapping
+
+                                   we have the storeDefinitions so a list of all fields we need
+                                   by name (or id in the case where they have non-spec-compliant
+                                   field names)
+
+                                   we havent worked out the query situation yet but the query
+                                   remulation will need to return data in the format the ARS API
+                                   would have which means formDefinition defined fieldNames
+
+                                   ok. so for tables, we need ...
+
+                                    * column list is the union of [1,6] + distinct _id values from the
+                                      storeDefinition indexes and the fields array from the
+                                      _sync.query object (converted into fieldIDs) ... then if all
+                                      of that was in the array 'a': a.map((fieldID) => { return(`_${fieldID}`)})
+                                      there's your column names `$_{fieldID}`
+
+                                      checked it out on the api on a test table and this seems to work
+                                      also it's the easiest automated way forward. If we need human
+                                      readable columns, we'll just make a view or something.
+
+                                    * we will need to get type and length/limit, etc from the formDef
+
+                                    * we can auto-generate tables this way
+
+                                    * we can copy the indexes from the storeDefinition onto the
+                                      server side table, as a starting place at least.
+
+                                    * for now this needs an sql generation script
+                                      but eventually ... a table like we did with ars_webhooks
+                                      a table with a formDef and a storeDefinition field ...
+                                      creating a row, fires a notify that gets picked up by
+                                      a node daemon that creates the table in question, its indexes,
+                                      grants permission to mezo_user from whatever schema it is in,
+                                      then reloads the postgrest schema-cache.
+                                      That'd be tight
+
+
+                                2) implement an input on noiceMezoRemulatorAPI maybe call it formMap
                                    but it's a mapping like this:
                                    {
                                         <formName>: {
@@ -65,7 +107,6 @@
                                             }
                                         }
                                    }
-                                 2) generate formMaps for each of the forms in the config
                                  3) as part of 2, make all the tables for them too
                                  4) implement createTicket & modifyTicket emulations
                                     using the formMap
