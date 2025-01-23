@@ -55,7 +55,7 @@
 
                                 task set #2 (emulate create and modify)
                                 --------------------------------------------------
-                                1) generate formMaps for each of the forms in the config
+                                1) [DONE 1/21/25] generate formMaps for each of the forms in the config
                                    ok, so we now have tableGenerator.js which spits out table
                                    defs with indexes and constraints and the whole 9.
 
@@ -69,7 +69,7 @@
                                    I'm not so sure we wanna use a form map like I was thinking for #2
                                    the app will have the form def. we just translate everything to fieldIDs
 
-                                2) [DONE 1/21/25] implement an input on noiceMezoRemulatorAPI maybe call it formMap
+                                2) implement an input on noiceMezoRemulatorAPI maybe call it formMap
                                    but it's a mapping like this:
                                    {
                                         <formName>: {
@@ -79,8 +79,10 @@
                                             }
                                         }
                                    }
+
                                  3) [DONE 1/21/25] as part of 2, make all the tables for them too
-                                 4) implement createTicket & modifyTicket emulations
+
+                                 4) [LOH] implement createTicket & modifyTicket emulations
                                     using the formMap
 
 
