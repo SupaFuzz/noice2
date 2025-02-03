@@ -82,12 +82,11 @@ setupCallback(self){
 
     // make the table
     let fileList = new wcTable({
-        label: 'mezo.files',
+        label: 'remulator.form_registry',
         columns: [
-            { name: 'id', order: 1, type: 'int', width: '5em' },
-            { name: 'type', order: 2, type: 'char', width: '8em'},
-            { name: 'name', order: 3, type: 'char', width: '15em', disableCellEdit: false },
-            { name: 'size', order: 4, type: 'int', width: '8em'}
+            { name: 'status', order: 2, type: 'char', width: '5em'},
+            { name: 'form_name', order: 3, type: 'char', width: '18em'},
+            { name: 'table_name', order: 4, type: 'char', width: '10em', disableCellEdit: false }
         ],
         rows: [],
         select_mode: 'single',
@@ -100,21 +99,17 @@ setupCallback(self){
         show_btn_search: true,
         allow_cell_edit: false,
         fit_parent: true,
+        default_sort: { colName: 'form_name', order: 'ascending' }
+        /*
         rowDblClickCallback: async (rowElement, span, tblRef) => { return(that.handleRowDblClick(rowElement, span, tblRef)); },
         custom_buttons: [
             { name: 'upload', callback: (tbl, btn) => { that.handleUpload(tbl, btn); } },
             { name: 'refresh', callback: (tbl, btn) => { that.refreshFileTable(that.api, tbl); } }
         ]
+        */
     });
     that._DOMElements.tableContainer.appendChild(fileList);
     that.table = fileList;
-
-    // make the api object
-    that.api = new noiceMezoAPI({
-        protocol: window.location.protocol.replace(':',''),
-        server: window.location.hostname,
-        proxyPath: that._DOMElements.proxypath.value
-    });
 
     // make the other api object
     that.remulator = new noiceMezoRemulatorAPI({
@@ -126,30 +121,28 @@ setupCallback(self){
     // bind proxyPath value change to attribute
     that._DOMElements.proxypath.captureValueCallback = (n,s) => {
         console.log(`set new proxyPath: ${n}`);
-        that.api.proxyPath = n;
+        that.remulator.proxyPath = n;
     };
 
     // bind the login button
     that._DOMElements.btnAuth.addEventListener('click', (evt) => {
         if (that._DOMElements.btnAuth.textContent == "Log Out"){
-            that.api.logout().catch((e) => {
+            that.remulator.logout().catch((e) => {
                 console.log(`api logout failed? ${e}`);
             }).then(() => {
                 that._DOMElements.btnAuth.textContent = "Log In";
                 fileList.clear();
             })
         }else{
-            that.api.authenticate({
+            that.remulator.authenticate({
                 user: that._DOMElements.username.value,
                 password: that._DOMElements.pass.value
             }).then((api) => {
-                that.api = api;
-                that.remulator.token = api.token;
+                that.remulator = api;
                 console.log(api.token);
                 that._DOMElements.btnAuth.textContent = "Log Out";
 
-                that.refreshFileTable(api, fileList);
-
+                that.refreshFormTable(api, fileList);
 
             }).catch((error) => {
                 // yeah i dunno -- pop an error or something I guess?
@@ -163,15 +156,17 @@ setupCallback(self){
 
 
 /*
-    refreshFileTable(tbl)
+    refreshFormTable(tbl)
 */
-refreshFileTable(api, tbl){
+refreshFormTable(api, tbl){
 
     tbl.clear();
+
     // populate table with file list
-    api.getRows({
-        table: 'mezo.files',
-        field_list: ['id','type','name','size']
+    this.remulator.getRows({
+        table: 'remulator.form_registry',
+        field_list: ['id','status','form_name','table_name'],
+        query: `status=eq.ready`
     }).then((r) => {
         // r is an array
         tbl.rows = r;
@@ -179,6 +174,7 @@ refreshFileTable(api, tbl){
         // whatevs
         console.log(error);
     });
+
 }
 
 
