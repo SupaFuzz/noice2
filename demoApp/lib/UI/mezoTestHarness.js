@@ -30,6 +30,7 @@ constructor(args, defaults, callback){
         }, defaults),
         callback
     );
+    this.noiceRemedyAPI = noiceRemedyAPI;
 }
 
 
