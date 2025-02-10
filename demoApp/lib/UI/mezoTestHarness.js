@@ -48,15 +48,40 @@ get html(){return(`
             behind a reverse proxy mapped to the <strong>proxyPath</strong> specified below.
         </p>
 
-        <div style="display: grid; grid-template-columns: auto auto;">
-            <div class="formElements">
+        <div style="
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: left;
+            align-content: center;
+            margin: .25em;
+        ">
+            <div class="formElements" style="
+                font-size: .8em;
+                background-color: rgba(240, 240, 240, .1);
+                padding: .5em;
+                border-radius: 1em;
+                width: max-content;
+                margin: 1em;
+            ">
                 <wc-form-element type="text" data-templatename="proxypath" data-templateattribute="true" label="proxyPath" default_value="/REST" capture_value_on="focusoutOrReturn"></wc-form-element>
                 <wc-form-element type="text" data-templatename="username" data-templateattribute="true" label="user"></wc-form-element>
                 <wc-form-element type="password" data-templatename="pass" data-templateattribute="true" label="password"></wc-form-element>
                 <button id="btnAuth" data-templatename="btnAuth" data-templateattribute="true" style="width:max-content; margin-top:.5em;">Log In</button>
             </div>
-            <div data-templatename="tableContainer" data-templateattribute="true" style="font-size:.8em; ">
+            <div data-templatename="tableContainer" data-templateattribute="true" style="font-size:.8em; "></div>
+
+            <div class="formElements" style="
+                font-size: .8em;
+                background-color: rgba(240, 240, 240, .1);
+                padding: .5em;
+                border-radius: 1em;
+                width: max-content;
+                margin: 1em;
+            ">
+                <wc-form-element type="file" data-templatename="file_input" data-templateattribute="true" label="file" capture_value_on="change"></wc-form-element>
+                <button id="btnUpload" data-templatename="btnUpload" data-templateattribute="true" style="width:max-content; margin-top:.5em;">Upload</button>
             </div>
+
         </div>
 
         <div class="testStuff" data-templatename="testStuff" data-templateattribute="true"></div>
@@ -149,6 +174,42 @@ setupCallback(self){
                 // yeah i dunno -- pop an error or something I guess?
                 console.log(error);
             })
+        }
+    });
+
+    // bind the upload button and such
+    that._DOMElements.file_input.captureValueCallback = (n,s,e) => {
+        that._DOMElements.file_input._file = e.target.files[0] || null;
+        console.log(`file_input value capture fired!`, that._DOMElements.file_input._file);
+    }
+    that._DOMElements.btnUpload.addEventListener('click', (evt) => {
+        if (that._DOMElements.file_input._file instanceof File){
+            const reader = new FileReader();
+            reader.addEventListener('loadend', (loadEvt) => {
+                const fileContent = new Uint8Array(reader.result);
+                const fileName = that._DOMElements.file_input._file.name;
+                const fileLength = that._DOMElements.file_input._file.size;
+                console.log(`file content loaded: ${fileContent instanceof Uint8Array} | ${fileContent.length}`);
+
+                // ok, lets just try to make a dummy entry on offlineData and see what we can do here
+                that.remulator.createTicket({
+                    schema: 'NPAM:NSCAN5:offlineData',
+                    fields: {
+                        Status: 'active',
+                        documentName: 'test file',
+                        documentLength: fileLength,
+                        dataFile: fileName
+                    },
+                    attachments: {
+                        dataFile: fileContent
+                    }
+                }).then((r) => {
+                    console.log(r);
+                }).catch((e) => {
+                    console.log(e);
+                });
+            });
+            reader.readAsArrayBuffer(that._DOMElements.file_input._file);
         }
     });
 }
