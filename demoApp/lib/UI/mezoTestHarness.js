@@ -693,7 +693,6 @@ handleLoadForm(tbl, btn){
                                                                     fields: modFields,
                                                                     id: cr.id
                                                                 }).then(() => {
-                                                                    console.log("i got here?");
                                                                     Promise.resolve().then(() => { recursor(idx + 1); });
                                                                 }).catch((error) => {
                                                                     console.log(error);
