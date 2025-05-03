@@ -1,0 +1,22 @@
+/* this disables scrolling on the body */
+html, body {
+    position: fixed;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-size: 2vw;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background-color: rgb(20, 22, 23);
+    color: rgb(216, 210, 210);
+}
+@font-face {
+   font-family: 'Comfortaa';
+   src: url('./gfx/Comfortaa.woff2') format("woff2");
+}
