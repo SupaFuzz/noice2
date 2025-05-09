@@ -1,5 +1,6 @@
 import { wcPieChart } from '../../lib/webComponents/wcPieChart.js';
 import { wcMainUI } from '../../lib/webComponents/wcMainUI.js';
+import { wcProgressUI } from '../../lib/webComponents/wcProgressUI.js';
 
 
 /*

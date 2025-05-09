@@ -5,7 +5,6 @@ html, body {
     height: 100%;
     width: 100%;
 }
-
 body {
     font-size: 2vw;
     font-family: -apple-system, Helvetica, Arial, sans-serif;
@@ -19,4 +18,10 @@ body {
 @font-face {
    font-family: 'Comfortaa';
    src: url('./gfx/Comfortaa.woff2') format("woff2");
+}
+
+:root {
+    /* test theme var overrides here */
+    --wc-progress-ui-color: rgb(191, 191, 24);
+    --wc-progress-ui-chart-color: rgb(191, 191, 24);
 }
