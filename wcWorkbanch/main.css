@@ -26,5 +26,6 @@ body {
     --wc-progress-ui-chart-color: rgb(237, 85, 59);
     --wc-main-ui-header-color: rgb(237, 85, 59);
     --wc-main-ui-user-prompt-text-color: rgb(237, 85, 59);
+    --wc-main-ui-user-prompt-alert-color: rgba(240, 240, 240,.8);
     --wc-balloon-dialog-body-background-color: rgb(237, 85, 59);
 }
