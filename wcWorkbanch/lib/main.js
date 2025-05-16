@@ -14,26 +14,11 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     window.uiHolder = document.body.querySelector('wc-screen-holder');
     window.mainUI = document.body.querySelector('wc-main-ui');
 
-    /*
-    // make a menu of the uis on the burger menu (old school)
-    window.mainUI.burgerMenuContent.innerHTML = '';
-    Object.keys(window.uiHolder.UIs).map((a) => {return(window.uiHolder.UIs[a])}).sort((a,b) => {return(
-        parseFloat(a.dataset.menu_order) - parseFloat(b.dataset.menu_order)
-    )}).map((ui) => {
-        let btn = document.createElement('button');
-        btn.textContent = ui.dataset.menu_label;
-        btn.addEventListener('click', (evt) => { window.uiHolder.switchUI(ui.dataset.name).then(() => {
-            // do something like set selected bool or something
-        })});
-        return(btn);
-    }).forEach((el) => {
-        window.mainUI.burgerMenuContent.appendChild(el);
-    })
-    */
+    // make a burgerMenu of the UIs on the screenHolder
     window.burgerMenu = new wcBasic({
         content: Object.keys(window.uiHolder.UIs).map((a) => {return(window.uiHolder.UIs[a])}).sort((a,b) => {return(
                     parseFloat(a.dataset.menu_order) - parseFloat(b.dataset.menu_order)
-                 )}).map((el) => {return(`<button data-name="${el.dataset.name}">${el.dataset.menu_label}</button>`)}).join(""),
+                 )}).map((el) => {return(`<button class="menuBtn" data-_name="${el.dataset.name}">${el.dataset.menu_label}</button>`)}).join(""),
         styleSheet: `
             :host {
                 display: grid;
@@ -47,13 +32,26 @@ document.addEventListener("DOMContentLoaded", (evt) => {
                 text-align: right;
                 font-size: 1.5rem;
                 font-family: Comfortaa;
-
+                width: 10em;
+            }
+            button:hover {
+                color: var(--wc-main-ui-user-prompt-alert-color);
+                background-color: var(--wc-main-ui-header-color);
+            }
+            button[data-selected="true"]{
+                background-color: rgba(240, 240, 240, .2);
             }
         `,
         initializedCallback: (slf) => {
             slf.shadowDOM.querySelectorAll('button').forEach((el) => {
                 el.addEventListener("click", (evt) => {
-                    window.uiHolder.switchUI(el.dataset.name);
+                    window.uiHolder.switchUI(el.dataset._name).then(() => {
+                        Object.keys(slf._elements).map((a) => {return(slf._elements[a])}).filter((ell) => {return(
+                            ell.className == "menuBtn" &&
+                            (ell.dataset._name != el.dataset._name)
+                        )}).forEach((ell) => {ell.dataset.selected = "false"; })
+                        el.dataset.selected = "true";
+                    });
                 });
             })
         }
