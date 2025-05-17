@@ -29,4 +29,11 @@ body {
     --wc-main-ui-user-prompt-alert-color: rgba(240, 240, 240,.8);
     --wc-main-ui-user-prompt-alert-text-color: rgba(240, 240, 240,.8);
     --wc-balloon-dialog-body-background-color: rgb(237, 85, 59);
+    --wc-screen-holder-menu-button-width: 10em;
+    --wc-screen-holder-menu-button-color: rgb(237, 85, 59);
+    --wc-screen-holder-menu-button-hover-border-color: transparent;
+    --wc-screen-holder-menu-button-hover-color: rgb(237, 85, 59);
+    --wc-screen-holder-menu-button-select-border-color: transparent;
+    --wc-screen-holder-menu-button-select-background-color: rgba(237, 85, 59, .25);
+    --wc-screen-holder-menu-button-select-color: rgb(237, 85, 59);
 }
