@@ -21,30 +21,13 @@
         <h2 slot="burger_menu_content">menu_test</h2>
         <div slot="status_menu_content" data-_name="burgerMenu">status_menu_test</div>
         <wc-screen-holder slot="main_content" full_screen="false">
-            <h1 slot="screen" data-name="test1" data-menu_order="1" data-menu_label="test UI 1">Test #1</h1>
+            <div slot="screen" data-name="test1" data-menu_order="1" data-menu_label="test UI 1">
+                <h1>Test #1</h1>
+                <button data-_name="progTest">test progress dialog</button>
+            </div>
             <h1 slot="screen" data-name="test2" data-menu_order="2" data-menu_label="test UI 2">Test #2</h1>
             <h1 slot="screen" data-name="test3" data-menu_order="3" data-menu_label="test UI 3">Test #3</h1>
         </wc-screen-holder>
-
-        <!--
-        <wc-pie-chart value="33" size="5em" slot="main_content"></wc-pie-chart>
-        <wc-progress-ui
-            title="progress message"
-            detail="progress detail message"
-            additional_detail="this is some additional detail"
-            percent="35"
-            slot="main_content"
-        ></wc-progress-ui>
-        <div slot="main_content" style="
-            width: 2em;
-            height: 2em;
-            display: block;
-            background-color: green;
-            margin-left: 20em;
-            margin-top: 10em;
-        "></div>
-    -->
-
     </wc-main-ui>
 
 </body>
