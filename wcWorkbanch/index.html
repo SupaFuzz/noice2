@@ -16,14 +16,19 @@
 <body>
 
     <!-- old school baby -->
-    <wc-main-ui>
+    <wc-main-ui status_menu_title="About wcWorkbanch">
         <span slot="header_message">this is a test</span>
         <h2 slot="burger_menu_content">menu_test</h2>
-        <div slot="status_menu_content" data-_name="burgerMenu">status_menu_test</div>
+        <!--
+        <div slot="status_menu_content">
+
+        </div>
+    -->
         <wc-screen-holder slot="main_content" full_screen="false">
             <div slot="screen" data-name="test1" data-menu_order="1" data-menu_label="test UI 1">
                 <h1>Test #1</h1>
                 <button data-_name="progTest">test progress dialog</button>
+                <button data-_name="progTest2">test progress dialog (with animation)</button>
             </div>
             <h1 slot="screen" data-name="test2" data-menu_order="2" data-menu_label="test UI 2">Test #2</h1>
             <h1 slot="screen" data-name="test3" data-menu_order="3" data-menu_label="test UI 3">Test #3</h1>

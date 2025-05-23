@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     }))}
 
     // add a hook to the test1 UI to do the progressDialog
-    window.uiHolder.UIs.test1.querySelector('button').addEventListener('click', (evt) => {
+    window.uiHolder.UIs.test1.querySelector('button[data-_name="progTest"]').addEventListener('click', (evt) => {
         window.mainUI.progress_menu_open = true;
         window.mainUI.progressUI.title = "doin' it!";
         window.mainUI.progressUI.detail = "and doin' it";
@@ -50,18 +50,69 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         function recursor(idx){
             if (idx < 100){
                 window.mainUI.progressUI.percent = idx;
-                requestAnimationFrame(() => { recursor(idx + 1) })
+                requestAnimationFrame(() => { recursor(idx + .15) })
             }else{
                 window.mainUI.progress_menu_open = false;
             }
         }
         recursor(0);
-        /*
-        temp0.progress_menu_open = true;
-        temp0.progressUI.title = "hello";
-        temp0.progressUI.detail = "is it me";
-        temp0.progressUI.additional_detail = "you're lookin' for?"
-        temp0.progressUI.percent = 33;
-        */
     });
+
+    // add a hook to the test1 UI to do the progressDialog with animation
+    window.uiHolder.UIs.test1.querySelector('button[data-_name="progTest2"]').addEventListener('click', (evt) => {
+        window.mainUI.progress_menu_open = true;
+        window.mainUI.progressUI.title = "doin' it!";
+        window.mainUI.progressUI.detail = "and doin' it";
+        window.mainUI.progressUI.additional_detail = "and doin' it well";
+        window.mainUI.progressUI.run_animation = true;
+        function recursor(idx){
+            if (idx < 100){
+                window.mainUI.progressUI.percent = idx;
+                requestAnimationFrame(() => { recursor(idx + .15) })
+            }else{
+                window.mainUI.progress_menu_open = false;
+            }
+        }
+        recursor(0);
+    });
+
+    // create a fancy about menu
+    let aboutMenu = new wcBasic({
+        content: `
+            <div class="aboutMenu">
+                <h2>wcWorkbanch v1.0</h2>
+                <span class="date">5/22/2025</span>
+                <span class="author">Amy Hicox</span>
+                <span class="email">amy@hicox.com</span>
+                <fieldset>
+                    <legend>test thread activity indicators</legend>
+                    <button>net-read</button>
+                    <button>net-write</button>
+                    <button>db-read</button>
+                    <button>db-write</button>
+                    <button>pending</button>
+                    <button>clear</button>
+                </fieldset>
+            </div>
+        `,
+        styleSheet: `
+            .aboutMenu {
+                font-family: Comfortaa;
+                padding: 1em;
+            }
+            .aboutMenu h2 {
+                text-align: center;
+            }
+            .aboutMenu legend {
+                margin-top: 3em;
+            }
+        `,
+        initializedCallback: (slf) => {
+            slf.shadowRoot.querySelectorAll('button').forEach((el) => {
+                el.addEventListener('click', (evt) => { window.mainUI._elements.btnIndicator.dataset.status = el.textContent; });
+            });
+        }
+    });
+    aboutMenu.setAttribute('slot', 'status_menu_content');
+    window.mainUI.appendChild(aboutMenu);
 });
