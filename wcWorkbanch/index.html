@@ -19,11 +19,6 @@
     <wc-main-ui status_menu_title="About wcWorkbanch">
         <span slot="header_message">this is a test</span>
         <h2 slot="burger_menu_content">menu_test</h2>
-        <!--
-        <div slot="status_menu_content">
-
-        </div>
-    -->
         <wc-screen-holder slot="main_content" full_screen="false">
             <div slot="screen" data-name="test1" data-menu_order="1" data-menu_label="test UI 1">
                 <h1>Test #1</h1>
@@ -32,6 +27,10 @@
             </div>
             <h1 slot="screen" data-name="test2" data-menu_order="2" data-menu_label="test UI 2">Test #2</h1>
             <h1 slot="screen" data-name="test3" data-menu_order="3" data-menu_label="test UI 3">Test #3</h1>
+            <wc-basic slot="screen" data-name="wcBasictest" data-menu_order="4" data-menu_label="wcBasic Test">
+                <div slot="content" class="temp"><h2 data-_name="testArtifact">so ... did it work?</h2></div>
+                <div slot="content" class="temp"><h2 data-_name="testArtifact2">well did it?</h2></div>
+            </wc-basic>
         </wc-screen-holder>
     </wc-main-ui>
 

@@ -3,6 +3,7 @@ import { wcMainUI } from '../../lib/webComponents/wcMainUI.js';
 import { wcProgressUI } from '../../lib/webComponents/wcProgressUI.js';
 import { wcScreenHolder } from '../../lib/webComponents/wcScreenHolder.js';
 import { wcBasic } from '../../lib/webComponents/wcBasic.js';
+import { wcScreen } from '../../lib/webComponents/wcScreen.js';
 
 /*
     document.loaded() hook
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
                 detail: "for reasons of demonstration, test2 throws a dialog on exit asking you if you're sure. so are you?",
                 options: {
                     "Cancel": false,
-                    "continue": true
+                    "Continue": true
                 }
             }).then((ztdr) => {
                 if (ztdr == true){
@@ -81,9 +82,11 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         content: `
             <div class="aboutMenu">
                 <h2>wcWorkbanch v1.0</h2>
-                <span class="date">5/22/2025</span>
-                <span class="author">Amy Hicox</span>
-                <span class="email">amy@hicox.com</span>
+                <p>
+                    <span class="date">5/22/2025</span>
+                    <span class="author">Amy Hicox</span>
+                    <span class="email">amy@hicox.com</span>
+                </p>
                 <fieldset>
                     <legend>test thread activity indicators</legend>
                     <button>net-read</button>
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
                 font-family: Comfortaa;
                 padding: 1em;
             }
-            .aboutMenu h2 {
+            .aboutMenu h2, .aboutMenu p {
                 text-align: center;
             }
             .aboutMenu legend {
