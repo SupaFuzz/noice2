@@ -4,6 +4,7 @@ import { wcProgressUI } from '../../lib/webComponents/wcProgressUI.js';
 import { wcScreenHolder } from '../../lib/webComponents/wcScreenHolder.js';
 import { wcBasic } from '../../lib/webComponents/wcBasic.js';
 import { wcScreen } from '../../lib/webComponents/wcScreen.js';
+import { customScreenExample } from './customScreenExample.js';
 
 /*
     document.loaded() hook
@@ -18,6 +19,16 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     // send the default menu from the uiHolder to the burgerMenu in the balloonDialog
     window.mainUI.burgerMenuContent.innerHTML = '';
     window.mainUI.burgerMenuContent.appendChild(window.uiHolder.getUIMenu());
+
+    // add a custom UI subclass from the js side
+    let cust = new customScreenExample({
+        name: "customScreenExample",
+        menu_label: "Custom Example",
+        menu_order: "5.5",
+        fit_parent: "true"
+    });
+    cust.setAttribute('slot', "screen");
+    window.uiHolder.appendChild(cust);
 
     // put an are you sure? on the test2 screen
     window.uiHolder.UIs.test2.setFocus = (focusBool, focusArgs) => { return(new Promise((toot, boot) => {
