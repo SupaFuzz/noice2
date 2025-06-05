@@ -66,8 +66,15 @@ constructor(args){
     // hackarooni
     this.setContent();
     this.setStyleSheet();
-    //this.setInitCallback();
 
+    // more hackaliciousness
+    let that = this;
+    this.addEventListener('DOMConnected', (evt) => { that.fitParent(); });
+    that.resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) { if (entry.contentBoxSize) { that.fitParent(); } }
+    });
+    that.resizeObserver.observe(document.documentElement);
+    that.resizeObserver.observe(that);
 }
 
 
@@ -102,7 +109,7 @@ setContent(){
     this.content = `
         <!-- html content goes here -->
         <div class="container">
-            <div class="header">
+            <div class="header" data-_name="header">
                 <h2 class="title">The Lorem</h2>
                 <div class="buttonContainer">
                     <button>Sit</button>
@@ -110,7 +117,7 @@ setContent(){
                     <button>Ipsum</button>
                 </div>
             </div>
-            <div class="main">
+            <div class="main" data-_name="main">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare, lectus vitae aliquam rhoncus, ipsum elit consequat dui, sed rhoncus ante ante id nisi. Sed a arcu sit amet dolor pulvinar lacinia vel sed dui. Duis sit amet varius risus. Donec luctus ultricies dui quis posuere. Phasellus a eros fermentum orci sodales posuere in in magna. Suspendisse sit amet massa eros. Nam lacus leo, dapibus a nibh vitae, scelerisque accumsan nisi. Curabitur accumsan arcu eu semper pulvinar. Duis diam ante, dictum vitae feugiat sit amet, volutpat quis sem. Quisque laoreet suscipit interdum. Nunc nulla tortor, egestas et ultrices nec, porta quis ligula. Nullam rhoncus, quam nec semper viverra, ante quam interdum erat, vel malesuada magna sapien sed eros. Cras placerat nisl nisl, vel efficitur nisl placerat eu.</p>
 
                 <p>Curabitur dictum congue interdum. Curabitur orci magna, scelerisque vel pulvinar eu, hendrerit vel ex. Phasellus vulputate sem orci, maximus placerat nunc auctor vitae. Suspendisse pellentesque imperdiet libero ac dapibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin ullamcorper eros quis nunc ultrices, vel euismod odio interdum. Nam velit sem, porta et ex quis, dignissim volutpat justo. Sed quis efficitur augue. Vestibulum sed elit et metus laoreet maximus. Proin luctus, ipsum et ultricies malesuada, sapien eros tincidunt sapien, nec vulputate nibh lorem nec leo. In nec ligula felis. Cras tortor ligula, commodo posuere sagittis sit amet, imperdiet ut magna. Donec quis volutpat neque. Proin congue eget mi quis egestas.</p>
@@ -151,6 +158,9 @@ setStyleSheet(){
         .container .header .buttonContainer button {
           margin-right: .5em;
         }
+        div[data-_name="main"]{
+            overflow-y: auto;
+        }
 
     `;
 }
@@ -184,6 +194,8 @@ setStyleSheet(){
 initializedCallback(slf){
     // do thine one-time setups here
     // console.log("I'm here");
+
+
 };
 
 
@@ -217,6 +229,31 @@ loseFocusCallback(focusArgs, slf){
         */
         toot(that);
     }));
+}
+
+
+
+
+/*
+    fitParent()
+    this adjusts the height of .main because imma be honest
+
+    I'm sure it can be done native CSS.
+    I have neither the patience nor the inclination at the moment.
+    "ain't nobody got time fo dat"
+*/
+fitParent(){
+    if (this.initialized){
+        if(
+            (this.parentElement instanceof Element) &&
+            (this._elements.main instanceof Element) &&
+            (this._elements.header instanceof Element)
+        ){
+            let d = this.parentElement.getBoundingClientRect();
+            let h = this._elements.header.getBoundingClientRect();
+            this._elements.main.style.height = `${document.documentElement.clientHeight - d.y - h.height}px`;
+        }
+    }
 }
 
 
